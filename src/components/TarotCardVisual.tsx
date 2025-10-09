@@ -4,14 +4,15 @@ import RunicSymbol from './RunicSymbol';
 interface TarotCardVisualProps {
   card: TarotCard;
   revealed?: boolean;
-  size?: 'small' | 'medium' | 'large';
+  size?: 'small' | 'medium' | 'large' | 'xlarge';
 }
 
 export default function TarotCardVisual({ card, revealed = false, size = 'medium' }: TarotCardVisualProps) {
   const sizeClasses = {
     small: 'w-24',
     medium: 'w-32',
-    large: 'w-48'
+    large: 'w-48',
+    xlarge: 'w-80'
   };
 
   const getCardSymbol = () => {
