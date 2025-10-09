@@ -14,14 +14,14 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 50%;
-    max-width: 600px;
+    width: 60%;
+    max-width: 700px;
     aspect-ratio: 1;
     background-image: url('/u6125288155_The_Lovers_Card_VI_A_naked_man_and_woman_stand_in_6780c881-39ea-42ae-be23-b7889f877df5_3.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    opacity: 0.08;
+    opacity: 0.25;
     pointer-events: none;
     z-index: 0;
   }
