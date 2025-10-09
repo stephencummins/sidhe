@@ -85,6 +85,16 @@ export default function LandingPage({ onStartReading }: LandingPageProps) {
             <p className="text-sm" style={{ fontFamily: 'Georgia, serif' }}>AI-guided interpretations</p>
           </div>
         </div>
+
+        <div className="mt-12">
+          <a
+            href="/admin"
+            className="text-amber-600/60 hover:text-amber-500 text-sm transition-colors duration-200"
+            style={{ fontFamily: 'Georgia, serif' }}
+          >
+            Admin Login
+          </a>
+        </div>
       </div>
     </div>
   );
