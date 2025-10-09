@@ -15,15 +15,19 @@ export default function AdminPanel() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadDecks();
-  }, []);
+    if (user) {
+      loadDecks();
+    }
+  }, [user]);
 
   const loadDecks = async () => {
+    if (!user) return;
+
     try {
       const { data, error } = await supabase
         .from('tarot_decks')
         .select('*')
-        .eq('created_by', user?.id)
+        .eq('created_by', user.id)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -44,7 +48,7 @@ export default function AdminPanel() {
         .insert({
           name: newDeckName,
           description: newDeckDescription,
-          created_by: user?.id
+          created_by: user.id
         })
         .select()
         .single();
