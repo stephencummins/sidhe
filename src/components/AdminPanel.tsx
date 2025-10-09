@@ -14,17 +14,6 @@ export default function AdminPanel() {
   const [newDeckDescription, setNewDeckDescription] = useState('');
   const [loading, setLoading] = useState(true);
 
-  console.log('AdminPanel render - user:', user?.email, 'loading:', loading, 'decks:', decks.length);
-
-  // DEBUG ONLY - Remove this after troubleshooting
-  if (!user) {
-    return (
-      <div className="min-h-screen bg-red-500 p-8">
-        <h1 className="text-white text-4xl">DEBUG: No user found in AdminPanel</h1>
-      </div>
-    );
-  }
-
   useEffect(() => {
     if (user) {
       loadDecks();
@@ -132,10 +121,6 @@ export default function AdminPanel() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4">
-      {/* DEBUG BAR */}
-      <div className="bg-yellow-400 text-black p-4 text-xl font-bold mb-4">
-        DEBUG: AdminPanel is rendering! User: {user.email}
-      </div>
       <div className="max-w-6xl mx-auto space-y-6">
         <div className="flex items-center justify-between mb-6">
           <div>
