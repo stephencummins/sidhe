@@ -1,11 +1,14 @@
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import RunicSymbol from './RunicSymbol';
 import CelticBorder from './CelticBorder';
 
-interface LandingPageProps {
-  onStartReading: () => void;
-}
+export default function LandingPage() {
+  const navigate = useNavigate();
 
-export default function LandingPage({ onStartReading }: LandingPageProps) {
+  const handleStartReading = () => {
+    navigate('/reading');
+  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-900 via-amber-950 to-stone-950 flex items-center justify-center p-4 relative overflow-hidden">
       <div className="absolute inset-0 opacity-5">
@@ -42,7 +45,7 @@ export default function LandingPage({ onStartReading }: LandingPageProps) {
         </p>
 
         <button
-          onClick={onStartReading}
+          onClick={handleStartReading}
           className="group relative px-12 py-4 bg-gradient-to-r from-amber-700 via-orange-800 to-amber-700 text-amber-50 text-lg font-semibold border-2 border-amber-600/50 hover:border-amber-500 transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-amber-700/60"
           style={{ fontFamily: 'Georgia, serif' }}
         >
@@ -87,13 +90,13 @@ export default function LandingPage({ onStartReading }: LandingPageProps) {
         </div>
 
         <div className="mt-12">
-          <a
-            href="/admin"
+          <Link
+            to="/admin/login"
             className="text-amber-600/60 hover:text-amber-500 text-sm transition-colors duration-200"
             style={{ fontFamily: 'Georgia, serif' }}
           >
             Admin Login
-          </a>
+          </Link>
         </div>
       </div>
     </div>

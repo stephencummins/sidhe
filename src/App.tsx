@@ -1,60 +1,12 @@
-import { useState, useEffect } from 'react';
-import { AppScreen, SpreadType, SelectedCard, Reading } from './types';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import LandingPage from './components/LandingPage';
-import SpreadSelection from './components/SpreadSelection';
-import QuestionInput from './components/QuestionInput';
-import CardSelection from './components/CardSelection';
-import ReadingDisplay from './components/ReadingDisplay';
 import AdminLogin from './components/AdminLogin';
 import AdminPanel from './components/AdminPanel';
+import TarotFlow from './components/TarotFlow';
 
-function AppContent() {
-  const [screen, setScreen] = useState<AppScreen>('landing');
-  const [selectedSpread, setSelectedSpread] = useState<SpreadType | null>(null);
-  const [question, setQuestion] = useState<string>('');
-  const [reading, setReading] = useState<Reading | null>(null);
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
-
-  useEffect(() => {
-    const path = window.location.pathname;
-    if (path === '/admin') {
-      setScreen('admin' as AppScreen);
-    }
-  }, []);
-
-  const handleStartReading = () => {
-    setScreen('spread-selection');
-  };
-
-  const handleSpreadSelect = (spreadType: SpreadType) => {
-    setSelectedSpread(spreadType);
-    setScreen('question-input');
-  };
-
-  const handleQuestionSubmit = (userQuestion: string) => {
-    setQuestion(userQuestion);
-    setScreen('card-selection');
-  };
-
-  const handleCardsSelected = (cards: SelectedCard[]) => {
-    if (selectedSpread) {
-      setReading({
-        spread: selectedSpread,
-        question,
-        cards,
-        timestamp: Date.now()
-      });
-      setScreen('reading-display');
-    }
-  };
-
-  const handleNewReading = () => {
-    setScreen('landing');
-    setSelectedSpread(null);
-    setQuestion('');
-    setReading(null);
-  };
 
   if (loading) {
     return (
@@ -64,42 +16,32 @@ function AppContent() {
     );
   }
 
-  if (screen === 'admin') {
-    return user ? <AdminPanel /> : <AdminLogin />;
-  }
+  return user ? <>{children}</> : <Navigate to="/admin/login" replace />;
+}
 
+function AppContent() {
   return (
-    <div className="min-h-screen">
-      {screen === 'landing' && (
-        <LandingPage onStartReading={handleStartReading} />
-      )}
-      {screen === 'spread-selection' && (
-        <SpreadSelection onSpreadSelect={handleSpreadSelect} />
-      )}
-      {screen === 'question-input' && selectedSpread && (
-        <QuestionInput onSubmit={handleQuestionSubmit} />
-      )}
-      {screen === 'card-selection' && selectedSpread && (
-        <CardSelection
-          spreadType={selectedSpread}
-          onCardsSelected={handleCardsSelected}
-        />
-      )}
-      {screen === 'reading-display' && reading && (
-        <ReadingDisplay
-          reading={reading}
-          onNewReading={handleNewReading}
-        />
-      )}
-    </div>
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/reading/*" element={<TarotFlow />} />
+      <Route path="/admin/login" element={<AdminLogin />} />
+      <Route path="/admin" element={
+        <ProtectedRoute>
+          <AdminPanel />
+        </ProtectedRoute>
+      } />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }
 
 function App() {
   return (
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
+    <BrowserRouter>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 
