@@ -1,0 +1,420 @@
+import { useState, useEffect } from 'react';
+import { LogOut, Plus, Trash2, Upload, Check, X } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
+import { supabase } from '../lib/supabase';
+import { TarotDeck, TarotCardDB } from '../types/database';
+import CelticBorder from './CelticBorder';
+
+export default function AdminPanel() {
+  const { user, signOut } = useAuth();
+  const [decks, setDecks] = useState<TarotDeck[]>([]);
+  const [selectedDeck, setSelectedDeck] = useState<string | null>(null);
+  const [showNewDeckForm, setShowNewDeckForm] = useState(false);
+  const [newDeckName, setNewDeckName] = useState('');
+  const [newDeckDescription, setNewDeckDescription] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadDecks();
+  }, []);
+
+  const loadDecks = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('tarot_decks')
+        .select('*')
+        .eq('created_by', user?.id)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setDecks(data || []);
+    } catch (error) {
+      console.error('Error loading decks:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const createDeck = async () => {
+    if (!newDeckName.trim()) return;
+
+    try {
+      const { data, error } = await supabase
+        .from('tarot_decks')
+        .insert({
+          name: newDeckName,
+          description: newDeckDescription,
+          created_by: user?.id
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      setDecks([data, ...decks]);
+      setNewDeckName('');
+      setNewDeckDescription('');
+      setShowNewDeckForm(false);
+      setSelectedDeck(data.id);
+    } catch (error) {
+      console.error('Error creating deck:', error);
+    }
+  };
+
+  const deleteDeck = async (deckId: string) => {
+    if (!confirm('Are you sure you want to delete this deck?')) return;
+
+    try {
+      const { error } = await supabase
+        .from('tarot_decks')
+        .delete()
+        .eq('id', deckId);
+
+      if (error) throw error;
+
+      setDecks(decks.filter(d => d.id !== deckId));
+      if (selectedDeck === deckId) setSelectedDeck(null);
+    } catch (error) {
+      console.error('Error deleting deck:', error);
+    }
+  };
+
+  const toggleDeckActive = async (deckId: string, currentActive: boolean) => {
+    try {
+      if (!currentActive) {
+        await supabase
+          .from('tarot_decks')
+          .update({ is_active: false })
+          .neq('id', deckId);
+      }
+
+      const { error } = await supabase
+        .from('tarot_decks')
+        .update({ is_active: !currentActive })
+        .eq('id', deckId);
+
+      if (error) throw error;
+
+      setDecks(decks.map(d => ({
+        ...d,
+        is_active: d.id === deckId ? !currentActive : (!currentActive ? false : d.is_active)
+      })));
+    } catch (error) {
+      console.error('Error toggling deck:', error);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4">
+      <div className="max-w-6xl mx-auto space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-serif text-purple-100">Admin Panel</h1>
+            <p className="text-slate-300 mt-1">Manage your tarot decks</p>
+          </div>
+          <button
+            onClick={signOut}
+            className="flex items-center gap-2 px-4 py-2 bg-slate-800 text-slate-300 rounded-lg hover:bg-slate-700 transition-colors"
+          >
+            <LogOut className="w-4 h-4" />
+            Sign Out
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-1 space-y-4">
+            <CelticBorder>
+              <div className="bg-gradient-to-br from-slate-800/95 to-purple-900/95 backdrop-blur-sm p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-serif text-purple-100">Your Decks</h2>
+                  <button
+                    onClick={() => setShowNewDeckForm(!showNewDeckForm)}
+                    className="p-2 bg-purple-500/20 text-purple-300 rounded-lg hover:bg-purple-500/30 transition-colors"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </button>
+                </div>
+
+                {showNewDeckForm && (
+                  <div className="mb-4 p-4 bg-slate-900/50 rounded-lg space-y-3">
+                    <input
+                      type="text"
+                      placeholder="Deck name"
+                      value={newDeckName}
+                      onChange={(e) => setNewDeckName(e.target.value)}
+                      className="w-full px-3 py-2 bg-slate-800 text-white rounded-lg border border-slate-700 focus:border-purple-500 focus:outline-none"
+                    />
+                    <textarea
+                      placeholder="Description (optional)"
+                      value={newDeckDescription}
+                      onChange={(e) => setNewDeckDescription(e.target.value)}
+                      className="w-full px-3 py-2 bg-slate-800 text-white rounded-lg border border-slate-700 focus:border-purple-500 focus:outline-none resize-none"
+                      rows={3}
+                    />
+                    <div className="flex gap-2">
+                      <button
+                        onClick={createDeck}
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors"
+                      >
+                        <Check className="w-4 h-4" />
+                        Create
+                      </button>
+                      <button
+                        onClick={() => setShowNewDeckForm(false)}
+                        className="px-4 py-2 bg-slate-700 text-slate-300 rounded-lg hover:bg-slate-600 transition-colors"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {loading ? (
+                  <p className="text-slate-400 text-center py-8">Loading...</p>
+                ) : decks.length === 0 ? (
+                  <p className="text-slate-400 text-center py-8">No decks yet. Create one to get started!</p>
+                ) : (
+                  <div className="space-y-2">
+                    {decks.map(deck => (
+                      <div
+                        key={deck.id}
+                        className={`p-4 rounded-lg border-2 transition-all cursor-pointer ${
+                          selectedDeck === deck.id
+                            ? 'border-purple-500 bg-purple-500/10'
+                            : 'border-slate-700 bg-slate-800/50 hover:border-slate-600'
+                        }`}
+                        onClick={() => setSelectedDeck(deck.id)}
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="flex-1 min-w-0">
+                            <h3 className="text-purple-100 font-medium truncate">{deck.name}</h3>
+                            {deck.description && (
+                              <p className="text-slate-400 text-sm mt-1 line-clamp-2">{deck.description}</p>
+                            )}
+                            {deck.is_active && (
+                              <span className="inline-block mt-2 px-2 py-1 bg-green-500/20 text-green-300 text-xs rounded">
+                                Active
+                              </span>
+                            )}
+                          </div>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              deleteDeck(deck.id);
+                            }}
+                            className="p-1 text-slate-400 hover:text-red-400 transition-colors"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </CelticBorder>
+          </div>
+
+          <div className="lg:col-span-2">
+            {selectedDeck ? (
+              <DeckEditor
+                deckId={selectedDeck}
+                deck={decks.find(d => d.id === selectedDeck)!}
+                onToggleActive={toggleDeckActive}
+              />
+            ) : (
+              <CelticBorder>
+                <div className="bg-gradient-to-br from-slate-800/95 to-purple-900/95 backdrop-blur-sm p-12">
+                  <p className="text-slate-400 text-center">
+                    Select a deck to edit or create a new one
+                  </p>
+                </div>
+              </CelticBorder>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+interface DeckEditorProps {
+  deckId: string;
+  deck: TarotDeck;
+  onToggleActive: (deckId: string, currentActive: boolean) => void;
+}
+
+function DeckEditor({ deckId, deck, onToggleActive }: DeckEditorProps) {
+  const [cards, setCards] = useState<TarotCardDB[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
+
+  useEffect(() => {
+    loadCards();
+  }, [deckId]);
+
+  const loadCards = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('tarot_cards')
+        .select('*')
+        .eq('deck_id', deckId)
+        .order('name');
+
+      if (error) throw error;
+      setCards(data || []);
+    } catch (error) {
+      console.error('Error loading cards:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleBulkUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
+
+    setUploading(true);
+
+    try {
+      const uploadedCards: TarotCardDB[] = [];
+
+      for (const file of Array.from(files)) {
+        const fileName = file.name.replace(/\.[^/.]+$/, '');
+        const fileExt = file.name.split('.').pop();
+        const filePath = `${deckId}/${crypto.randomUUID()}.${fileExt}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('tarot-cards')
+          .upload(filePath, file);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('tarot-cards')
+          .getPublicUrl(filePath);
+
+        const arcana = fileName.toLowerCase().includes('major') ? 'major' : 'minor';
+        let suit = null;
+        if (arcana === 'minor') {
+          if (fileName.toLowerCase().includes('wand')) suit = 'wands';
+          else if (fileName.toLowerCase().includes('cup')) suit = 'cups';
+          else if (fileName.toLowerCase().includes('sword')) suit = 'swords';
+          else if (fileName.toLowerCase().includes('pentacle')) suit = 'pentacles';
+        }
+
+        const { data: cardData, error: cardError } = await supabase
+          .from('tarot_cards')
+          .insert({
+            deck_id: deckId,
+            name: fileName,
+            arcana,
+            suit,
+            image_url: publicUrl,
+            meaning_upright: '',
+            meaning_reversed: '',
+            keywords: []
+          })
+          .select()
+          .single();
+
+        if (cardError) throw cardError;
+        uploadedCards.push(cardData);
+      }
+
+      setCards([...cards, ...uploadedCards]);
+    } catch (error) {
+      console.error('Error uploading cards:', error);
+      alert('Failed to upload some cards. Please try again.');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const deleteCard = async (cardId: string) => {
+    try {
+      const { error } = await supabase
+        .from('tarot_cards')
+        .delete()
+        .eq('id', cardId);
+
+      if (error) throw error;
+      setCards(cards.filter(c => c.id !== cardId));
+    } catch (error) {
+      console.error('Error deleting card:', error);
+    }
+  };
+
+  return (
+    <CelticBorder>
+      <div className="bg-gradient-to-br from-slate-800/95 to-purple-900/95 backdrop-blur-sm p-6">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-2xl font-serif text-purple-100">{deck.name}</h2>
+            <p className="text-slate-400 mt-1">{cards.length} cards</p>
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={() => onToggleActive(deckId, deck.is_active)}
+              className={`px-4 py-2 rounded-lg transition-colors ${
+                deck.is_active
+                  ? 'bg-green-500/20 text-green-300 hover:bg-green-500/30'
+                  : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+              }`}
+            >
+              {deck.is_active ? 'Active' : 'Set Active'}
+            </button>
+            <label className="flex items-center gap-2 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors cursor-pointer">
+              <Upload className="w-4 h-4" />
+              Upload Cards
+              <input
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={handleBulkUpload}
+                className="hidden"
+                disabled={uploading}
+              />
+            </label>
+          </div>
+        </div>
+
+        {uploading && (
+          <div className="mb-4 p-4 bg-purple-500/20 text-purple-300 rounded-lg text-center">
+            Uploading cards...
+          </div>
+        )}
+
+        {loading ? (
+          <p className="text-slate-400 text-center py-12">Loading cards...</p>
+        ) : cards.length === 0 ? (
+          <div className="text-center py-12">
+            <Upload className="w-12 h-12 text-slate-600 mx-auto mb-3" />
+            <p className="text-slate-400">No cards yet. Upload images to get started.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            {cards.map(card => (
+              <div key={card.id} className="group relative">
+                <div className="aspect-[2/3] bg-slate-900/50 rounded-lg overflow-hidden">
+                  <img
+                    src={card.image_url}
+                    alt={card.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <button
+                  onClick={() => deleteCard(card.id)}
+                  className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+                <p className="mt-2 text-sm text-slate-300 truncate">{card.name}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </CelticBorder>
+  );
+}
