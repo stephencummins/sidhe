@@ -23,23 +23,23 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-sidhe-deep-blue via-sidhe-navy to-sidhe-deep-blue flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <CelticBorder>
-          <div className="bg-gradient-to-br from-slate-800/95 to-purple-900/95 backdrop-blur-sm p-8 space-y-6">
+          <div className="bg-gradient-to-br from-sidhe-navy/95 to-sidhe-deep-blue/95 backdrop-blur-sm p-8 space-y-6">
             <div className="text-center space-y-2">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-purple-500/20 mb-4">
-                <Lock className="w-8 h-8 text-purple-300" />
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-sidhe-gold/20 mb-4">
+                <Lock className="w-8 h-8 text-sidhe-gold" />
               </div>
-              <h1 className="text-3xl font-serif text-purple-100">Admin Portal</h1>
-              <p className="text-slate-300">
+              <h1 className="text-3xl font-serif text-sidhe-cream">Admin Portal</h1>
+              <p className="text-sidhe-moon">
                 Sign in to manage tarot decks
               </p>
             </div>
 
             <button
               onClick={handleLogin}
-              className="w-full flex items-center justify-center gap-3 px-6 py-3 bg-white text-slate-800 rounded-lg hover:bg-slate-100 transition-colors font-medium"
+              className="w-full flex items-center justify-center gap-3 px-6 py-3 bg-white text-slate-800 rounded-lg hover:bg-slate-100 transition-all duration-300 font-medium shadow-lg hover:shadow-sidhe-gold/30"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path
