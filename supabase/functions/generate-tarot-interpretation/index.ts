@@ -46,38 +46,38 @@ Provide a comprehensive tarot interpretation that includes:
 
 Keep the tone mystical yet insightful. Focus on personal growth and self-reflection.`;
 
-    const apiKey = Deno.env.get('ANTHROPIC_API_KEY');
+    // Use OpenAI API instead
+    const apiKey = Deno.env.get('OPENAI_API_KEY');
     if (!apiKey) {
-      throw new Error('ANTHROPIC_API_KEY not configured');
+      throw new Error('OPENAI_API_KEY not configured');
     }
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01'
+        'Authorization': `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: 'claude-3-5-sonnet-20241022',
-        max_tokens: 1500,
+        model: 'gpt-4o-mini',
         messages: [
           {
             role: 'user',
             content: prompt
           }
-        ]
+        ],
+        max_tokens: 1500
       })
     });
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      console.error('Anthropic API Error:', response.status, errorData);
+      console.error('OpenAI API Error:', response.status, errorData);
       throw new Error(`API returned ${response.status}`);
     }
 
     const data = await response.json();
-    const interpretation = data.content[0].text;
+    const interpretation = data.choices[0].message.content;
 
     return new Response(
       JSON.stringify({ interpretation }),
