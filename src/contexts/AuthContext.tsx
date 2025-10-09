@@ -16,6 +16,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Handle hash fragments from OAuth redirect
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    const accessToken = hashParams.get('access_token');
+
+    if (accessToken) {
+      // Supabase will handle the session automatically
+      // Just clean up the URL
+      window.history.replaceState(null, '', window.location.pathname);
+    }
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
       setLoading(false);
@@ -24,10 +34,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       (async () => {
         setUser(session?.user ?? null);
-
-        if (session && window.location.hash) {
-          window.history.replaceState(null, '', window.location.pathname);
-        }
       })();
     });
 
