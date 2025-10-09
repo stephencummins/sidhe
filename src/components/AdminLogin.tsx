@@ -5,7 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import CelticBorder from './CelticBorder';
 
 export default function AdminLogin() {
-  const { signInWithGoogle, user } = useAuth();
+  const { signInWithGoogle, user, loading } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -13,6 +13,14 @@ export default function AdminLogin() {
       navigate('/admin', { replace: true });
     }
   }, [user, navigate]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-sidhe-deep-blue via-sidhe-navy to-sidhe-deep-blue flex items-center justify-center">
+        <p className="text-sidhe-cream">Loading...</p>
+      </div>
+    );
+  }
 
   const handleLogin = async () => {
     try {
