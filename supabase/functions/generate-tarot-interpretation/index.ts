@@ -51,6 +51,7 @@ Keep the tone mystical yet insightful. Focus on personal growth and self-reflect
       throw new Error('ANTHROPIC_API_KEY not configured');
     }
 
+    console.log('Calling Anthropic API...');
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -59,7 +60,7 @@ Keep the tone mystical yet insightful. Focus on personal growth and self-reflect
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-3-haiku-20240307',
+        model: 'claude-3-5-haiku-20241022',
         max_tokens: 2000,
         messages: [
           {
@@ -71,9 +72,9 @@ Keep the tone mystical yet insightful. Focus on personal growth and self-reflect
     });
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      console.error('Anthropic API Error:', response.status, errorData);
-      throw new Error(`API returned ${response.status}`);
+      const errorText = await response.text();
+      console.error('Anthropic API Error:', response.status, errorText);
+      throw new Error(`API returned ${response.status}: ${errorText}`);
     }
 
     const data = await response.json();
