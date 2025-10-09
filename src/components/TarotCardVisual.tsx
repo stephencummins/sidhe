@@ -12,7 +12,7 @@ export default function TarotCardVisual({ card, revealed = false, size = 'medium
     small: 'w-24',
     medium: 'w-32',
     large: 'w-48',
-    xlarge: 'w-80'
+    xlarge: 'w-48 sm:w-64 lg:w-80'
   };
 
   const getCardSymbol = () => {

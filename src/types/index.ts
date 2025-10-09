@@ -16,6 +16,7 @@ export interface SelectedCard {
     arcana: string;
     keywords: string[];
     upright_meaning: string;
+    reversed_meaning: string;
     image_url?: string;
   };
   position: string;
