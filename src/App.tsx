@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import Layout from './components/Layout';
 import LandingPage from './components/LandingPage';
 import AdminLogin from './components/AdminLogin';
 import AdminPanel from './components/AdminPanel';
@@ -21,17 +22,19 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 function AppContent() {
   return (
-    <Routes>
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/reading/*" element={<TarotFlow />} />
-      <Route path="/admin/login" element={<AdminLogin />} />
-      <Route path="/admin" element={
-        <ProtectedRoute>
-          <AdminPanel />
-        </ProtectedRoute>
-      } />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <Layout>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/reading/*" element={<TarotFlow />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin" element={
+          <ProtectedRoute>
+            <AdminPanel />
+          </ProtectedRoute>
+        } />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Layout>
   );
 }
 
