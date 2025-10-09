@@ -121,13 +121,15 @@ export default function AdminPanel() {
     }
   };
 
+  console.log('RENDERING ADMIN PANEL - RETURN STATEMENT REACHED');
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-sidhe-deep-blue via-sidhe-navy to-sidhe-deep-blue p-4">
       <div className="max-w-6xl mx-auto space-y-6">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between bg-red-500 p-4">
           <div>
-            <h1 className="text-3xl font-serif text-sidhe-cream">Admin Panel</h1>
-            <p className="text-sidhe-moon mt-1">Manage your tarot decks</p>
+            <h1 className="text-3xl font-serif text-white">Admin Panel TEST</h1>
+            <p className="text-white mt-1">Manage your tarot decks - CAN YOU SEE THIS?</p>
           </div>
           <button
             onClick={signOut}
