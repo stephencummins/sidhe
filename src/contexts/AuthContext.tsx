@@ -22,7 +22,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+      (async () => {
+        setUser(session?.user ?? null);
+
+        if (session && window.location.hash) {
+          window.history.replaceState(null, '', window.location.pathname);
+        }
+      })();
     });
 
     return () => subscription.unsubscribe();
