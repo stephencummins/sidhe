@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import RunicSymbol from './RunicSymbol';
 import CelticBorder from './CelticBorder';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -19,88 +18,137 @@ export default function LandingPage() {
       console.error('Login error:', error);
     }
   };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sidhe-deep-blue via-sidhe-navy to-sidhe-deep-blue flex items-center justify-center p-4 relative overflow-hidden">
-      <div className="absolute inset-0 opacity-5">
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-amber-50 via-orange-50 to-teal-50">
+      <div className="absolute inset-0 opacity-20">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <pattern id="cave-pattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
-              <circle cx="20" cy="20" r="2" fill="#d4af37" opacity="0.3" />
-              <path d="M40 30 Q50 25 60 30" stroke="#d4af37" strokeWidth="1" fill="none" opacity="0.2" />
-              <path d="M10 60 L15 55 L20 60 L15 65 Z" stroke="#d4af37" strokeWidth="0.5" opacity="0.2" />
+            <pattern id="kells-pattern" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
+              <path d="M60 20 Q75 35 60 50 Q45 35 60 20" stroke="#92400e" strokeWidth="1.5" fill="none" opacity="0.3" />
+              <path d="M20 60 Q35 45 50 60 Q35 75 20 60" stroke="#b45309" strokeWidth="1.5" fill="none" opacity="0.3" />
+              <circle cx="60" cy="60" r="15" stroke="#d97706" strokeWidth="1" fill="none" opacity="0.2" />
+              <path d="M100 60 Q85 75 70 60 Q85 45 100 60" stroke="#ea580c" strokeWidth="1.5" fill="none" opacity="0.3" />
             </pattern>
           </defs>
-          <rect width="100%" height="100%" fill="url(#cave-pattern)" />
+          <rect width="100%" height="100%" fill="url(#kells-pattern)" />
         </svg>
       </div>
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-sidhe-navy/10 to-transparent"></div>
 
-      <div className="max-w-2xl mx-auto text-center relative z-10">
-        <div className="mb-8 flex justify-center">
-          <div className="relative">
-            <img src="/Copilot_20251009_124652.png" alt="SIDHE" className="w-48 h-48 object-contain drop-shadow-2xl" />
+      <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-amber-900/10 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-orange-900/10 to-transparent" />
+
+      <div className="max-w-4xl mx-auto px-4 py-16 relative z-10">
+        <div className="text-center mb-12">
+          <div className="inline-block mb-8">
+            <img
+              src="/Copilot_20251009_124652.png"
+              alt="SIDHE"
+              className="w-56 h-56 object-contain drop-shadow-2xl filter brightness-110 contrast-110"
+            />
           </div>
+
+          <div className="mb-6">
+            <h1 className="text-7xl font-bold mb-2 bg-gradient-to-r from-amber-800 via-orange-700 to-red-800 bg-clip-text text-transparent drop-shadow-sm" style={{ fontFamily: 'Cinzel, serif' }}>
+              SIDHE
+            </h1>
+            <div className="w-48 h-1 mx-auto bg-gradient-to-r from-transparent via-amber-700 to-transparent" />
+          </div>
+
+          <p className="text-2xl text-amber-900/80 mb-4 leading-relaxed italic">
+            Tarot Reading of the Ancient Ones
+          </p>
+          <p className="text-lg text-orange-800/70 max-w-2xl mx-auto">
+            Where illuminated wisdom meets modern divination
+          </p>
         </div>
 
-        <h1 className="text-6xl font-bold text-sidhe-cream mb-4 tracking-wide" style={{ fontFamily: 'Georgia, serif', letterSpacing: '0.05em' }}>
-          SIDHE
-        </h1>
+        <div className="flex justify-center mb-16">
+          <button
+            onClick={handleStartReading}
+            className="group relative px-16 py-5 bg-gradient-to-r from-amber-700 via-orange-600 to-red-700 text-amber-50 text-xl font-bold border-4 border-double border-amber-900 hover:border-orange-800 transition-all duration-500 transform hover:scale-105 shadow-2xl hover:shadow-amber-900/50 overflow-hidden"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
+            <span className="relative z-10 tracking-wide" style={{ fontFamily: 'Cinzel, serif' }}>Begin Your Journey</span>
 
-        <p className="text-xl text-sidhe-moon/80 mb-12 leading-relaxed" style={{ fontFamily: 'Georgia, serif' }}>
-          Tarot Reading AI - Ancient wisdom channeled through modern divination
-        </p>
-
-        <button
-          onClick={handleStartReading}
-          className="group relative px-12 py-4 bg-gradient-to-r from-sidhe-orange via-sidhe-coral to-sidhe-orange text-sidhe-cream text-lg font-semibold border-2 border-sidhe-gold/50 hover:border-sidhe-bright-gold transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-sidhe-gold/60"
-          style={{ fontFamily: 'Georgia, serif' }}
-        >
-          <span className="relative z-10">Begin Your Reading</span>
-          <div className="absolute inset-0 bg-sidhe-bright-gold opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
-          <div className="absolute -top-1 -left-1 w-3 h-3 border-t-2 border-l-2 border-sidhe-gold/50"></div>
-          <div className="absolute -top-1 -right-1 w-3 h-3 border-t-2 border-r-2 border-sidhe-gold/50"></div>
-          <div className="absolute -bottom-1 -left-1 w-3 h-3 border-b-2 border-l-2 border-sidhe-gold/50"></div>
-          <div className="absolute -bottom-1 -right-1 w-3 h-3 border-b-2 border-r-2 border-sidhe-gold/50"></div>
-        </button>
-
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 text-sidhe-moon/70">
-          <div className="relative p-6 bg-sidhe-navy/60 backdrop-blur-sm border-2 border-sidhe-teal/40 hover:border-sidhe-sage/60 transition-all">
-            <div className="absolute top-2 left-2 w-4 h-4 border-t border-l border-sidhe-gold/30"></div>
-            <div className="absolute top-2 right-2 w-4 h-4 border-t border-r border-sidhe-gold/30"></div>
-            <div className="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-sidhe-gold/30"></div>
-            <div className="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-sidhe-gold/30"></div>
-            <RunicSymbol variant="fehu" className="w-10 h-12 mb-3 text-sidhe-gold/70 mx-auto" />
-            <h3 className="text-sidhe-cream font-semibold mb-2" style={{ fontFamily: 'Georgia, serif' }}>Choose Your Spread</h3>
-            <p className="text-sm" style={{ fontFamily: 'Georgia, serif' }}>Select from ancient spreading patterns</p>
-          </div>
-
-          <div className="relative p-6 bg-sidhe-navy/60 backdrop-blur-sm border-2 border-sidhe-teal/40 hover:border-sidhe-sage/60 transition-all">
-            <div className="absolute top-2 left-2 w-4 h-4 border-t border-l border-sidhe-gold/30"></div>
-            <div className="absolute top-2 right-2 w-4 h-4 border-t border-r border-sidhe-gold/30"></div>
-            <div className="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-sidhe-gold/30"></div>
-            <div className="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-sidhe-gold/30"></div>
-            <RunicSymbol variant="ansuz" className="w-10 h-12 mb-3 text-sidhe-gold/70 mx-auto" />
-            <h3 className="text-sidhe-cream font-semibold mb-2" style={{ fontFamily: 'Georgia, serif' }}>Draw Your Cards</h3>
-            <p className="text-sm" style={{ fontFamily: 'Georgia, serif' }}>Channel primordial energies</p>
-          </div>
-
-          <div className="relative p-6 bg-sidhe-navy/60 backdrop-blur-sm border-2 border-sidhe-teal/40 hover:border-sidhe-sage/60 transition-all">
-            <div className="absolute top-2 left-2 w-4 h-4 border-t border-l border-sidhe-gold/30"></div>
-            <div className="absolute top-2 right-2 w-4 h-4 border-t border-r border-sidhe-gold/30"></div>
-            <div className="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-sidhe-gold/30"></div>
-            <div className="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-sidhe-gold/30"></div>
-            <RunicSymbol variant="kenaz" className="w-10 h-12 mb-3 text-sidhe-gold/70 mx-auto" />
-            <h3 className="text-sidhe-cream font-semibold mb-2" style={{ fontFamily: 'Georgia, serif' }}>Receive Wisdom</h3>
-            <p className="text-sm" style={{ fontFamily: 'Georgia, serif' }}>AI-guided interpretations</p>
-          </div>
+            <div className="absolute -top-1 -left-1 w-6 h-6 border-t-4 border-l-4 border-amber-300" />
+            <div className="absolute -top-1 -right-1 w-6 h-6 border-t-4 border-r-4 border-amber-300" />
+            <div className="absolute -bottom-1 -left-1 w-6 h-6 border-b-4 border-l-4 border-amber-300" />
+            <div className="absolute -bottom-1 -right-1 w-6 h-6 border-b-4 border-r-4 border-amber-300" />
+          </button>
         </div>
 
-        <div className="mt-12 flex flex-col items-center gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          <CelticBorder className="transform hover:scale-105 transition-transform duration-300">
+            <div className="p-8 text-center">
+              <div className="mb-4 flex justify-center">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-600 to-orange-700 flex items-center justify-center shadow-lg">
+                  <span className="text-3xl text-amber-50">I</span>
+                </div>
+              </div>
+              <h3 className="text-xl font-bold text-amber-900 mb-3" style={{ fontFamily: 'Cinzel, serif' }}>Choose Your Spread</h3>
+              <p className="text-orange-800/80 leading-relaxed">Select from sacred spreading patterns passed down through ages</p>
+            </div>
+          </CelticBorder>
+
+          <CelticBorder className="transform hover:scale-105 transition-transform duration-300">
+            <div className="p-8 text-center">
+              <div className="mb-4 flex justify-center">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-orange-600 to-red-700 flex items-center justify-center shadow-lg">
+                  <span className="text-3xl text-amber-50">II</span>
+                </div>
+              </div>
+              <h3 className="text-xl font-bold text-amber-900 mb-3" style={{ fontFamily: 'Cinzel, serif' }}>Draw Your Cards</h3>
+              <p className="text-orange-800/80 leading-relaxed">Channel the ancient energies through mystical cards</p>
+            </div>
+          </CelticBorder>
+
+          <CelticBorder className="transform hover:scale-105 transition-transform duration-300">
+            <div className="p-8 text-center">
+              <div className="mb-4 flex justify-center">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-red-600 to-amber-700 flex items-center justify-center shadow-lg">
+                  <span className="text-3xl text-amber-50">III</span>
+                </div>
+              </div>
+              <h3 className="text-xl font-bold text-amber-900 mb-3" style={{ fontFamily: 'Cinzel, serif' }}>Receive Wisdom</h3>
+              <p className="text-orange-800/80 leading-relaxed">Discover insights illuminated by divine guidance</p>
+            </div>
+          </CelticBorder>
+        </div>
+
+        <div className="max-w-3xl mx-auto">
+          <CelticBorder>
+            <div className="p-8">
+              <div className="flex flex-col md:flex-row gap-8 items-center">
+                <div className="grid grid-cols-2 gap-4 flex-shrink-0">
+                  <img src="/The_Star copy.gif" alt="The Star" className="w-24 h-36 object-cover rounded shadow-lg border-2 border-amber-700" />
+                  <img src="/The_Moon copy.gif" alt="The Moon" className="w-24 h-36 object-cover rounded shadow-lg border-2 border-amber-700" />
+                  <img src="/The_Sun copy.gif" alt="The Sun" className="w-24 h-36 object-cover rounded shadow-lg border-2 border-amber-700" />
+                  <img src="/The_World copy.gif" alt="The World" className="w-24 h-36 object-cover rounded shadow-lg border-2 border-amber-700" />
+                </div>
+                <div className="flex-1 text-center md:text-left">
+                  <h3 className="text-2xl font-bold text-amber-900 mb-3" style={{ fontFamily: 'Cinzel, serif' }}>
+                    Illuminated by Celtic Art
+                  </h3>
+                  <p className="text-orange-800/80 leading-relaxed mb-4">
+                    Each card is a masterwork inspired by the intricate beauty of the Book of Kells,
+                    blending ancient Celtic artistry with timeless tarot symbolism.
+                  </p>
+                  <p className="text-amber-900/70 italic text-sm">
+                    "In every knot, a story. In every line, wisdom eternal."
+                  </p>
+                </div>
+              </div>
+            </div>
+          </CelticBorder>
+        </div>
+
+        <div className="mt-16 flex flex-col items-center gap-6">
           <button
             onClick={handleGoogleLogin}
-            className="flex items-center justify-center gap-3 px-6 py-3 bg-white text-slate-800 rounded-lg hover:bg-slate-100 transition-all duration-300 font-medium shadow-lg hover:shadow-sidhe-gold/30"
+            className="flex items-center justify-center gap-3 px-8 py-4 bg-white text-slate-800 rounded-lg hover:bg-amber-50 transition-all duration-300 font-semibold shadow-xl hover:shadow-2xl border-2 border-amber-200 hover:border-amber-400"
           >
-            <svg className="w-5 h-5" viewBox="0 0 24 24">
+            <svg className="w-6 h-6" viewBox="0 0 24 24">
               <path
                 fill="currentColor"
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -122,11 +170,17 @@ export default function LandingPage() {
           </button>
           <Link
             to="/admin/login"
-            className="text-sidhe-gold/60 hover:text-sidhe-bright-gold text-sm transition-colors duration-200"
-            style={{ fontFamily: 'Georgia, serif' }}
+            className="text-amber-800 hover:text-orange-700 font-medium transition-colors duration-200 underline decoration-amber-600/30 hover:decoration-orange-600"
           >
-            Admin Login
+            Admin Portal
           </Link>
+        </div>
+
+        <div className="mt-16 text-center">
+          <div className="w-full h-px bg-gradient-to-r from-transparent via-amber-700/50 to-transparent mb-8" />
+          <p className="text-amber-900/60 text-sm italic">
+            "The threads of fate are woven in patterns both ancient and new"
+          </p>
         </div>
       </div>
     </div>
