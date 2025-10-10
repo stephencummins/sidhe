@@ -646,8 +646,18 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
           <div className="space-y-8">
             {(() => {
               console.log('DeckEditor: Rendering cards, total:', cards.length);
-              const majorArcana = cards.filter(c => c.arcana === 'major');
-              const minorArcana = cards.filter(c => c.arcana === 'minor');
+
+              // List of Major Arcana card names
+              const majorArcanaNames = [
+                'The Fool', 'The Magician', 'The High Priestess', 'The Empress', 'The Emperor',
+                'The Hierophant', 'The Lovers', 'The Chariot', 'Strength', 'The Hermit',
+                'Wheel of Fortune', 'Justice', 'The Hanged Man', 'Death', 'Temperance',
+                'The Devil', 'The Tower', 'The Star', 'The Moon', 'The Sun', 'Judgement', 'The World'
+              ];
+
+              // Filter by card name since arcana field needs fixing in database
+              const majorArcana = cards.filter(c => majorArcanaNames.includes(c.name));
+              const minorArcana = cards.filter(c => !majorArcanaNames.includes(c.name));
               console.log('DeckEditor: Major Arcana:', majorArcana.length, 'Minor Arcana:', minorArcana.length);
               const minorBySuit = {
                 spring: minorArcana.filter(c => c.suit?.toLowerCase() === 'spring'),
