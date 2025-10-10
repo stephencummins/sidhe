@@ -18,5 +18,9 @@ export interface TarotCardDB {
   meaning_reversed: string;
   image_url: string;
   keywords: string[];
+  celtic_meaning_upright?: string;
+  celtic_meaning_reversed?: string;
+  celtic_keywords?: string[];
+  celtic_mythology?: string;
   created_at: string;
 }

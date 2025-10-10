@@ -7,6 +7,10 @@ export interface TarotCard {
   upright_meaning: string;
   reversed_meaning: string;
   image_url?: string;
+  celtic_upright?: string;
+  celtic_reversed?: string;
+  celtic_keywords?: string[];
+  celtic_mythology?: string;
 }
 
 const majorArcana: TarotCard[] = [

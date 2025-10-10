@@ -14,6 +14,7 @@ interface RequestBody {
   }>;
   question?: string;
   spreadName: string;
+  meaningType?: 'traditional' | 'celtic';
 }
 
 Deno.serve(async (req: Request) => {
@@ -25,19 +26,23 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
-    const { cards, question, spreadName }: RequestBody = await req.json();
+    const { cards, question, spreadName, meaningType = 'traditional' }: RequestBody = await req.json();
 
     const cardsDescription = cards
       .map(card => `${card.position}: ${card.name}${card.isReversed ? ' (Reversed)' : ''}`)
       .join('\n');
 
-    const prompt = `You are a mystical tarot reader with deep knowledge of symbolism and intuition.
+    const celticContext = meaningType === 'celtic'
+      ? `\n\nIMPORTANT: This reading uses Celtic mythology interpretations. Draw upon Celtic deities, legends, and symbolism in your interpretation. Reference figures like Dagda, Brigid, Morrigan, Lugh, and other Celtic gods and goddesses. Connect the cards to Celtic festivals (Samhain, Imbolc, Beltane, Lughnasadh), Celtic animal symbolism, and ancient Celtic wisdom.`
+      : '';
+
+    const prompt = `You are a mystical tarot reader with deep knowledge of symbolism and intuition${meaningType === 'celtic' ? ' and Celtic mythology' : ''}.
 
 Spread: ${spreadName}
 ${question ? `Question: ${question}` : 'This is a general reading.'}
 
 Cards drawn:
-${cardsDescription}
+${cardsDescription}${celticContext}
 
 Provide a comprehensive tarot interpretation that includes:
 1. The meaning of each card in its position

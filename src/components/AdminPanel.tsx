@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { LogOut, Plus, Trash2, Upload, Check, X, RefreshCw } from 'lucide-react';
+import { LogOut, Plus, Trash2, Upload, Check, X, RefreshCw, BookOpen } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 import { TarotDeck, TarotCardDB } from '../types/database';
 import CelticBorder from './CelticBorder';
 import { tarotDeck } from '../data/tarotDeck';
+import CelticMeaningsImport from './CelticMeaningsImport';
 
 export default function AdminPanel() {
   const { user, signOut } = useAuth();
@@ -322,6 +323,7 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
   const [cards, setCards] = useState<TarotCardDB[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
+  const [showCelticImport, setShowCelticImport] = useState(false);
 
   useEffect(() => {
     loadCards();
@@ -420,14 +422,22 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
   };
 
   return (
-    <CelticBorder>
+    <>
+      {showCelticImport && (
+        <CelticMeaningsImport
+          deckId={deckId}
+          onClose={() => setShowCelticImport(false)}
+          onSuccess={() => loadCards()}
+        />
+      )}
+      <CelticBorder>
       <div className="bg-slate-800/95 backdrop-blur-sm p-6">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-2xl font-serif text-white">{deck.name}</h2>
             <p className="text-gray-300 mt-1">{cards.length} cards</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <button
               onClick={() => onToggleActive(deckId, deck.is_active)}
               className={`px-4 py-2 rounded-lg transition-colors ${
@@ -445,6 +455,13 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
             >
               <RefreshCw className={`w-4 h-4 ${syncing ? 'animate-spin' : ''}`} />
               Sync Meanings
+            </button>
+            <button
+              onClick={() => setShowCelticImport(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-lg hover:bg-emerald-500/30 transition-colors font-medium"
+            >
+              <BookOpen className="w-4 h-4" />
+              Import Celtic
             </button>
             <label className="flex items-center gap-2 px-4 py-2 bg-amber-500 text-slate-900 rounded-lg hover:bg-amber-400 transition-colors cursor-pointer font-medium">
               <Upload className="w-4 h-4" />
@@ -504,5 +521,6 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
         )}
       </div>
     </CelticBorder>
+    </>
   );
 }
