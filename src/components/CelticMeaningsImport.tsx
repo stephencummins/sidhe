@@ -37,8 +37,8 @@ export default function CelticMeaningsImport({ deckId, onClose, onSuccess }: Cel
         return null;
       }
 
-      if (data.cards.length !== 78 && data.cards.length !== 77) {
-        setValidationError(`Expected 77-78 cards, but found ${data.cards.length}`);
+      if (data.cards.length !== 78) {
+        setValidationError(`Expected 78 cards, but found ${data.cards.length}`);
         return null;
       }
 
