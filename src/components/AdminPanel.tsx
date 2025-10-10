@@ -659,27 +659,49 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
               const majorArcana = cards.filter(c => majorArcanaNames.includes(c.name));
               const minorArcana = cards.filter(c => !majorArcanaNames.includes(c.name));
               console.log('DeckEditor: Major Arcana:', majorArcana.length, 'Minor Arcana:', minorArcana.length);
+
+              // Extract suit from card name (e.g., "Ace of Spring" -> "spring")
+              const getSuitFromName = (name: string) => {
+                const match = name.match(/of (Spring|Summer|Autumn|Winter|Wands|Cups|Swords|Pentacles)/i);
+                return match ? match[1].toLowerCase() : null;
+              };
+
+              // Sort cards by rank
+              const rankOrder = ['Ace', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Page', 'Knight', 'Queen', 'King'];
+              const sortByRank = (a: any, b: any) => {
+                const aRank = rankOrder.findIndex(r => a.name.startsWith(r));
+                const bRank = rankOrder.findIndex(r => b.name.startsWith(r));
+                return aRank - bRank;
+              };
+
+              // Sort Major Arcana by traditional order
+              const sortedMajorArcana = [...majorArcana].sort((a, b) => {
+                const aIndex = majorArcanaNames.indexOf(a.name);
+                const bIndex = majorArcanaNames.indexOf(b.name);
+                return aIndex - bIndex;
+              });
+
               const minorBySuit = {
-                spring: minorArcana.filter(c => c.suit?.toLowerCase() === 'spring'),
-                summer: minorArcana.filter(c => c.suit?.toLowerCase() === 'summer'),
-                autumn: minorArcana.filter(c => c.suit?.toLowerCase() === 'autumn'),
-                winter: minorArcana.filter(c => c.suit?.toLowerCase() === 'winter'),
-                wands: minorArcana.filter(c => c.suit?.toLowerCase() === 'wands'),
-                cups: minorArcana.filter(c => c.suit?.toLowerCase() === 'cups'),
-                swords: minorArcana.filter(c => c.suit?.toLowerCase() === 'swords'),
-                pentacles: minorArcana.filter(c => c.suit?.toLowerCase() === 'pentacles'),
+                spring: minorArcana.filter(c => getSuitFromName(c.name) === 'spring').sort(sortByRank),
+                summer: minorArcana.filter(c => getSuitFromName(c.name) === 'summer').sort(sortByRank),
+                autumn: minorArcana.filter(c => getSuitFromName(c.name) === 'autumn').sort(sortByRank),
+                winter: minorArcana.filter(c => getSuitFromName(c.name) === 'winter').sort(sortByRank),
+                wands: minorArcana.filter(c => getSuitFromName(c.name) === 'wands').sort(sortByRank),
+                cups: minorArcana.filter(c => getSuitFromName(c.name) === 'cups').sort(sortByRank),
+                swords: minorArcana.filter(c => getSuitFromName(c.name) === 'swords').sort(sortByRank),
+                pentacles: minorArcana.filter(c => getSuitFromName(c.name) === 'pentacles').sort(sortByRank),
               };
 
               return (
                 <>
-                  {majorArcana.length > 0 && (
+                  {sortedMajorArcana.length > 0 && (
                     <div>
                       <h3 className="text-xl font-bold text-amber-900 mb-4 flex items-center gap-2" style={{ fontFamily: 'Cinzel, serif' }}>
                         Major Arcana
-                        <span className="text-sm text-orange-800/70">({majorArcana.length})</span>
+                        <span className="text-sm text-orange-800/70">({sortedMajorArcana.length})</span>
                       </h3>
                       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                        {majorArcana.map(card => (
+                        {sortedMajorArcana.map(card => (
                           <div key={card.id} className="group relative">
                             <div className="aspect-[2/3] bg-amber-100/50 rounded-lg overflow-hidden border-2 border-amber-700/30">
                               <img
