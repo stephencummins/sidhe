@@ -5,9 +5,10 @@ interface TarotCardVisualProps {
   card: TarotCard;
   revealed?: boolean;
   size?: 'small' | 'medium' | 'large' | 'xlarge';
+  isReversed?: boolean;
 }
 
-export default function TarotCardVisual({ card, revealed = false, size = 'medium' }: TarotCardVisualProps) {
+export default function TarotCardVisual({ card, revealed = false, size = 'medium', isReversed = false }: TarotCardVisualProps) {
   const sizeClasses = {
     small: 'w-24',
     medium: 'w-32',
@@ -55,7 +56,7 @@ export default function TarotCardVisual({ card, revealed = false, size = 'medium
 
   if (!revealed) {
     return (
-      <div className={`${sizeClasses[size]} aspect-[2/3] relative`}>
+      <div className={`${sizeClasses[size]} aspect-[2/3] relative ${isReversed ? 'rotate-180' : ''}`}>
         <div className="absolute inset-0 bg-gradient-to-br from-amber-900 via-orange-950 to-stone-900 rounded-lg shadow-2xl border-2 border-amber-800/50">
           <div className="absolute inset-0 opacity-20">
             <svg className="w-full h-full" viewBox="0 0 100 150" fill="none">
@@ -77,7 +78,7 @@ export default function TarotCardVisual({ card, revealed = false, size = 'medium
 
   if (card.image_url) {
     return (
-      <div className={`${sizeClasses[size]} aspect-[2/3] relative group`}>
+      <div className={`${sizeClasses[size]} aspect-[2/3] relative group ${isReversed ? 'rotate-180' : ''}`}>
         <div className="absolute inset-0 rounded-lg shadow-2xl overflow-hidden">
           <img
             src={card.image_url}
@@ -90,7 +91,7 @@ export default function TarotCardVisual({ card, revealed = false, size = 'medium
   }
 
   return (
-    <div className={`${sizeClasses[size]} aspect-[2/3] relative group`}>
+    <div className={`${sizeClasses[size]} aspect-[2/3] relative group ${isReversed ? 'rotate-180' : ''}`}>
       <div className="absolute inset-0 bg-gradient-to-br from-amber-50 via-stone-100 to-amber-100 rounded-lg shadow-2xl border-3 border-amber-900/60">
         <div className="absolute inset-0 p-2">
           <div className="w-full h-full border-2 border-amber-900/30 rounded-md relative overflow-hidden">
