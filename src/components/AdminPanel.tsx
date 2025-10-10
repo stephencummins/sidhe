@@ -214,16 +214,16 @@ export default function AdminPanel() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-teal-50 p-4">
       <div className="max-w-6xl mx-auto space-y-6">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-3xl font-serif text-white">Admin Panel</h1>
-            <p className="text-gray-300 mt-1">Manage your tarot decks</p>
+            <h1 className="text-3xl font-bold text-amber-900" style={{ fontFamily: 'Cinzel, serif' }}>Admin Panel</h1>
+            <p className="text-orange-800/80 mt-1">Manage your tarot decks</p>
           </div>
           <button
             onClick={signOut}
-            className="flex items-center gap-2 px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition-colors border border-amber-500"
+            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-700 to-orange-700 text-amber-50 rounded-lg hover:from-amber-600 hover:to-orange-600 transition-colors border-2 border-amber-900"
           >
             <LogOut className="w-4 h-4" />
             Sign Out
@@ -233,44 +233,44 @@ export default function AdminPanel() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-1 space-y-4">
             <CelticBorder>
-              <div className="bg-slate-800/95 backdrop-blur-sm p-6">
+              <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-serif text-white">Your Decks</h2>
+                  <h2 className="text-xl font-bold text-amber-900" style={{ fontFamily: 'Cinzel, serif' }}>Your Decks</h2>
                   <button
                     onClick={() => setShowNewDeckForm(!showNewDeckForm)}
-                    className="p-2 bg-amber-500/20 text-amber-400 rounded-lg hover:bg-amber-500/30 transition-colors"
+                    className="p-2 bg-amber-700 text-amber-50 rounded-lg hover:bg-amber-600 transition-colors"
                   >
                     <Plus className="w-4 h-4" />
                   </button>
                 </div>
 
                 {showNewDeckForm && (
-                  <div className="mb-4 p-4 bg-slate-700/50 rounded-lg space-y-3">
+                  <div className="mb-4 p-4 bg-amber-100/50 rounded-lg space-y-3 border-2 border-amber-700/30">
                     <input
                       type="text"
                       placeholder="Deck name"
                       value={newDeckName}
                       onChange={(e) => setNewDeckName(e.target.value)}
-                      className="w-full px-3 py-2 bg-slate-900 text-white rounded-lg border border-amber-500/30 focus:border-amber-500 focus:outline-none"
+                      className="w-full px-3 py-2 bg-white text-amber-900 rounded-lg border-2 border-amber-700/30 focus:border-amber-700 focus:outline-none"
                     />
                     <textarea
                       placeholder="Description (optional)"
                       value={newDeckDescription}
                       onChange={(e) => setNewDeckDescription(e.target.value)}
-                      className="w-full px-3 py-2 bg-slate-900 text-white rounded-lg border border-amber-500/30 focus:border-amber-500 focus:outline-none resize-none"
+                      className="w-full px-3 py-2 bg-white text-amber-900 rounded-lg border-2 border-amber-700/30 focus:border-amber-700 focus:outline-none resize-none"
                       rows={3}
                     />
                     <div className="flex gap-2">
                       <button
                         onClick={createDeck}
-                        className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-amber-500 text-slate-900 rounded-lg hover:bg-amber-400 transition-colors font-medium"
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-700 to-orange-700 text-amber-50 rounded-lg hover:from-amber-600 hover:to-orange-600 transition-colors font-medium"
                       >
                         <Check className="w-4 h-4" />
                         Create
                       </button>
                       <button
                         onClick={() => setShowNewDeckForm(false)}
-                        className="px-4 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-500 transition-colors"
+                        className="px-4 py-2 bg-amber-200 text-amber-900 rounded-lg hover:bg-amber-300 transition-colors"
                       >
                         <X className="w-4 h-4" />
                       </button>
@@ -279,9 +279,9 @@ export default function AdminPanel() {
                 )}
 
                 {loading ? (
-                  <p className="text-gray-300 text-center py-8">Loading...</p>
+                  <p className="text-amber-900 text-center py-8">Loading...</p>
                 ) : decks.length === 0 ? (
-                  <p className="text-gray-300 text-center py-8">No decks yet. Create one to get started!</p>
+                  <p className="text-amber-900 text-center py-8">No decks yet. Create one to get started!</p>
                 ) : (
                   <div className="space-y-2">
                     {decks.map(deck => (
@@ -289,8 +289,8 @@ export default function AdminPanel() {
                         key={deck.id}
                         className={`p-4 rounded-lg border-2 transition-all ${
                           selectedDeck === deck.id
-                            ? 'border-amber-500 bg-amber-500/10'
-                            : 'border-slate-600 bg-slate-700/50 hover:border-amber-500/50'
+                            ? 'border-amber-700 bg-amber-200/50'
+                            : 'border-amber-700/30 bg-amber-50/50 hover:border-amber-700'
                         } ${editingDeck === deck.id ? '' : 'cursor-pointer'}`}
                         onClick={() => editingDeck !== deck.id && setSelectedDeck(deck.id)}
                       >
@@ -301,14 +301,14 @@ export default function AdminPanel() {
                               value={editDeckName}
                               onChange={(e) => setEditDeckName(e.target.value)}
                               onClick={(e) => e.stopPropagation()}
-                              className="w-full px-3 py-2 bg-slate-900 text-white rounded-lg border border-amber-500/30 focus:border-amber-500 focus:outline-none"
+                              className="w-full px-3 py-2 bg-white text-amber-900 rounded-lg border-2 border-amber-700/30 focus:border-amber-700 focus:outline-none"
                               placeholder="Deck name"
                             />
                             <textarea
                               value={editDeckDescription}
                               onChange={(e) => setEditDeckDescription(e.target.value)}
                               onClick={(e) => e.stopPropagation()}
-                              className="w-full px-3 py-2 bg-slate-900 text-white rounded-lg border border-amber-500/30 focus:border-amber-500 focus:outline-none resize-none"
+                              className="w-full px-3 py-2 bg-white text-amber-900 rounded-lg border-2 border-amber-700/30 focus:border-amber-700 focus:outline-none resize-none"
                               placeholder="Description (optional)"
                               rows={2}
                             />
@@ -318,7 +318,7 @@ export default function AdminPanel() {
                                   e.stopPropagation();
                                   saveDeckEdit(deck.id);
                                 }}
-                                className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-amber-500 text-slate-900 rounded-lg hover:bg-amber-400 transition-colors font-medium"
+                                className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r from-amber-700 to-orange-700 text-amber-50 rounded-lg hover:from-amber-600 hover:to-orange-600 transition-colors font-medium"
                               >
                                 <Check className="w-4 h-4" />
                                 Save
@@ -328,7 +328,7 @@ export default function AdminPanel() {
                                   e.stopPropagation();
                                   cancelEditingDeck();
                                 }}
-                                className="px-3 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-500 transition-colors"
+                                className="px-3 py-2 bg-amber-200 text-amber-900 rounded-lg hover:bg-amber-300 transition-colors"
                               >
                                 <X className="w-4 h-4" />
                               </button>
@@ -337,12 +337,12 @@ export default function AdminPanel() {
                         ) : (
                           <div className="flex items-start justify-between gap-2">
                             <div className="flex-1 min-w-0">
-                              <h3 className="text-white font-medium truncate">{deck.name}</h3>
+                              <h3 className="text-amber-900 font-semibold truncate">{deck.name}</h3>
                               {deck.description && (
-                                <p className="text-gray-300 text-sm mt-1 line-clamp-2">{deck.description}</p>
+                                <p className="text-orange-800/80 text-sm mt-1 line-clamp-2">{deck.description}</p>
                               )}
                               {deck.is_active && (
-                                <span className="inline-block mt-2 px-2 py-1 bg-green-500/20 text-green-300 text-xs rounded">
+                                <span className="inline-block mt-2 px-2 py-1 bg-green-600/20 text-green-800 text-xs rounded border border-green-700/30">
                                   Active
                                 </span>
                               )}
@@ -353,7 +353,7 @@ export default function AdminPanel() {
                                   e.stopPropagation();
                                   startEditingDeck(deck);
                                 }}
-                                className="p-1 text-gray-400 hover:text-amber-400 transition-colors"
+                                className="p-1 text-amber-700 hover:text-orange-700 transition-colors"
                               >
                                 <Edit2 className="w-4 h-4" />
                               </button>
@@ -362,7 +362,7 @@ export default function AdminPanel() {
                                   e.stopPropagation();
                                   deleteDeck(deck.id);
                                 }}
-                                className="p-1 text-gray-400 hover:text-red-400 transition-colors"
+                                className="p-1 text-amber-700 hover:text-red-700 transition-colors"
                               >
                                 <Trash2 className="w-4 h-4" />
                               </button>
@@ -389,8 +389,8 @@ export default function AdminPanel() {
               />
             ) : (
               <CelticBorder>
-                <div className="bg-slate-800/95 backdrop-blur-sm p-12">
-                  <p className="text-gray-300 text-center">
+                <div className="p-12">
+                  <p className="text-amber-900 text-center">
                     Select a deck to edit or create a new one
                   </p>
                 </div>
@@ -567,19 +567,19 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
         />
       )}
       <CelticBorder>
-      <div className="bg-slate-800/95 backdrop-blur-sm p-6">
+      <div className="p-6">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-2xl font-serif text-white">{deck.name}</h2>
-            <p className="text-gray-300 mt-1">{cards.length} cards</p>
+            <h2 className="text-2xl font-bold text-amber-900" style={{ fontFamily: 'Cinzel, serif' }}>{deck.name}</h2>
+            <p className="text-orange-800/80 mt-1">{cards.length} cards</p>
           </div>
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => onToggleActive(deckId, deck.is_active)}
-              className={`px-4 py-2 rounded-lg transition-colors ${
+              className={`px-4 py-2 rounded-lg transition-colors border-2 ${
                 deck.is_active
-                  ? 'bg-green-500/20 text-green-300 hover:bg-green-500/30'
-                  : 'bg-slate-700 text-white hover:bg-slate-600 border border-amber-500/30'
+                  ? 'bg-green-600/20 text-green-800 border-green-700/40 hover:bg-green-600/30'
+                  : 'bg-amber-100 text-amber-900 border-amber-700/40 hover:bg-amber-200'
               }`}
             >
               {deck.is_active ? 'Active' : 'Set Active'}
@@ -587,19 +587,19 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
             <button
               onClick={() => onSyncMeanings(deckId)}
               disabled={syncing}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-500/20 text-blue-300 border border-blue-500/30 rounded-lg hover:bg-blue-500/30 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600/20 text-blue-900 border-2 border-blue-700/40 rounded-lg hover:bg-blue-600/30 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <RefreshCw className={`w-4 h-4 ${syncing ? 'animate-spin' : ''}`} />
               Sync Meanings
             </button>
             <button
               onClick={() => setShowCelticImport(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-lg hover:bg-emerald-500/30 transition-colors font-medium"
+              className="flex items-center gap-2 px-4 py-2 bg-emerald-600/20 text-emerald-900 border-2 border-emerald-700/40 rounded-lg hover:bg-emerald-600/30 transition-colors font-medium"
             >
               <BookOpen className="w-4 h-4" />
               Import Celtic
             </button>
-            <label className="flex items-center gap-2 px-4 py-2 bg-amber-500 text-slate-900 rounded-lg hover:bg-amber-400 transition-colors cursor-pointer font-medium">
+            <label className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-700 to-orange-700 text-amber-50 rounded-lg hover:from-amber-600 hover:to-orange-600 transition-colors cursor-pointer font-medium">
               <Upload className="w-4 h-4" />
               Upload Cards
               <input
@@ -615,23 +615,23 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
         </div>
 
         {uploading && (
-          <div className="mb-4 p-4 bg-amber-500/20 text-amber-400 rounded-lg text-center">
+          <div className="mb-4 p-4 bg-amber-600/20 text-amber-900 rounded-lg text-center border-2 border-amber-700/40">
             Uploading cards...
           </div>
         )}
 
         {syncMessage && (
-          <div className="mb-4 p-4 bg-blue-500/20 text-blue-300 rounded-lg text-center">
+          <div className="mb-4 p-4 bg-blue-600/20 text-blue-900 rounded-lg text-center border-2 border-blue-700/40">
             {syncMessage}
           </div>
         )}
 
         {loading ? (
-          <p className="text-gray-300 text-center py-12">Loading cards...</p>
+          <p className="text-amber-900 text-center py-12">Loading cards...</p>
         ) : cards.length === 0 ? (
           <div className="text-center py-12">
-            <Upload className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-            <p className="text-gray-300">No cards yet. Upload images to get started.</p>
+            <Upload className="w-12 h-12 text-amber-700 mx-auto mb-3" />
+            <p className="text-amber-900">No cards yet. Upload images to get started.</p>
           </div>
         ) : (
           <div className="space-y-8">
@@ -653,14 +653,14 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
                 <>
                   {majorArcana.length > 0 && (
                     <div>
-                      <h3 className="text-xl font-serif text-amber-400 mb-4 flex items-center gap-2">
+                      <h3 className="text-xl font-bold text-amber-900 mb-4 flex items-center gap-2" style={{ fontFamily: 'Cinzel, serif' }}>
                         Major Arcana
-                        <span className="text-sm text-gray-400">({majorArcana.length})</span>
+                        <span className="text-sm text-orange-800/70">({majorArcana.length})</span>
                       </h3>
                       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                         {majorArcana.map(card => (
                           <div key={card.id} className="group relative">
-                            <div className="aspect-[2/3] bg-slate-900/50 rounded-lg overflow-hidden">
+                            <div className="aspect-[2/3] bg-amber-100/50 rounded-lg overflow-hidden border-2 border-amber-700/30">
                               <img
                                 src={card.image_url}
                                 alt={card.name}
@@ -669,11 +669,11 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
                             </div>
                             <button
                               onClick={() => deleteCard(card.id)}
-                              className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                              className="absolute top-2 right-2 p-1.5 bg-red-700 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
-                            <p className="mt-2 text-sm text-white truncate">{card.name}</p>
+                            <p className="mt-2 text-sm text-amber-900 truncate font-medium">{card.name}</p>
                           </div>
                         ))}
                       </div>
@@ -683,14 +683,14 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
                   {Object.entries(minorBySuit).map(([suit, suitCards]) => (
                     suitCards.length > 0 && (
                       <div key={suit}>
-                        <h3 className="text-xl font-serif text-amber-400 mb-4 flex items-center gap-2 capitalize">
+                        <h3 className="text-xl font-bold text-amber-900 mb-4 flex items-center gap-2 capitalize" style={{ fontFamily: 'Cinzel, serif' }}>
                           {suit}
-                          <span className="text-sm text-gray-400">({suitCards.length})</span>
+                          <span className="text-sm text-orange-800/70">({suitCards.length})</span>
                         </h3>
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
                           {suitCards.map(card => (
                             <div key={card.id} className="group relative">
-                              <div className="aspect-[2/3] bg-slate-900/50 rounded-lg overflow-hidden">
+                              <div className="aspect-[2/3] bg-amber-100/50 rounded-lg overflow-hidden border-2 border-amber-700/30">
                                 <img
                                   src={card.image_url}
                                   alt={card.name}
@@ -699,11 +699,11 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
                               </div>
                               <button
                                 onClick={() => deleteCard(card.id)}
-                                className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                                className="absolute top-2 right-2 p-1.5 bg-red-700 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
                               >
                                 <Trash2 className="w-4 h-4" />
                               </button>
-                              <p className="mt-2 text-sm text-white truncate">{card.name}</p>
+                              <p className="mt-2 text-sm text-amber-900 truncate font-medium">{card.name}</p>
                             </div>
                           ))}
                         </div>
