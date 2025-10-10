@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { LogOut, Plus, Trash2, Upload, Check, X, RefreshCw, BookOpen } from 'lucide-react';
+import { LogOut, Plus, Trash2, Upload, Check, X, RefreshCw, BookOpen, Edit2 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 import { TarotDeck, TarotCardDB } from '../types/database';
@@ -17,6 +17,9 @@ export default function AdminPanel() {
   const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState(false);
   const [syncMessage, setSyncMessage] = useState('');
+  const [editingDeck, setEditingDeck] = useState<string | null>(null);
+  const [editDeckName, setEditDeckName] = useState('');
+  const [editDeckDescription, setEditDeckDescription] = useState('');
 
   useEffect(() => {
     if (user) {
@@ -95,6 +98,43 @@ export default function AdminPanel() {
       if (selectedDeck === deckId) setSelectedDeck(null);
     } catch (error) {
       console.error('Error deleting deck:', error);
+    }
+  };
+
+  const startEditingDeck = (deck: TarotDeck) => {
+    setEditingDeck(deck.id);
+    setEditDeckName(deck.name);
+    setEditDeckDescription(deck.description || '');
+  };
+
+  const cancelEditingDeck = () => {
+    setEditingDeck(null);
+    setEditDeckName('');
+    setEditDeckDescription('');
+  };
+
+  const saveDeckEdit = async (deckId: string) => {
+    if (!editDeckName.trim()) return;
+
+    try {
+      const { error } = await supabase
+        .from('tarot_decks')
+        .update({
+          name: editDeckName,
+          description: editDeckDescription
+        })
+        .eq('id', deckId);
+
+      if (error) throw error;
+
+      setDecks(decks.map(d =>
+        d.id === deckId
+          ? { ...d, name: editDeckName, description: editDeckDescription }
+          : d
+      ));
+      cancelEditingDeck();
+    } catch (error) {
+      console.error('Error updating deck:', error);
     }
   };
 
@@ -247,35 +287,88 @@ export default function AdminPanel() {
                     {decks.map(deck => (
                       <div
                         key={deck.id}
-                        className={`p-4 rounded-lg border-2 transition-all cursor-pointer ${
+                        className={`p-4 rounded-lg border-2 transition-all ${
                           selectedDeck === deck.id
                             ? 'border-amber-500 bg-amber-500/10'
                             : 'border-slate-600 bg-slate-700/50 hover:border-amber-500/50'
-                        }`}
-                        onClick={() => setSelectedDeck(deck.id)}
+                        } ${editingDeck === deck.id ? '' : 'cursor-pointer'}`}
+                        onClick={() => editingDeck !== deck.id && setSelectedDeck(deck.id)}
                       >
-                        <div className="flex items-start justify-between gap-2">
-                          <div className="flex-1 min-w-0">
-                            <h3 className="text-white font-medium truncate">{deck.name}</h3>
-                            {deck.description && (
-                              <p className="text-gray-300 text-sm mt-1 line-clamp-2">{deck.description}</p>
-                            )}
-                            {deck.is_active && (
-                              <span className="inline-block mt-2 px-2 py-1 bg-green-500/20 text-green-300 text-xs rounded">
-                                Active
-                              </span>
-                            )}
+                        {editingDeck === deck.id ? (
+                          <div className="space-y-3">
+                            <input
+                              type="text"
+                              value={editDeckName}
+                              onChange={(e) => setEditDeckName(e.target.value)}
+                              onClick={(e) => e.stopPropagation()}
+                              className="w-full px-3 py-2 bg-slate-900 text-white rounded-lg border border-amber-500/30 focus:border-amber-500 focus:outline-none"
+                              placeholder="Deck name"
+                            />
+                            <textarea
+                              value={editDeckDescription}
+                              onChange={(e) => setEditDeckDescription(e.target.value)}
+                              onClick={(e) => e.stopPropagation()}
+                              className="w-full px-3 py-2 bg-slate-900 text-white rounded-lg border border-amber-500/30 focus:border-amber-500 focus:outline-none resize-none"
+                              placeholder="Description (optional)"
+                              rows={2}
+                            />
+                            <div className="flex gap-2">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  saveDeckEdit(deck.id);
+                                }}
+                                className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-amber-500 text-slate-900 rounded-lg hover:bg-amber-400 transition-colors font-medium"
+                              >
+                                <Check className="w-4 h-4" />
+                                Save
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  cancelEditingDeck();
+                                }}
+                                className="px-3 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-500 transition-colors"
+                              >
+                                <X className="w-4 h-4" />
+                              </button>
+                            </div>
                           </div>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              deleteDeck(deck.id);
-                            }}
-                            className="p-1 text-gray-400 hover:text-red-400 transition-colors"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
+                        ) : (
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="flex-1 min-w-0">
+                              <h3 className="text-white font-medium truncate">{deck.name}</h3>
+                              {deck.description && (
+                                <p className="text-gray-300 text-sm mt-1 line-clamp-2">{deck.description}</p>
+                              )}
+                              {deck.is_active && (
+                                <span className="inline-block mt-2 px-2 py-1 bg-green-500/20 text-green-300 text-xs rounded">
+                                  Active
+                                </span>
+                              )}
+                            </div>
+                            <div className="flex gap-1">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  startEditingDeck(deck);
+                                }}
+                                className="p-1 text-gray-400 hover:text-amber-400 transition-colors"
+                              >
+                                <Edit2 className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  deleteDeck(deck.id);
+                                }}
+                                className="p-1 text-gray-400 hover:text-red-400 transition-colors"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
