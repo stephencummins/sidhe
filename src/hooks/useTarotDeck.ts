@@ -38,7 +38,11 @@ export function useTarotDeck() {
             keywords: card.keywords,
             upright_meaning: card.meaning_upright,
             reversed_meaning: card.meaning_reversed,
-            image_url: card.image_url
+            image_url: card.image_url,
+            celtic_upright: card.celtic_meaning_upright,
+            celtic_reversed: card.celtic_meaning_reversed,
+            celtic_keywords: card.celtic_keywords,
+            celtic_mythology: card.celtic_mythology
           }));
           setDeck(formattedDeck);
         }
