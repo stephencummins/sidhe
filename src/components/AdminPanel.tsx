@@ -422,16 +422,59 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
     loadCards();
   }, [deckId]);
 
+  const sortCards = (cards: TarotCardDB[]): TarotCardDB[] => {
+    const suitOrder: Record<string, number> = {
+      'spring': 1,
+      'summer': 2,
+      'autumn': 3,
+      'winter': 4,
+      'wands': 1,
+      'cups': 2,
+      'swords': 3,
+      'pentacles': 4
+    };
+
+    const rankOrder: Record<string, number> = {
+      'ace': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5,
+      'six': 6, 'seven': 7, 'eight': 8, 'nine': 9, 'ten': 10,
+      'page': 11, 'knight': 12, 'queen': 13, 'king': 14
+    };
+
+    return [...cards].sort((a, b) => {
+      if (a.arcana !== b.arcana) {
+        return a.arcana === 'major' ? -1 : 1;
+      }
+
+      if (a.arcana === 'minor') {
+        const suitA = (a.suit || '').toLowerCase();
+        const suitB = (b.suit || '').toLowerCase();
+        const suitComparison = (suitOrder[suitA] || 999) - (suitOrder[suitB] || 999);
+        if (suitComparison !== 0) return suitComparison;
+
+        const nameA = a.name.toLowerCase();
+        const nameB = b.name.toLowerCase();
+        for (const [rank, order] of Object.entries(rankOrder)) {
+          const aHasRank = nameA.includes(rank);
+          const bHasRank = nameB.includes(rank);
+          if (aHasRank && !bHasRank) return -1;
+          if (!aHasRank && bHasRank) return 1;
+          if (aHasRank && bHasRank) return order - order;
+        }
+      }
+
+      return a.name.localeCompare(b.name);
+    });
+  };
+
   const loadCards = async () => {
     try {
       const { data, error } = await supabase
         .from('tarot_cards')
         .select('*')
-        .eq('deck_id', deckId)
-        .order('name');
+        .eq('deck_id', deckId);
 
       if (error) throw error;
-      setCards(data || []);
+      setCards(sortCards(data || []));
     } catch (error) {
       console.error('Error loading cards:', error);
     } finally {
@@ -491,7 +534,7 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
         uploadedCards.push(cardData);
       }
 
-      setCards([...cards, ...uploadedCards]);
+      setCards(sortCards([...cards, ...uploadedCards]));
     } catch (error) {
       console.error('Error uploading cards:', error);
       alert('Failed to upload some cards. Please try again.');
@@ -591,25 +634,85 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
             <p className="text-gray-300">No cards yet. Upload images to get started.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            {cards.map(card => (
-              <div key={card.id} className="group relative">
-                <div className="aspect-[2/3] bg-slate-900/50 rounded-lg overflow-hidden">
-                  <img
-                    src={card.image_url}
-                    alt={card.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <button
-                  onClick={() => deleteCard(card.id)}
-                  className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-                <p className="mt-2 text-sm text-white truncate">{card.name}</p>
-              </div>
-            ))}
+          <div className="space-y-8">
+            {(() => {
+              const majorArcana = cards.filter(c => c.arcana === 'major');
+              const minorArcana = cards.filter(c => c.arcana === 'minor');
+              const minorBySuit = {
+                spring: minorArcana.filter(c => c.suit?.toLowerCase() === 'spring'),
+                summer: minorArcana.filter(c => c.suit?.toLowerCase() === 'summer'),
+                autumn: minorArcana.filter(c => c.suit?.toLowerCase() === 'autumn'),
+                winter: minorArcana.filter(c => c.suit?.toLowerCase() === 'winter'),
+                wands: minorArcana.filter(c => c.suit?.toLowerCase() === 'wands'),
+                cups: minorArcana.filter(c => c.suit?.toLowerCase() === 'cups'),
+                swords: minorArcana.filter(c => c.suit?.toLowerCase() === 'swords'),
+                pentacles: minorArcana.filter(c => c.suit?.toLowerCase() === 'pentacles'),
+              };
+
+              return (
+                <>
+                  {majorArcana.length > 0 && (
+                    <div>
+                      <h3 className="text-xl font-serif text-amber-400 mb-4 flex items-center gap-2">
+                        Major Arcana
+                        <span className="text-sm text-gray-400">({majorArcana.length})</span>
+                      </h3>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                        {majorArcana.map(card => (
+                          <div key={card.id} className="group relative">
+                            <div className="aspect-[2/3] bg-slate-900/50 rounded-lg overflow-hidden">
+                              <img
+                                src={card.image_url}
+                                alt={card.name}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            <button
+                              onClick={() => deleteCard(card.id)}
+                              className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                            <p className="mt-2 text-sm text-white truncate">{card.name}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {Object.entries(minorBySuit).map(([suit, suitCards]) => (
+                    suitCards.length > 0 && (
+                      <div key={suit}>
+                        <h3 className="text-xl font-serif text-amber-400 mb-4 flex items-center gap-2 capitalize">
+                          {suit}
+                          <span className="text-sm text-gray-400">({suitCards.length})</span>
+                        </h3>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
+                          {suitCards.map(card => (
+                            <div key={card.id} className="group relative">
+                              <div className="aspect-[2/3] bg-slate-900/50 rounded-lg overflow-hidden">
+                                <img
+                                  src={card.image_url}
+                                  alt={card.name}
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                              <button
+                                onClick={() => deleteCard(card.id)}
+                                className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                              <p className="mt-2 text-sm text-white truncate">{card.name}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )
+                  ))}
+                </>
+              );
+            })()}
           </div>
         )}
       </div>
