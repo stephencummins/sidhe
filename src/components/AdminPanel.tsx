@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { LogOut, Plus, Trash2, Upload, Check, X } from 'lucide-react';
+import { LogOut, Plus, Trash2, Upload, Check, X, RefreshCw } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 import { TarotDeck, TarotCardDB } from '../types/database';
 import CelticBorder from './CelticBorder';
+import { tarotDeck } from '../data/tarotDeck';
 
 export default function AdminPanel() {
   const { user, signOut } = useAuth();
@@ -13,6 +14,8 @@ export default function AdminPanel() {
   const [newDeckName, setNewDeckName] = useState('');
   const [newDeckDescription, setNewDeckDescription] = useState('');
   const [loading, setLoading] = useState(true);
+  const [syncing, setSyncing] = useState(false);
+  const [syncMessage, setSyncMessage] = useState('');
 
   useEffect(() => {
     if (user) {
@@ -116,6 +119,56 @@ export default function AdminPanel() {
       })));
     } catch (error) {
       console.error('Error toggling deck:', error);
+    }
+  };
+
+  const syncCardMeanings = async (deckId: string) => {
+    if (!confirm('This will update all cards in this deck with meanings from the default tarot deck. Continue?')) return;
+
+    setSyncing(true);
+    setSyncMessage('Syncing card meanings...');
+
+    try {
+      const { data: dbCards, error: cardsError } = await supabase
+        .from('tarot_cards')
+        .select('*')
+        .eq('deck_id', deckId);
+
+      if (cardsError) throw cardsError;
+
+      let updated = 0;
+      let failed = 0;
+
+      for (const dbCard of dbCards) {
+        const localCard = tarotDeck.find(c => c.name === dbCard.name);
+
+        if (localCard) {
+          const { error: updateError } = await supabase
+            .from('tarot_cards')
+            .update({
+              meaning_upright: localCard.upright_meaning,
+              meaning_reversed: localCard.reversed_meaning,
+              keywords: localCard.keywords
+            })
+            .eq('id', dbCard.id);
+
+          if (updateError) {
+            console.error(`Error updating ${dbCard.name}:`, updateError);
+            failed++;
+          } else {
+            updated++;
+          }
+        }
+      }
+
+      setSyncMessage(`✓ Updated ${updated} cards${failed > 0 ? `, ${failed} failed` : ''}`);
+      setTimeout(() => setSyncMessage(''), 3000);
+    } catch (error) {
+      console.error('Error syncing card meanings:', error);
+      setSyncMessage('Error syncing cards');
+      setTimeout(() => setSyncMessage(''), 3000);
+    } finally {
+      setSyncing(false);
     }
   };
 
@@ -236,6 +289,9 @@ export default function AdminPanel() {
                 deckId={selectedDeck}
                 deck={decks.find(d => d.id === selectedDeck)!}
                 onToggleActive={toggleDeckActive}
+                onSyncMeanings={syncCardMeanings}
+                syncing={syncing}
+                syncMessage={syncMessage}
               />
             ) : (
               <CelticBorder>
@@ -257,9 +313,12 @@ interface DeckEditorProps {
   deckId: string;
   deck: TarotDeck;
   onToggleActive: (deckId: string, currentActive: boolean) => void;
+  onSyncMeanings: (deckId: string) => void;
+  syncing: boolean;
+  syncMessage: string;
 }
 
-function DeckEditor({ deckId, deck, onToggleActive }: DeckEditorProps) {
+function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syncMessage }: DeckEditorProps) {
   const [cards, setCards] = useState<TarotCardDB[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
@@ -379,6 +438,14 @@ function DeckEditor({ deckId, deck, onToggleActive }: DeckEditorProps) {
             >
               {deck.is_active ? 'Active' : 'Set Active'}
             </button>
+            <button
+              onClick={() => onSyncMeanings(deckId)}
+              disabled={syncing}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-500/20 text-blue-300 border border-blue-500/30 rounded-lg hover:bg-blue-500/30 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <RefreshCw className={`w-4 h-4 ${syncing ? 'animate-spin' : ''}`} />
+              Sync Meanings
+            </button>
             <label className="flex items-center gap-2 px-4 py-2 bg-amber-500 text-slate-900 rounded-lg hover:bg-amber-400 transition-colors cursor-pointer font-medium">
               <Upload className="w-4 h-4" />
               Upload Cards
@@ -397,6 +464,12 @@ function DeckEditor({ deckId, deck, onToggleActive }: DeckEditorProps) {
         {uploading && (
           <div className="mb-4 p-4 bg-amber-500/20 text-amber-400 rounded-lg text-center">
             Uploading cards...
+          </div>
+        )}
+
+        {syncMessage && (
+          <div className="mb-4 p-4 bg-blue-500/20 text-blue-300 rounded-lg text-center">
+            {syncMessage}
           </div>
         )}
 
