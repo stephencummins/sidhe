@@ -467,16 +467,24 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
   };
 
   const loadCards = async () => {
+    console.log('DeckEditor: Loading cards for deck:', deckId);
     try {
       const { data, error } = await supabase
         .from('tarot_cards')
         .select('*')
         .eq('deck_id', deckId);
 
-      if (error) throw error;
-      setCards(sortCards(data || []));
+      if (error) {
+        console.error('DeckEditor: Error from Supabase:', error);
+        throw error;
+      }
+
+      console.log('DeckEditor: Loaded cards:', data?.length || 0);
+      const sorted = sortCards(data || []);
+      console.log('DeckEditor: After sorting:', sorted.length);
+      setCards(sorted);
     } catch (error) {
-      console.error('Error loading cards:', error);
+      console.error('DeckEditor: Error loading cards:', error);
     } finally {
       setLoading(false);
     }
@@ -632,12 +640,15 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
           <div className="text-center py-12">
             <Upload className="w-12 h-12 text-amber-700 mx-auto mb-3" />
             <p className="text-amber-900">No cards yet. Upload images to get started.</p>
+            <p className="text-xs text-amber-700 mt-2">Debug: Deck ID = {deckId}</p>
           </div>
         ) : (
           <div className="space-y-8">
             {(() => {
+              console.log('DeckEditor: Rendering cards, total:', cards.length);
               const majorArcana = cards.filter(c => c.arcana === 'major');
               const minorArcana = cards.filter(c => c.arcana === 'minor');
+              console.log('DeckEditor: Major Arcana:', majorArcana.length, 'Minor Arcana:', minorArcana.length);
               const minorBySuit = {
                 spring: minorArcana.filter(c => c.suit?.toLowerCase() === 'spring'),
                 summer: minorArcana.filter(c => c.suit?.toLowerCase() === 'summer'),
