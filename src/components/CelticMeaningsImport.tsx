@@ -37,8 +37,8 @@ export default function CelticMeaningsImport({ deckId, onClose, onSuccess }: Cel
         return null;
       }
 
-      if (data.cards.length !== 78) {
-        setValidationError(`Expected 78 cards, but found ${data.cards.length}`);
+      if (data.cards.length !== 78 && data.cards.length !== 77) {
+        setValidationError(`Expected 77-78 cards, but found ${data.cards.length}`);
         return null;
       }
 
@@ -75,6 +75,21 @@ export default function CelticMeaningsImport({ deckId, onClose, onSuccess }: Cel
     reader.readAsText(file);
   };
 
+  const normalizeCardName = (name: string): string => {
+    const suitMap: Record<string, string> = {
+      'Wands': 'Spring',
+      'Cups': 'Summer',
+      'Swords': 'Autumn',
+      'Pentacles': 'Winter'
+    };
+
+    let normalized = name;
+    for (const [traditional, seasonal] of Object.entries(suitMap)) {
+      normalized = normalized.replace(traditional, seasonal);
+    }
+    return normalized;
+  };
+
   const handleImport = async () => {
     const data = validateJSON(jsonData);
     if (!data) return;
@@ -93,11 +108,12 @@ export default function CelticMeaningsImport({ deckId, onClose, onSuccess }: Cel
       if (fetchError) throw fetchError;
 
       for (const celticCard of data.cards) {
-        const existingCard = existingCards.find(c => c.name === celticCard.name);
+        const normalizedName = normalizeCardName(celticCard.name);
+        const existingCard = existingCards.find(c => c.name === normalizedName || c.name === celticCard.name);
 
         if (!existingCard) {
           status.failed++;
-          status.errors.push(`Card "${celticCard.name}" not found in deck`);
+          status.errors.push(`Card "${celticCard.name}" (tried "${normalizedName}") not found in deck`);
           continue;
         }
 
@@ -199,7 +215,10 @@ export default function CelticMeaningsImport({ deckId, onClose, onSuccess }: Cel
                 <div className="flex-1">
                   <p className="text-green-300 font-medium">Valid JSON</p>
                   <p className="text-green-200 text-sm mt-1">
-                    Ready to import 78 cards with Celtic meanings
+                    Ready to import {JSON.parse(jsonData).cards.length} cards with Celtic meanings
+                  </p>
+                  <p className="text-green-200/70 text-xs mt-1">
+                    Traditional suits (Wands/Cups/Swords/Pentacles) will be mapped to seasonal suits (Spring/Summer/Autumn/Winter)
                   </p>
                 </div>
               </div>
@@ -249,6 +268,18 @@ export default function CelticMeaningsImport({ deckId, onClose, onSuccess }: Cel
   ]
 }`}
               </pre>
+              <div className="mt-3 p-3 bg-blue-900/20 border border-blue-700/30 rounded">
+                <p className="text-blue-300 text-xs font-medium mb-1">📝 Suit Mapping:</p>
+                <p className="text-blue-200/80 text-xs">
+                  Traditional suits in your JSON will be auto-converted:
+                </p>
+                <ul className="text-blue-200/70 text-xs mt-1 ml-4 space-y-0.5">
+                  <li>• Wands → Spring</li>
+                  <li>• Cups → Summer</li>
+                  <li>• Swords → Autumn</li>
+                  <li>• Pentacles → Winter</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
