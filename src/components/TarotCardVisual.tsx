@@ -6,9 +6,10 @@ interface TarotCardVisualProps {
   revealed?: boolean;
   size?: 'small' | 'medium' | 'large' | 'xlarge';
   isReversed?: boolean;
+  cardBackUrl?: string;
 }
 
-export default function TarotCardVisual({ card, revealed = false, size = 'medium', isReversed = false }: TarotCardVisualProps) {
+export default function TarotCardVisual({ card, revealed = false, size = 'medium', isReversed = false, cardBackUrl }: TarotCardVisualProps) {
   const sizeClasses = {
     small: 'w-24',
     medium: 'w-32',
@@ -55,6 +56,20 @@ export default function TarotCardVisual({ card, revealed = false, size = 'medium
   };
 
   if (!revealed) {
+    if (cardBackUrl) {
+      return (
+        <div className={`${sizeClasses[size]} aspect-[2/3] relative ${isReversed ? 'rotate-180' : ''}`}>
+          <div className="absolute inset-0 rounded-lg shadow-2xl overflow-hidden border-2 border-amber-800/50">
+            <img
+              src={cardBackUrl}
+              alt="Card back"
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className={`${sizeClasses[size]} aspect-[2/3] relative ${isReversed ? 'rotate-180' : ''}`}>
         <div className="absolute inset-0 bg-gradient-to-br from-amber-900 via-orange-950 to-stone-900 rounded-lg shadow-2xl border-2 border-amber-800/50">

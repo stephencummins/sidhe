@@ -6,6 +6,7 @@ import { tarotDeck as defaultDeck } from '../data/tarotDeck';
 export function useTarotDeck() {
   const [deck, setDeck] = useState(defaultDeck);
   const [loading, setLoading] = useState(true);
+  const [cardBackUrl, setCardBackUrl] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     loadActiveDeck();
@@ -15,13 +16,15 @@ export function useTarotDeck() {
     try {
       const { data: activeDeck, error: deckError } = await supabase
         .from('tarot_decks')
-        .select('id')
+        .select('id, card_back_url')
         .eq('is_active', true)
         .maybeSingle();
 
       if (deckError) throw deckError;
 
       if (activeDeck) {
+        setCardBackUrl(activeDeck.card_back_url || undefined);
+
         const { data: cards, error: cardsError } = await supabase
           .from('tarot_cards')
           .select('*')
@@ -54,5 +57,5 @@ export function useTarotDeck() {
     }
   };
 
-  return { deck, loading };
+  return { deck, loading, cardBackUrl };
 }

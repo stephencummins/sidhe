@@ -163,6 +163,10 @@ export default function AdminPanel() {
     }
   };
 
+  const handleCardBackUpdate = (deckId: string, url: string) => {
+    setDecks(decks.map(d => d.id === deckId ? { ...d, card_back_url: url } : d));
+  };
+
   const syncCardMeanings = async (deckId: string) => {
     if (!confirm('This will update all cards in this deck with meanings from the default tarot deck. Continue?')) return;
 
@@ -386,6 +390,7 @@ export default function AdminPanel() {
                 onSyncMeanings={syncCardMeanings}
                 syncing={syncing}
                 syncMessage={syncMessage}
+                onCardBackUpdate={handleCardBackUpdate}
               />
             ) : (
               <CelticBorder>
@@ -410,13 +415,15 @@ interface DeckEditorProps {
   onSyncMeanings: (deckId: string) => void;
   syncing: boolean;
   syncMessage: string;
+  onCardBackUpdate: (deckId: string, url: string) => void;
 }
 
-function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syncMessage }: DeckEditorProps) {
+function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syncMessage, onCardBackUpdate }: DeckEditorProps) {
   const [cards, setCards] = useState<TarotCardDB[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [showCelticImport, setShowCelticImport] = useState(false);
+  const [uploadingCardBack, setUploadingCardBack] = useState(false);
 
   useEffect(() => {
     loadCards();
@@ -551,6 +558,42 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
     }
   };
 
+  const handleCardBackUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setUploadingCardBack(true);
+
+    try {
+      const fileExt = file.name.split('.').pop();
+      const filePath = `card-backs/${deckId}-${crypto.randomUUID()}.${fileExt}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('tarot-cards')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('tarot-cards')
+        .getPublicUrl(filePath);
+
+      const { error: updateError } = await supabase
+        .from('tarot_decks')
+        .update({ card_back_url: publicUrl })
+        .eq('id', deckId);
+
+      if (updateError) throw updateError;
+
+      onCardBackUpdate(deckId, publicUrl);
+    } catch (error) {
+      console.error('Error uploading card back:', error);
+      alert('Failed to upload card back image. Please try again.');
+    } finally {
+      setUploadingCardBack(false);
+    }
+  };
+
   const deleteCard = async (cardId: string) => {
     try {
       const { error } = await supabase
@@ -633,6 +676,39 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
             {syncMessage}
           </div>
         )}
+
+        <div className="mb-6 p-4 bg-amber-100/50 rounded-lg border-2 border-amber-700/30">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-bold text-amber-900 mb-1" style={{ fontFamily: 'Cinzel, serif' }}>Card Back Image</h3>
+              <p className="text-sm text-amber-800/80">This image will be shown when users select cards for their reading</p>
+            </div>
+            <label className="flex items-center gap-2 px-4 py-2 bg-amber-700 text-amber-50 rounded-lg hover:bg-amber-600 transition-colors cursor-pointer font-medium">
+              <Upload className="w-4 h-4" />
+              {deck.card_back_url ? 'Change' : 'Upload'}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleCardBackUpload}
+                className="hidden"
+                disabled={uploadingCardBack}
+              />
+            </label>
+          </div>
+          {deck.card_back_url && (
+            <div className="mt-4 flex items-center gap-4">
+              <div className="w-24 aspect-[2/3] rounded-lg overflow-hidden border-2 border-amber-700/40">
+                <img src={deck.card_back_url} alt="Card back" className="w-full h-full object-cover" />
+              </div>
+              <p className="text-sm text-amber-700">Current card back image</p>
+            </div>
+          )}
+          {uploadingCardBack && (
+            <div className="mt-4 p-3 bg-amber-600/20 text-amber-900 rounded-lg text-center border border-amber-700/40">
+              Uploading card back image...
+            </div>
+          )}
+        </div>
 
         {loading ? (
           <p className="text-amber-900 text-center py-12">Loading cards...</p>

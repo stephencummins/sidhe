@@ -6,6 +6,7 @@ export interface TarotDeck {
   created_by: string;
   created_at: string;
   updated_at: string;
+  card_back_url?: string;
 }
 
 export interface TarotCardDB {

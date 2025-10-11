@@ -19,34 +19,22 @@ const supabaseUrl = env.VITE_SUPABASE_URL;
 const supabaseKey = env.VITE_SUPABASE_SERVICE_ROLE_KEY || env.VITE_SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-console.log('Applying migration...\n');
+const migration = readFileSync(join(__dirname, 'supabase/migrations/20251011000000_add_card_back_url.sql'), 'utf-8');
 
-const migrationSQL = readFileSync(join(__dirname, 'supabase/migrations/20251010160000_fix_arcana_and_suits.sql'), 'utf-8');
+// Extract just the SQL commands (skip comments)
+const sqlCommands = migration
+  .split('\n')
+  .filter(line => !line.trim().startsWith('/*') && !line.trim().startsWith('*') && !line.trim().startsWith('--'))
+  .join('\n');
 
-// Split by semicolons and execute each statement
-const statements = migrationSQL
-  .split(';')
-  .map(s => s.trim())
-  .filter(s => s && !s.startsWith('/*') && !s.startsWith('--'));
-
-for (const statement of statements) {
-  if (!statement) continue;
-  
-  console.log('Executing:', statement.substring(0, 80) + '...');
-  
-  const { error } = await supabase.rpc('exec_sql', { sql: statement });
-  
+try {
+  const { error } = await supabase.rpc('exec_sql', { sql: sqlCommands });
   if (error) {
-    console.error('Error:', error);
-  } else {
-    console.log('✓ Success\n');
+    console.error('Migration error:', error);
+    process.exit(1);
   }
+  console.log('Migration applied successfully!');
+} catch (err) {
+  console.error('Error applying migration:', err);
+  process.exit(1);
 }
-
-console.log('Verifying fix...');
-const { data: cards } = await supabase
-  .from('tarot_cards')
-  .select('arcana')
-  .eq('name', 'The Fool');
-
-console.log('The Fool arcana:', cards?.[0]?.arcana || 'NOT FOUND');

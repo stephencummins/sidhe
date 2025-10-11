@@ -13,7 +13,7 @@ interface CardSelectionProps {
 }
 
 export default function CardSelection({ spreadType, onCardsSelected }: CardSelectionProps) {
-  const { deck: tarotDeck, loading: deckLoading } = useTarotDeck();
+  const { deck: tarotDeck, loading: deckLoading, cardBackUrl } = useTarotDeck();
   const [deck, setDeck] = useState<TarotCard[]>([]);
   const [selectedCards, setSelectedCards] = useState<SelectedCard[]>([]);
   const [isShuffling, setIsShuffling] = useState(false);
@@ -123,7 +123,7 @@ export default function CardSelection({ spreadType, onCardsSelected }: CardSelec
                     animationDelay: `${index * 30}ms`
                   }}
                 >
-                  <TarotCardVisual card={card} revealed={false} size="small" />
+                  <TarotCardVisual card={card} revealed={false} size="small" cardBackUrl={cardBackUrl} />
 
                   {selected && selectionOrder >= 0 && (
                     <div className="absolute -top-3 -right-3 w-10 h-10 rounded-full bg-gradient-to-br from-amber-700 to-orange-800 text-amber-50 border-3 border-amber-300 flex items-center justify-center font-bold shadow-xl z-10" style={{ fontFamily: 'Cinzel, serif' }}>
