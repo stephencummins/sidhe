@@ -32,14 +32,17 @@ export default function SpreadSelection({ onSpreadSelect }: SpreadSelectionProps
           <div className="mb-6">
             <h2 className="text-5xl font-bold mb-4" style={{ 
               fontFamily: 'Cinzel, serif',
-              color: 'var(--calan-accent-gold)',
-              textShadow: '0 0 20px rgba(212, 175, 55, 0.4)'
+              color: '#d4af37',
+              textShadow: '0 0 20px rgba(212, 175, 55, 0.6), 0 2px 4px rgba(0,0,0,0.8)'
             }}>
               Choose Your Sacred Spread
             </h2>
-            <div className="w-64 h-1 mx-auto bg-gradient-to-r from-transparent via-[var(--calan-accent-gold)] to-transparent" />
+            <div className="w-64 h-1 mx-auto bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" />
           </div>
-          <p className="text-xl italic" style={{ color: 'var(--calan-cream)', opacity: 0.9 }}>
+          <p className="text-xl italic" style={{ 
+            color: '#f5e6d3',
+            textShadow: '0 1px 3px rgba(0,0,0,0.8)'
+          }}>
             Select the pattern that speaks to your soul
           </p>
         </div>
@@ -53,35 +56,44 @@ export default function SpreadSelection({ onSpreadSelect }: SpreadSelectionProps
               className="group transform hover:scale-105 transition-all duration-500 text-left"
             >
               <CelticBorder>
-                <div className="p-8 bg-gradient-to-br from-purple-950/80 to-purple-900/60">
+                <div className="p-8">
                   {/* Card Count Badge */}
                   <div className="flex items-center justify-between mb-6">
-                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-amber-600 to-amber-700 flex items-center justify-center shadow-lg group-hover:shadow-amber-500/50 transition-shadow">
-                      <span className="text-2xl font-bold text-amber-50">{spread.cardCount}</span>
+                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center shadow-lg group-hover:shadow-amber-500/50 transition-shadow border-2 border-amber-300">
+                      <span className="text-2xl font-bold text-amber-950">{spread.cardCount}</span>
                     </div>
-                    <div className="px-4 py-2 bg-amber-700/30 border-2 border-amber-600/60 font-semibold text-sm rounded" style={{ color: 'var(--calan-accent-gold)' }}>
+                    <div className="px-4 py-2 bg-amber-600/30 border-2 border-amber-500/60 font-semibold text-sm rounded" 
+                      style={{ 
+                        color: '#d4af37',
+                        textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                      }}>
                       {spread.cardCount === 1 ? 'Card' : 'Cards'}
                     </div>
                   </div>
 
                   {/* Spread Name */}
-                  <h3 className="text-2xl font-bold mb-3 group-hover:text-amber-400 transition-colors" style={{ 
+                  <h3 className="text-2xl font-bold mb-3 group-hover:text-amber-300 transition-colors" style={{ 
                     fontFamily: 'Cinzel, serif',
-                    color: 'var(--calan-accent-gold)'
+                    color: '#d4af37',
+                    textShadow: '0 1px 3px rgba(0,0,0,0.8)'
                   }}>
                     {spread.name}
                   </h3>
 
                   {/* Description */}
-                  <p className="leading-relaxed mb-6" style={{ color: 'var(--calan-cream)', opacity: 0.85 }}>
+                  <p className="leading-relaxed mb-6 text-lg" style={{ 
+                    color: '#f5e6d3',
+                    textShadow: '0 1px 2px rgba(0,0,0,0.7)'
+                  }}>
                     {spread.description}
                   </p>
 
                   {/* Positions Preview */}
-                  <div className="pt-4 border-t-2 border-amber-700/40">
+                  <div className="pt-4 border-t-2 border-amber-600/40">
                     <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ 
                       fontFamily: 'Cinzel, serif',
-                      color: 'var(--calan-accent-bronze)'
+                      color: '#cd7f32',
+                      textShadow: '0 1px 2px rgba(0,0,0,0.8)'
                     }}>
                       Positions:
                     </p>
@@ -91,9 +103,10 @@ export default function SpreadSelection({ onSpreadSelect }: SpreadSelectionProps
                           key={idx}
                           className="text-xs px-3 py-1 border rounded-full font-medium"
                           style={{
-                            background: 'rgba(212, 175, 55, 0.15)',
-                            borderColor: 'rgba(212, 175, 55, 0.4)',
-                            color: 'var(--calan-accent-gold)'
+                            background: 'rgba(212, 175, 55, 0.2)',
+                            borderColor: 'rgba(212, 175, 55, 0.6)',
+                            color: '#f5e6d3',
+                            textShadow: '0 1px 2px rgba(0,0,0,0.8)'
                           }}
                         >
                           {position}
@@ -102,9 +115,10 @@ export default function SpreadSelection({ onSpreadSelect }: SpreadSelectionProps
                       {spread.positions.length > 3 && (
                         <span className="text-xs px-3 py-1 border rounded-full font-medium"
                           style={{
-                            background: 'rgba(205, 127, 50, 0.15)',
-                            borderColor: 'rgba(205, 127, 50, 0.4)',
-                            color: 'var(--calan-accent-bronze)'
+                            background: 'rgba(205, 127, 50, 0.2)',
+                            borderColor: 'rgba(205, 127, 50, 0.6)',
+                            color: '#f5e6d3',
+                            textShadow: '0 1px 2px rgba(0,0,0,0.8)'
                           }}>
                           +{spread.positions.length - 3} more
                         </span>
@@ -119,8 +133,12 @@ export default function SpreadSelection({ onSpreadSelect }: SpreadSelectionProps
 
         {/* Footer Quote */}
         <div className="mt-16 text-center">
-          <div className="w-full h-px bg-gradient-to-r from-transparent via-[var(--calan-accent-gold)] to-transparent opacity-50 mb-6" />
-          <p className="text-sm italic" style={{ color: 'var(--calan-cream)', opacity: 0.6 }}>
+          <div className="w-full h-px bg-gradient-to-r from-transparent via-[#d4af37] to-transparent opacity-50 mb-6" />
+          <p className="text-sm italic" style={{ 
+            color: '#f5e6d3', 
+            opacity: 0.8,
+            textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+          }}>
             "In the arrangement of cards lies the map of your journey"
           </p>
         </div>
