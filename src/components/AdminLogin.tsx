@@ -63,13 +63,6 @@ export default function AdminLogin() {
                 }}>
                 <Lock className="w-8 h-8" style={{ color: '#d4af37' }} />
               </div>
-              <h1 className="text-3xl font-bold" style={{ 
-                fontFamily: 'Cinzel, serif',
-                color: '#d4af37',
-                textShadow: '0 1px 2px rgba(0,0,0,0.8)'
-              }}>
-                Admin Portal
-              </h1>
               <p style={{
                 color: '#f5e6d3',
                 textShadow: '0 1px 2px rgba(0,0,0,0.7)'
