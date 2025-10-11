@@ -11,11 +11,12 @@
 
 /* OR use CSS layers for safe cascading */
 @layer calan-theme {
-  
+
   /* ========================================
      1. SAFE VARIABLES (won't override globals)
      ======================================== */
-  
+
+  :root,
   .calan-branded {
     --calan-primary-dark: #1a0b2e;
     --calan-primary-purple: #2d1b4e;
@@ -24,12 +25,12 @@
     --calan-deep-teal: #1b4d4d;
     --calan-cream: #f5e6d3;
     --calan-silver: #c0c0c0;
-    
+
     /* Gradients */
     --calan-bg-gradient: linear-gradient(135deg, #0a0515 0%, #1a0b2e 50%, #2d1b4e 100%);
     --calan-card-gradient: linear-gradient(180deg, rgba(29, 27, 46, 0.95) 0%, rgba(26, 11, 46, 0.98) 100%);
     --calan-gold-gradient: linear-gradient(135deg, #d4af37 0%, #cd7f32 100%);
-    
+
     /* Shadows */
     --calan-glow-gold: 0 0 20px rgba(212, 175, 55, 0.4);
     --calan-glow-gold-strong: 0 0 30px rgba(212, 175, 55, 0.7);
@@ -72,7 +73,7 @@
      ======================================== */
   
   .calan-branded .calan-ornate-container {
-    background: var(--calan-card-gradient);
+    background: rgba(29, 27, 46, 0.85);
     border: 3px solid var(--calan-accent-gold);
     border-radius: 12px;
     padding: 2rem;
@@ -223,9 +224,17 @@
      ======================================== */
   
   .calan-branded .calan-text-center { text-align: center; }
-  .calan-branded .calan-text-gold { color: var(--calan-accent-gold); }
-  .calan-branded .calan-text-bronze { color: var(--calan-accent-bronze); }
-  .calan-branded .calan-text-cream { color: var(--calan-cream); }
+  .calan-branded .calan-text-gold {
+    color: var(--calan-accent-gold);
+    text-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+  }
+  .calan-branded .calan-text-bronze {
+    color: var(--calan-accent-bronze);
+  }
+  .calan-branded .calan-text-cream {
+    color: var(--calan-cream);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  }
   
   .calan-branded .calan-mt-sm { margin-top: 0.5rem; }
   .calan-branded .calan-mt-md { margin-top: 1rem; }
