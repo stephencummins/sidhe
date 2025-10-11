@@ -68,7 +68,7 @@ export default function CelticBorder({ children, className = "" }: { children?: 
       <div className="absolute top-1/2 left-3/4 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-transparent via-amber-400 to-transparent" />
 
       {/* FIXED: Dark interior instead of light */}
-      <div className="relative bg-gradient-to-br from-purple-950/90 via-purple-900/80 to-purple-950/90 rounded-sm m-3">
+      <div className="relative bg-gradient-to-br from-teal-950/90 via-teal-900/80 to-teal-950/90 rounded-sm m-3">
         {children}
       </div>
     </div>

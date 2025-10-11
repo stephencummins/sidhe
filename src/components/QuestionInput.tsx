@@ -100,7 +100,7 @@ export default function QuestionInput({ onSubmit }: QuestionInputProps) {
               <div className="grid grid-cols-2 gap-4">
                 <button
                   onClick={handleSkip}
-                  className="px-8 py-4 bg-purple-900/50 border-2 border-amber-600/50 hover:border-amber-500 hover:bg-purple-900/70 hover:shadow-lg hover:shadow-amber-500/20 transition-all duration-300 font-semibold rounded"
+                  className="px-8 py-4 bg-teal-900/50 border-2 border-amber-600/50 hover:border-amber-500 hover:bg-teal-900/70 hover:shadow-lg hover:shadow-amber-500/20 transition-all duration-300 font-semibold rounded"
                   style={{ 
                     fontFamily: 'Cinzel, serif',
                     color: '#f5e6d3',

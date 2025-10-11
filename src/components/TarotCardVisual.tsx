@@ -101,7 +101,7 @@ export default function TarotCardVisual({ card, revealed = false, size = 'medium
             className="w-full h-full object-cover"
           />
           {isReversed && (
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-blue-500/10 to-pink-500/20 mix-blend-overlay pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-br from-teal-500/20 via-cyan-500/10 to-teal-500/20 mix-blend-overlay pointer-events-none" />
           )}
         </div>
       </div>

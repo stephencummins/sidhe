@@ -844,7 +844,7 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
         )}
 
         {generatingThumbnails && (
-          <div className="mb-4 p-4 bg-purple-600/20 text-purple-900 rounded-lg text-center border-2 border-purple-700/40">
+          <div className="mb-4 p-4 bg-teal-600/20 text-teal-900 rounded-lg text-center border-2 border-teal-700/40">
             {thumbnailProgress}
           </div>
         )}
