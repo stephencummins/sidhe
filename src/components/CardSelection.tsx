@@ -89,14 +89,17 @@ export default function CardSelection({ spreadType, onCardsSelected }: CardSelec
           <div className="mb-6">
             <h2 className="text-5xl font-bold mb-4" style={{ 
               fontFamily: 'Cinzel, serif',
-              color: 'var(--calan-accent-gold)',
-              textShadow: '0 0 20px rgba(212, 175, 55, 0.4)'
+              color: '#d4af37',
+              textShadow: '0 0 20px rgba(212, 175, 55, 0.6), 0 2px 4px rgba(0,0,0,0.8)'
             }}>
               Select Your Cards
             </h2>
-            <div className="w-64 h-1 mx-auto bg-gradient-to-r from-transparent via-[var(--calan-accent-gold)] to-transparent" />
+            <div className="w-64 h-1 mx-auto bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" />
           </div>
-          <p className="text-xl mb-6 italic" style={{ color: 'var(--calan-cream)', opacity: 0.9 }}>
+          <p className="text-xl mb-6 italic" style={{ 
+            color: '#f5e6d3',
+            textShadow: '0 1px 3px rgba(0,0,0,0.8)'
+          }}>
             {selectedCards.length === 0
               ? 'Let your spirit guide you to the cards meant for you'
               : `Card ${selectedCards.length} of ${cardsNeeded} drawn from the ancient deck`
@@ -141,10 +144,10 @@ export default function CardSelection({ spreadType, onCardsSelected }: CardSelec
 
                   {/* Selection Number Badge */}
                   {selected && selectionOrder >= 0 && (
-                    <div className="absolute -top-3 -right-3 w-10 h-10 rounded-full bg-gradient-to-br from-amber-600 to-amber-700 border-3 border-amber-300 flex items-center justify-center font-bold shadow-xl z-10" 
+                    <div className="absolute -top-3 -right-3 w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 border-3 border-amber-300 flex items-center justify-center font-bold shadow-xl z-10" 
                       style={{ 
                         fontFamily: 'Cinzel, serif',
-                        color: 'var(--calan-cream)'
+                        color: '#1a0b2e'
                       }}>
                       {selectionOrder + 1}
                     </div>
@@ -159,10 +162,11 @@ export default function CardSelection({ spreadType, onCardsSelected }: CardSelec
         {selectedCards.length > 0 && (
           <div className="mt-12 max-w-4xl mx-auto">
             <CelticBorder>
-              <div className="p-8 bg-gradient-to-br from-purple-950/80 to-purple-900/60">
+              <div className="p-8">
                 <h3 className="text-2xl font-bold mb-6 text-center" style={{ 
                   fontFamily: 'Cinzel, serif',
-                  color: 'var(--calan-accent-gold)'
+                  color: '#d4af37',
+                  textShadow: '0 1px 3px rgba(0,0,0,0.8)'
                 }}>
                   Your Chosen Cards
                 </h3>
@@ -171,18 +175,20 @@ export default function CardSelection({ spreadType, onCardsSelected }: CardSelec
                     <div key={idx} className="px-6 py-3 border-2 rounded-lg shadow-md"
                       style={{
                         background: 'rgba(212, 175, 55, 0.15)',
-                        borderColor: 'rgba(212, 175, 55, 0.4)'
+                        borderColor: 'rgba(212, 175, 55, 0.5)'
                       }}>
                       <span className="font-bold" style={{ 
                         fontFamily: 'Cinzel, serif',
-                        color: 'var(--calan-accent-gold)'
+                        color: '#d4af37',
+                        textShadow: '0 1px 2px rgba(0,0,0,0.8)'
                       }}>
                         {sc.position}
                       </span>
-                      <span className="mx-2" style={{ color: 'var(--calan-accent-bronze)' }}>•</span>
+                      <span className="mx-2" style={{ color: '#cd7f32' }}>•</span>
                       <span style={{ 
                         fontFamily: 'Crimson Text, serif',
-                        color: 'var(--calan-cream)'
+                        color: '#f5e6d3',
+                        textShadow: '0 1px 2px rgba(0,0,0,0.8)'
                       }}>
                         {sc.card.name}
                       </span>
@@ -196,7 +202,11 @@ export default function CardSelection({ spreadType, onCardsSelected }: CardSelec
 
         {/* Footer Quote */}
         <div className="mt-12 text-center">
-          <p className="text-sm italic" style={{ color: 'var(--calan-cream)', opacity: 0.6 }}>
+          <p className="text-sm italic" style={{ 
+            color: '#f5e6d3', 
+            opacity: 0.8,
+            textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+          }}>
             "Trust in the cards that call to you"
           </p>
         </div>
