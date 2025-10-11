@@ -451,6 +451,8 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
   const [showCelticImport, setShowCelticImport] = useState(false);
   const [uploadingCardBack, setUploadingCardBack] = useState(false);
   const [selectedCard, setSelectedCard] = useState<TarotCardDB | null>(null);
+  const [generatingThumbnails, setGeneratingThumbnails] = useState(false);
+  const [thumbnailProgress, setThumbnailProgress] = useState<string>('');
 
   useEffect(() => {
     loadCards();
@@ -663,6 +665,69 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
     }
   };
 
+  const generateThumbnailsForExisting = async () => {
+    const cardsNeedingThumbnails = cards.filter(c => !c.thumbnail_url);
+
+    if (cardsNeedingThumbnails.length === 0) {
+      alert('All cards already have thumbnails!');
+      return;
+    }
+
+    if (!confirm(`Generate thumbnails for ${cardsNeedingThumbnails.length} cards? This may take a few minutes.`)) {
+      return;
+    }
+
+    setGeneratingThumbnails(true);
+    let processed = 0;
+    let succeeded = 0;
+
+    for (const card of cardsNeedingThumbnails) {
+      processed++;
+      setThumbnailProgress(`Processing ${processed}/${cardsNeedingThumbnails.length}: ${card.name}`);
+
+      try {
+        const response = await fetch(card.image_url);
+        const blob = await response.blob();
+        const file = new File([blob], `${card.name}.jpg`, { type: blob.type });
+
+        const thumbnail = await createThumbnail(file, 300, 450);
+        const thumbPath = `${deckId}/thumbnails/${card.id}.jpg`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('tarot-cards')
+          .upload(thumbPath, thumbnail, { upsert: true });
+
+        if (uploadError) {
+          console.error(`Failed to upload thumbnail for ${card.name}:`, uploadError);
+          continue;
+        }
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('tarot-cards')
+          .getPublicUrl(thumbPath);
+
+        const { error: updateError } = await supabase
+          .from('tarot_cards')
+          .update({ thumbnail_url: publicUrl })
+          .eq('id', card.id);
+
+        if (updateError) {
+          console.error(`Failed to update DB for ${card.name}:`, updateError);
+          continue;
+        }
+
+        succeeded++;
+      } catch (error) {
+        console.error(`Error processing ${card.name}:`, error);
+      }
+    }
+
+    setGeneratingThumbnails(false);
+    setThumbnailProgress('');
+    alert(`Generated ${succeeded} thumbnails successfully!`);
+    loadCards();
+  };
+
   return (
     <>
       {showCelticImport && (
@@ -709,6 +774,14 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
               <BookOpen className="w-4 h-4" />
               Import Celtic
             </button>
+            <button
+              onClick={generateThumbnailsForExisting}
+              disabled={generatingThumbnails}
+              className="flex items-center gap-2 px-4 py-2 bg-purple-600/20 text-purple-900 border-2 border-purple-700/40 rounded-lg hover:bg-purple-600/30 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <RefreshCw className={`w-4 h-4 ${generatingThumbnails ? 'animate-spin' : ''}`} />
+              Generate Thumbnails
+            </button>
             <label className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-700 to-orange-700 text-amber-50 rounded-lg hover:from-amber-600 hover:to-orange-600 transition-colors cursor-pointer font-medium">
               <Upload className="w-4 h-4" />
               Upload Cards
@@ -733,6 +806,12 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
         {syncMessage && (
           <div className="mb-4 p-4 bg-blue-600/20 text-blue-900 rounded-lg text-center border-2 border-blue-700/40">
             {syncMessage}
+          </div>
+        )}
+
+        {generatingThumbnails && (
+          <div className="mb-4 p-4 bg-purple-600/20 text-purple-900 rounded-lg text-center border-2 border-purple-700/40">
+            {thumbnailProgress}
           </div>
         )}
 
