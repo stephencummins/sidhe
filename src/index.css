@@ -1,23 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Celtic-inspired ornate design */
-:root {
-  --primary-dark: #1a0b2e;
-  --primary-purple: #2d1b4e;
-  --accent-gold: #d4af37;
-  --accent-bronze: #cd7f32;
-  --deep-teal: #1b4d4d;
-}
-
 @layer base {
   body {
-    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-purple) 100%);
-    font-family: 'Cinzel', 'Cormorant Garamond', serif;
-    color: var(--accent-gold);
+    @apply bg-gradient-to-br from-amber-50 via-orange-50 to-teal-50;
+    font-family: 'Crimson Text', Georgia, serif;
     position: relative;
   }
 
@@ -25,18 +15,15 @@
     font-family: 'Cinzel', Georgia, serif;
   }
 
-  /* Celtic knot background pattern */
   body::before {
     content: '';
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0.05;
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0 L45 15 L30 30 L15 15 Z M30 30 L45 45 L30 60 L15 45 Z' fill='none' stroke='%23d4af37' stroke-width='1'/%3E%3C/svg%3E");
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(139, 69, 19, 0.02) 2px, rgba(139, 69, 19, 0.02) 4px),
+      repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(139, 69, 19, 0.02) 2px, rgba(139, 69, 19, 0.02) 4px);
     pointer-events: none;
-    z-index: -1;
+    z-index: 0;
   }
 
   body > * {
@@ -50,54 +37,17 @@
     font-size: 4rem;
     line-height: 1;
     font-weight: 700;
-    background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-bronze) 50%, var(--accent-gold) 100%);
+    background: linear-gradient(135deg, #d97706 0%, #ea580c 50%, #dc2626 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .kells-border {
-    background: linear-gradient(to right, var(--accent-bronze) 0%, var(--accent-gold) 50%, var(--accent-bronze) 100%);
+    background: linear-gradient(to right, #92400e 0%, #b45309 50%, #92400e 100%);
   }
 
   .celtic-knotwork {
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0 Q45 15 30 30 Q15 15 30 0 M0 30 Q15 15 30 30 Q15 45 0 30 M30 60 Q15 45 30 30 Q45 45 30 60 M60 30 Q45 45 30 30 Q45 15 60 30' stroke='%23d4af37' stroke-width='1.5' fill='none' opacity='0.3'/%3E%3C/svg%3E");
-  }
-
-  /* Ornate borders */
-  .card-container, .spread-selection {
-    border: 3px solid var(--accent-gold);
-    border-image: linear-gradient(45deg, var(--accent-gold), var(--accent-bronze)) 1;
-    box-shadow:
-      0 0 20px rgba(212, 175, 55, 0.3),
-      inset 0 0 20px rgba(212, 175, 55, 0.1);
-    position: relative;
-    padding: 2rem;
-    background: rgba(29, 27, 46, 0.8);
-    backdrop-filter: blur(10px);
-  }
-
-  /* Celtic corner decorations */
-  .card-container::before,
-  .card-container::after {
-    content: '';
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    border: 2px solid var(--accent-gold);
-  }
-
-  .card-container::before {
-    top: -2px;
-    left: -2px;
-    border-right: none;
-    border-bottom: none;
-  }
-
-  .card-container::after {
-    bottom: -2px;
-    right: -2px;
-    border-left: none;
-    border-top: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0 Q45 15 30 30 Q15 15 30 0 M0 30 Q15 15 30 30 Q15 45 0 30 M30 60 Q15 45 30 30 Q45 45 30 60 M60 30 Q45 45 30 30 Q45 15 60 30' stroke='%23b45309' stroke-width='1.5' fill='none' opacity='0.3'/%3E%3C/svg%3E");
   }
 }
