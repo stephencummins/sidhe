@@ -579,12 +579,17 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
         .from('tarot-cards')
         .getPublicUrl(filePath);
 
-      const { error: updateError } = await supabase
+      const { data, error: updateError } = await supabase
         .from('tarot_decks')
         .update({ card_back_url: publicUrl })
-        .eq('id', deckId);
+        .eq('id', deckId)
+        .select()
+        .single();
 
-      if (updateError) throw updateError;
+      if (updateError) {
+        console.error('Error updating deck with card back URL:', updateError);
+        throw updateError;
+      }
 
       onCardBackUpdate(deckId, publicUrl);
     } catch (error) {
