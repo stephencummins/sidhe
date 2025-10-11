@@ -20,23 +20,23 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-amber-50 via-orange-50 to-teal-50">
-      <div className="absolute inset-0 opacity-20">
+    <div className="calan-branded min-h-screen relative overflow-hidden">
+      <div className="absolute inset-0 opacity-15">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <pattern id="kells-pattern" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
-              <path d="M60 20 Q75 35 60 50 Q45 35 60 20" stroke="#92400e" strokeWidth="1.5" fill="none" opacity="0.3" />
-              <path d="M20 60 Q35 45 50 60 Q35 75 20 60" stroke="#b45309" strokeWidth="1.5" fill="none" opacity="0.3" />
-              <circle cx="60" cy="60" r="15" stroke="#d97706" strokeWidth="1" fill="none" opacity="0.2" />
-              <path d="M100 60 Q85 75 70 60 Q85 45 100 60" stroke="#ea580c" strokeWidth="1.5" fill="none" opacity="0.3" />
+            <pattern id="calan-pattern" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
+              <path d="M60 20 Q75 35 60 50 Q45 35 60 20" stroke="#d4af37" strokeWidth="1.5" fill="none" opacity="0.4" />
+              <path d="M20 60 Q35 45 50 60 Q35 75 20 60" stroke="#cd7f32" strokeWidth="1.5" fill="none" opacity="0.4" />
+              <circle cx="60" cy="60" r="15" stroke="#d4af37" strokeWidth="1" fill="none" opacity="0.3" />
+              <path d="M100 60 Q85 75 70 60 Q85 45 100 60" stroke="#cd7f32" strokeWidth="1.5" fill="none" opacity="0.4" />
             </pattern>
           </defs>
-          <rect width="100%" height="100%" fill="url(#kells-pattern)" />
+          <rect width="100%" height="100%" fill="url(#calan-pattern)" />
         </svg>
       </div>
 
-      <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-amber-900/10 to-transparent" />
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-orange-900/10 to-transparent" />
+      <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black/20 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/20 to-transparent" />
 
       <div className="max-w-4xl mx-auto px-4 py-16 relative z-10">
         <div className="text-center mb-12">
@@ -49,32 +49,36 @@ export default function LandingPage() {
           </div>
 
           <div className="mb-6">
-            <h1 className="text-7xl font-bold mb-2 bg-gradient-to-r from-amber-800 via-orange-700 to-red-800 bg-clip-text text-transparent drop-shadow-sm" style={{ fontFamily: 'Cinzel, serif' }}>
-              SIDHE
+            <h1 className="text-7xl font-bold mb-2 text-shadow-lg" style={{
+              fontFamily: 'Cinzel, serif',
+              color: 'var(--calan-accent-gold)',
+              textShadow: '0 0 20px rgba(212, 175, 55, 0.4), 0 2px 10px rgba(212, 175, 55, 0.3)'
+            }}>
+              CALAN
             </h1>
-            <div className="w-48 h-1 mx-auto bg-gradient-to-r from-transparent via-amber-700 to-transparent" />
+            <div className="w-48 h-1 mx-auto bg-gradient-to-r from-transparent via-[var(--calan-accent-gold)] to-transparent" />
           </div>
 
-          <p className="text-2xl text-amber-900/80 mb-4 leading-relaxed italic">
-            Tarot Reading of the Ancient Ones
+          <p className="text-2xl mb-4 leading-relaxed italic" style={{ color: 'var(--calan-cream)' }}>
+            Celtic Seasonal Tarot
           </p>
-          <p className="text-lg text-orange-800/70 max-w-2xl mx-auto">
-            Where illuminated wisdom meets modern divination
+          <p className="text-lg max-w-2xl mx-auto" style={{ color: 'var(--calan-cream)', opacity: 0.9 }}>
+            Where ancient Celtic wisdom meets the turning of the seasons
           </p>
         </div>
 
         <div className="flex justify-center mb-16">
           <button
             onClick={handleStartReading}
-            className="group relative px-16 py-5 bg-gradient-to-r from-amber-700 via-orange-600 to-red-700 text-amber-50 text-xl font-bold border-4 border-double border-amber-900 hover:border-orange-800 transition-all duration-500 transform hover:scale-105 shadow-2xl hover:shadow-amber-900/50 overflow-hidden"
+            className="calan-btn calan-btn-primary group relative px-16 py-5 text-xl font-bold transition-all duration-500 transform hover:scale-105 overflow-hidden"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
             <span className="relative z-10 tracking-wide" style={{ fontFamily: 'Cinzel, serif' }}>Begin Your Journey</span>
 
-            <div className="absolute -top-1 -left-1 w-6 h-6 border-t-4 border-l-4 border-amber-300" />
-            <div className="absolute -top-1 -right-1 w-6 h-6 border-t-4 border-r-4 border-amber-300" />
-            <div className="absolute -bottom-1 -left-1 w-6 h-6 border-b-4 border-l-4 border-amber-300" />
-            <div className="absolute -bottom-1 -right-1 w-6 h-6 border-b-4 border-r-4 border-amber-300" />
+            <div className="absolute -top-1 -left-1 w-6 h-6 border-t-4 border-l-4" style={{ borderColor: 'var(--calan-accent-gold)' }} />
+            <div className="absolute -top-1 -right-1 w-6 h-6 border-t-4 border-r-4" style={{ borderColor: 'var(--calan-accent-gold)' }} />
+            <div className="absolute -bottom-1 -left-1 w-6 h-6 border-b-4 border-l-4" style={{ borderColor: 'var(--calan-accent-gold)' }} />
+            <div className="absolute -bottom-1 -right-1 w-6 h-6 border-b-4 border-r-4" style={{ borderColor: 'var(--calan-accent-gold)' }} />
           </button>
         </div>
 
@@ -86,8 +90,8 @@ export default function LandingPage() {
                   <span className="text-3xl text-amber-50">I</span>
                 </div>
               </div>
-              <h3 className="text-xl font-bold text-amber-900 mb-3" style={{ fontFamily: 'Cinzel, serif' }}>Choose Your Spread</h3>
-              <p className="text-orange-800/80 leading-relaxed">Select from sacred spreading patterns passed down through ages</p>
+              <h3 className="text-xl font-bold mb-3 calan-text-gold" style={{ fontFamily: 'Cinzel, serif' }}>Choose Your Spread</h3>
+              <p className="calan-text-cream leading-relaxed">Select from sacred spreading patterns passed down through ages</p>
             </div>
           </CelticBorder>
 
@@ -98,8 +102,8 @@ export default function LandingPage() {
                   <span className="text-3xl text-amber-50">II</span>
                 </div>
               </div>
-              <h3 className="text-xl font-bold text-amber-900 mb-3" style={{ fontFamily: 'Cinzel, serif' }}>Draw Your Cards</h3>
-              <p className="text-orange-800/80 leading-relaxed">Channel the ancient energies through mystical cards</p>
+              <h3 className="text-xl font-bold mb-3 calan-text-gold" style={{ fontFamily: 'Cinzel, serif' }}>Draw Your Cards</h3>
+              <p className="calan-text-cream leading-relaxed">Channel the ancient energies through mystical cards</p>
             </div>
           </CelticBorder>
 
@@ -110,8 +114,8 @@ export default function LandingPage() {
                   <span className="text-3xl text-amber-50">III</span>
                 </div>
               </div>
-              <h3 className="text-xl font-bold text-amber-900 mb-3" style={{ fontFamily: 'Cinzel, serif' }}>Receive Wisdom</h3>
-              <p className="text-orange-800/80 leading-relaxed">Discover insights illuminated by divine guidance</p>
+              <h3 className="text-xl font-bold mb-3 calan-text-gold" style={{ fontFamily: 'Cinzel, serif' }}>Receive Wisdom</h3>
+              <p className="calan-text-cream leading-relaxed">Discover insights illuminated by divine guidance</p>
             </div>
           </CelticBorder>
         </div>
@@ -127,15 +131,15 @@ export default function LandingPage() {
                   <img src="/The_World copy.gif" alt="The World" className="w-24 h-36 object-cover rounded shadow-lg border-2 border-amber-700" />
                 </div>
                 <div className="flex-1 text-center md:text-left">
-                  <h3 className="text-2xl font-bold text-amber-900 mb-3" style={{ fontFamily: 'Cinzel, serif' }}>
+                  <h3 className="text-2xl font-bold calan-text-gold mb-3" style={{ fontFamily: 'Cinzel, serif' }}>
                     Illuminated by Celtic Art
                   </h3>
-                  <p className="text-orange-800/80 leading-relaxed mb-4">
-                    Each card is a masterwork inspired by the intricate beauty of the Book of Kells,
-                    blending ancient Celtic artistry with timeless tarot symbolism.
+                  <p className="calan-text-cream leading-relaxed mb-4">
+                    Each card is a masterwork inspired by the intricate beauty of Celtic tradition,
+                    blending ancient artistry with the turning of the seasons.
                   </p>
-                  <p className="text-amber-900/70 italic text-sm">
-                    "In every knot, a story. In every line, wisdom eternal."
+                  <p className="calan-text-bronze italic text-sm">
+                    "In every season, a story. In every turn, wisdom eternal."
                   </p>
                 </div>
               </div>
@@ -177,9 +181,9 @@ export default function LandingPage() {
         </div>
 
         <div className="mt-16 text-center">
-          <div className="w-full h-px bg-gradient-to-r from-transparent via-amber-700/50 to-transparent mb-8" />
-          <p className="text-amber-900/60 text-sm italic">
-            "The threads of fate are woven in patterns both ancient and new"
+          <div className="w-full h-px bg-gradient-to-r from-transparent via-[var(--calan-accent-gold)] to-transparent opacity-50 mb-8" />
+          <p className="calan-text-cream opacity-60 text-sm italic">
+            "The threads of fate are woven through the seasons of the soul"
           </p>
         </div>
       </div>
