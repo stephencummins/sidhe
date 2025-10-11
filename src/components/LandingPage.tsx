@@ -90,8 +90,8 @@ export default function LandingPage() {
                   <span className="text-3xl text-amber-50">I</span>
                 </div>
               </div>
-              <h3 className="text-xl font-bold mb-3" style={{ fontFamily: 'Cinzel, serif', color: 'var(--calan-accent-gold)' }}>Choose Your Spread</h3>
-              <p className="leading-relaxed" style={{ color: 'var(--calan-cream)', opacity: 0.9 }}>Select from sacred spreading patterns passed down through ages</p>
+              <h3 className="text-xl font-bold mb-3 text-amber-900" style={{ fontFamily: 'Cinzel, serif' }}>Choose Your Spread</h3>
+              <p className="text-amber-950 leading-relaxed">Select from sacred spreading patterns passed down through ages</p>
             </div>
           </CelticBorder>
 
@@ -102,8 +102,8 @@ export default function LandingPage() {
                   <span className="text-3xl text-amber-50">II</span>
                 </div>
               </div>
-              <h3 className="text-xl font-bold mb-3" style={{ fontFamily: 'Cinzel, serif', color: 'var(--calan-accent-gold)' }}>Draw Your Cards</h3>
-              <p className="leading-relaxed" style={{ color: 'var(--calan-cream)', opacity: 0.9 }}>Channel the ancient energies through mystical cards</p>
+              <h3 className="text-xl font-bold mb-3 text-amber-900" style={{ fontFamily: 'Cinzel, serif' }}>Draw Your Cards</h3>
+              <p className="text-amber-950 leading-relaxed">Channel the ancient energies through mystical cards</p>
             </div>
           </CelticBorder>
 
@@ -114,8 +114,8 @@ export default function LandingPage() {
                   <span className="text-3xl text-amber-50">III</span>
                 </div>
               </div>
-              <h3 className="text-xl font-bold mb-3" style={{ fontFamily: 'Cinzel, serif', color: 'var(--calan-accent-gold)' }}>Receive Wisdom</h3>
-              <p className="leading-relaxed" style={{ color: 'var(--calan-cream)', opacity: 0.9 }}>Discover insights illuminated by divine guidance</p>
+              <h3 className="text-xl font-bold mb-3 text-amber-900" style={{ fontFamily: 'Cinzel, serif' }}>Receive Wisdom</h3>
+              <p className="text-amber-950 leading-relaxed">Discover insights illuminated by divine guidance</p>
             </div>
           </CelticBorder>
         </div>
