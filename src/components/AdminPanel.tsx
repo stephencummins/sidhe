@@ -580,36 +580,62 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
           // Continue without thumbnail
         }
 
-        const arcana = fileName.toLowerCase().includes('major') ? 'major' : 'minor';
-        let suit = null;
-        if (arcana === 'minor') {
-          if (fileName.toLowerCase().includes('wand')) suit = 'wands';
-          else if (fileName.toLowerCase().includes('cup')) suit = 'cups';
-          else if (fileName.toLowerCase().includes('sword')) suit = 'swords';
-          else if (fileName.toLowerCase().includes('pentacle')) suit = 'pentacles';
-        }
-
-        const { data: cardData, error: cardError } = await supabase
+        // Check if card with this name already exists
+        const { data: existingCard } = await supabase
           .from('tarot_cards')
-          .insert({
-            deck_id: deckId,
-            name: fileName,
-            arcana,
-            suit,
-            image_url: publicUrl,
-            thumbnail_url: thumbnailUrl,
-            meaning_upright: '',
-            meaning_reversed: '',
-            keywords: []
-          })
-          .select()
-          .single();
+          .select('*')
+          .eq('deck_id', deckId)
+          .eq('name', fileName)
+          .maybeSingle();
 
-        if (cardError) throw cardError;
-        uploadedCards.push(cardData);
+        if (existingCard) {
+          // Update existing card - preserve all meanings
+          const { data: cardData, error: cardError } = await supabase
+            .from('tarot_cards')
+            .update({
+              image_url: publicUrl,
+              thumbnail_url: thumbnailUrl
+            })
+            .eq('id', existingCard.id)
+            .select()
+            .single();
+
+          if (cardError) throw cardError;
+          uploadedCards.push(cardData);
+        } else {
+          // Create new card
+          const arcana = fileName.toLowerCase().includes('major') ? 'major' : 'minor';
+          let suit = null;
+          if (arcana === 'minor') {
+            if (fileName.toLowerCase().includes('wand')) suit = 'wands';
+            else if (fileName.toLowerCase().includes('cup')) suit = 'cups';
+            else if (fileName.toLowerCase().includes('sword')) suit = 'swords';
+            else if (fileName.toLowerCase().includes('pentacle')) suit = 'pentacles';
+          }
+
+          const { data: cardData, error: cardError } = await supabase
+            .from('tarot_cards')
+            .insert({
+              deck_id: deckId,
+              name: fileName,
+              arcana,
+              suit,
+              image_url: publicUrl,
+              thumbnail_url: thumbnailUrl,
+              meaning_upright: '',
+              meaning_reversed: '',
+              keywords: []
+            })
+            .select()
+            .single();
+
+          if (cardError) throw cardError;
+          uploadedCards.push(cardData);
+        }
       }
 
-      setCards(sortCards([...cards, ...uploadedCards]));
+      // Reload cards to get fresh data
+      await loadCards();
     } catch (error) {
       console.error('Error uploading cards:', error);
       alert('Failed to upload some cards. Please try again.');
