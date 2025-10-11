@@ -51,6 +51,14 @@ export default function AdminPanel() {
 
       console.log('Loaded decks:', data);
       setDecks(data || []);
+
+      // Auto-select the active deck if no deck is selected
+      if (!selectedDeck && data && data.length > 0) {
+        const activeDeck = data.find(d => d.is_active);
+        if (activeDeck) {
+          setSelectedDeck(activeDeck.id);
+        }
+      }
     } catch (error) {
       console.error('Error loading decks:', error);
     } finally {
