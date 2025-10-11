@@ -34,47 +34,78 @@ export default function QuestionInput({ onSubmit }: QuestionInputProps) {
       <div className="max-w-3xl mx-auto w-full relative z-10">
         <div className="text-center mb-12">
           <div className="mb-6">
-            <h2 className="text-5xl font-bold mb-4 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-300 bg-clip-text text-transparent" style={{ fontFamily: 'Cinzel, serif' }}>
+            <h2 className="text-5xl font-bold mb-4" style={{ 
+              fontFamily: 'Cinzel, serif',
+              color: '#d4af37',
+              textShadow: '0 0 20px rgba(212, 175, 55, 0.6), 0 2px 4px rgba(0,0,0,0.8)'
+            }}>
               What Guidance Do You Seek?
             </h2>
-            <div className="w-64 h-1 mx-auto bg-gradient-to-r from-transparent via-amber-500 to-transparent" />
+            <div className="w-64 h-1 mx-auto bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" />
           </div>
-          <p className="text-xl italic" style={{ color: 'var(--calan-cream)', opacity: 0.9 }}>Share your question with the ancient spirits</p>
+          <p className="text-xl italic" style={{ 
+            color: '#f5e6d3',
+            textShadow: '0 1px 3px rgba(0,0,0,0.8)'
+          }}>
+            Share your question with the ancient spirits
+          </p>
         </div>
 
         <CelticBorder>
           <div className="p-8">
             <div className="mb-6">
               <div className="relative">
-                <div className="absolute -top-2 -left-2 w-6 h-6 border-t-2 border-l-2 border-amber-600/50" />
-                <div className="absolute -top-2 -right-2 w-6 h-6 border-t-2 border-r-2 border-amber-600/50" />
-                <div className="absolute -bottom-2 -left-2 w-6 h-6 border-b-2 border-l-2 border-amber-600/50" />
-                <div className="absolute -bottom-2 -right-2 w-6 h-6 border-b-2 border-r-2 border-amber-600/50" />
+                <div className="absolute -top-2 -left-2 w-6 h-6 border-t-2 border-l-2 border-amber-500/60" />
+                <div className="absolute -top-2 -right-2 w-6 h-6 border-t-2 border-r-2 border-amber-500/60" />
+                <div className="absolute -bottom-2 -left-2 w-6 h-6 border-b-2 border-l-2 border-amber-500/60" />
+                <div className="absolute -bottom-2 -right-2 w-6 h-6 border-b-2 border-r-2 border-amber-500/60" />
                 <textarea
                   value={question}
                   onChange={(e) => setQuestion(e.target.value.slice(0, maxLength))}
                   placeholder="What weighs upon your heart? What path do you seek to illuminate?"
-                  className="w-full h-48 bg-purple-950/30 text-amber-100 placeholder-amber-300/40 border-2 border-amber-600/30 p-6 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 resize-none rounded-sm text-lg leading-relaxed"
-                  style={{ fontFamily: 'Crimson Text, serif' }}
+                  className="w-full h-48 bg-black/40 border-2 border-amber-600/40 p-6 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 resize-none rounded-sm text-lg leading-relaxed"
+                  style={{ 
+                    fontFamily: 'Crimson Text, serif',
+                    color: '#f5e6d3',
+                    textShadow: '0 1px 2px rgba(0,0,0,0.5)'
+                  }}
                 />
+                <style>{`
+                  textarea::placeholder {
+                    color: #f5e6d3;
+                    opacity: 0.5;
+                  }
+                `}</style>
               </div>
 
               <div className="mt-4 flex items-center justify-between px-2">
-                <span className="text-sm italic" style={{ color: 'var(--calan-cream)', opacity: 0.6 }}>
+                <span className="text-sm italic" style={{ 
+                  color: '#f5e6d3', 
+                  opacity: 0.7,
+                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                }}>
                   Speak from the heart...
                 </span>
-                <span className={`text-sm font-semibold ${question.length >= maxLength ? 'text-orange-400' : 'text-amber-400/60'}`}>
+                <span className={`text-sm font-semibold ${question.length >= maxLength ? 'text-orange-400' : ''}`}
+                  style={{
+                    color: question.length >= maxLength ? '#fb923c' : '#d4af37',
+                    textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                  }}>
                   {question.length} / {maxLength}
                 </span>
               </div>
             </div>
 
-            <div className="border-t-2 border-amber-600/30 pt-6 mt-6">
+            <div className="border-t-2 border-amber-600/40 pt-6 mt-6">
               <div className="grid grid-cols-2 gap-4">
                 <button
                   onClick={handleSkip}
-                  className="px-8 py-4 bg-purple-900/40 text-amber-200 border-2 border-amber-600/40 hover:border-amber-500 hover:shadow-lg hover:shadow-amber-500/20 transition-all duration-300 font-semibold rounded"
-                  style={{ fontFamily: 'Cinzel, serif' }}
+                  className="px-8 py-4 bg-purple-900/50 border-2 border-amber-600/50 hover:border-amber-500 hover:bg-purple-900/70 hover:shadow-lg hover:shadow-amber-500/20 transition-all duration-300 font-semibold rounded"
+                  style={{ 
+                    fontFamily: 'Cinzel, serif',
+                    color: '#f5e6d3',
+                    textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                  }}
                 >
                   Skip
                 </button>
@@ -84,7 +115,7 @@ export default function QuestionInput({ onSubmit }: QuestionInputProps) {
                   style={{ fontFamily: 'Cinzel, serif' }}
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
-                  <span className="relative z-10 text-amber-950">Continue Journey</span>
+                  <span className="relative z-10" style={{ color: '#1a0b2e' }}>Continue Journey</span>
                 </button>
               </div>
             </div>
@@ -92,7 +123,11 @@ export default function QuestionInput({ onSubmit }: QuestionInputProps) {
         </CelticBorder>
 
         <div className="mt-8 text-center">
-          <p className="text-sm italic" style={{ color: 'var(--calan-cream)', opacity: 0.6 }}>
+          <p className="text-sm italic" style={{ 
+            color: '#f5e6d3', 
+            opacity: 0.7,
+            textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+          }}>
             "The clearer your question, the more profound the wisdom revealed"
           </p>
         </div>
