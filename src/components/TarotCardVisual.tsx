@@ -93,20 +93,23 @@ export default function TarotCardVisual({ card, revealed = false, size = 'medium
 
   if (card.image_url) {
     return (
-      <div className={`${sizeClasses[size]} aspect-[2/3] relative group ${isReversed ? 'rotate-180' : ''}`}>
-        <div className="absolute inset-0 rounded-lg shadow-2xl overflow-hidden">
+      <div className={`${sizeClasses[size]} aspect-[2/3] relative group`}>
+        <div className={`absolute inset-0 rounded-lg shadow-2xl overflow-hidden ${isReversed ? 'filter contrast-125 saturate-150 hue-rotate-15' : ''}`}>
           <img
             src={card.image_url}
             alt={card.name}
             className="w-full h-full object-cover"
           />
+          {isReversed && (
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-blue-500/10 to-pink-500/20 mix-blend-overlay pointer-events-none" />
+          )}
         </div>
       </div>
     );
   }
 
   return (
-    <div className={`${sizeClasses[size]} aspect-[2/3] relative group ${isReversed ? 'rotate-180' : ''}`}>
+    <div className={`${sizeClasses[size]} aspect-[2/3] relative group`}>
       <div className="absolute inset-0 bg-gradient-to-br from-amber-50 via-stone-100 to-amber-100 rounded-lg shadow-2xl border-3 border-amber-900/60">
         <div className="absolute inset-0 p-2">
           <div className="w-full h-full border-2 border-amber-900/30 rounded-md relative overflow-hidden">
