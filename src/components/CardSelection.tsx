@@ -1,134 +1,172 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { SpreadType, SelectedCard } from '../types';
+import { spreads } from '../data/spreads';
+import { useTarotDeck } from '../hooks/useTarotDeck';
 import CelticBorder from './CelticBorder';
+import TarotCardVisual from './TarotCardVisual';
 
-interface QuestionInputProps {
-  onSubmit: (question: string) => void;
+interface CardSelectionProps {
+  spreadType: SpreadType;
+  onCardsSelected: (cards: SelectedCard[]) => void;
 }
 
-export default function QuestionInput({ onSubmit }: QuestionInputProps) {
-  const [question, setQuestion] = useState('');
-  const maxLength = 200;
+export default function CardSelection({ spreadType, onCardsSelected }: CardSelectionProps) {
+  const { deck, loading, cardBackUrl } = useTarotDeck();
+  const [selectedCards, setSelectedCards] = useState<SelectedCard[]>([]);
+  const [shuffledDeck, setShuffledDeck] = useState(deck);
+  const [isShuffling, setIsShuffling] = useState(true);
 
-  const handleSubmit = () => {
-    onSubmit(question.trim());
+  const spread = spreads.find(s => s.id === spreadType);
+  const requiredCards = spread?.cardCount || 1;
+
+  useEffect(() => {
+    if (!loading) {
+      const shuffled = [...deck].sort(() => Math.random() - 0.5);
+      setShuffledDeck(shuffled);
+      setTimeout(() => setIsShuffling(false), 1000);
+    }
+  }, [deck, loading]);
+
+  const handleCardClick = (index: number) => {
+    if (selectedCards.length >= requiredCards) return;
+
+    const card = shuffledDeck[index];
+    const isReversed = Math.random() > 0.5;
+    const positionIndex = selectedCards.length;
+
+    const newCard: SelectedCard = {
+      card: {
+        id: card.id,
+        name: card.name,
+        suit: card.suit,
+        arcana: card.arcana,
+        keywords: card.keywords,
+        upright_meaning: card.upright_meaning,
+        reversed_meaning: card.reversed_meaning,
+        image_url: card.image_url,
+        celtic_upright: card.celtic_upright,
+        celtic_reversed: card.celtic_reversed,
+        celtic_keywords: card.celtic_keywords,
+        celtic_mythology: card.celtic_mythology
+      },
+      position: spread?.positions[positionIndex] || `Card ${positionIndex + 1}`,
+      positionIndex,
+      isReversed
+    };
+
+    const updatedCards = [...selectedCards, newCard];
+    setSelectedCards(updatedCards);
+
+    if (updatedCards.length === requiredCards) {
+      setTimeout(() => {
+        onCardsSelected(updatedCards);
+      }, 500);
+    }
   };
 
-  const handleSkip = () => {
-    onSubmit('');
-  };
+  if (loading) {
+    return (
+      <div className="calan-branded min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-2xl" style={{ color: 'var(--calan-accent-gold)', fontFamily: 'Cinzel, serif' }}>
+            Loading deck...
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="calan-branded min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="calan-branded min-h-screen p-4 relative overflow-hidden">
       <div className="absolute inset-0 opacity-10">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <pattern id="question-pattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
-              <path d="M50 20 Q60 30 50 40 Q40 30 50 20" stroke="#d4af37" strokeWidth="1" fill="none" opacity="0.4" />
-              <circle cx="50" cy="50" r="8" stroke="#d4af37" strokeWidth="1" fill="none" opacity="0.3" />
+            <pattern id="card-pattern" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
+              <path d="M60 20 Q75 35 60 50 Q45 35 60 20" stroke="#d4af37" strokeWidth="1.5" fill="none" opacity="0.4" />
+              <circle cx="60" cy="60" r="15" stroke="#d4af37" strokeWidth="1" fill="none" opacity="0.3" />
             </pattern>
           </defs>
-          <rect width="100%" height="100%" fill="url(#question-pattern)" />
+          <rect width="100%" height="100%" fill="url(#card-pattern)" />
         </svg>
       </div>
 
-      <div className="max-w-3xl mx-auto w-full relative z-10">
-        <div className="text-center mb-12">
-          <div className="mb-6">
-            <h2 className="text-5xl font-bold mb-4" style={{ 
-              fontFamily: 'Cinzel, serif',
-              color: '#d4af37',
-              textShadow: '0 0 20px rgba(212, 175, 55, 0.6), 0 2px 4px rgba(0,0,0,0.8)'
-            }}>
-              What Guidance Do You Seek?
-            </h2>
-            <div className="w-64 h-1 mx-auto bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" />
-          </div>
-          <p className="text-xl italic" style={{ 
-            color: '#f5e6d3',
-            textShadow: '0 1px 3px rgba(0,0,0,0.8)'
+      <div className="max-w-7xl mx-auto relative z-10">
+        <div className="text-center mb-8">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4" style={{
+            fontFamily: 'Cinzel, serif',
+            color: 'var(--calan-accent-gold)',
+            textShadow: '0 0 20px rgba(212, 175, 55, 0.6)'
           }}>
-            Share your question with the ancient spirits
+            Draw Your Cards
+          </h2>
+          <div className="w-64 h-1 mx-auto bg-gradient-to-r from-transparent via-[var(--calan-accent-gold)] to-transparent mb-4" />
+          <p className="text-xl" style={{ color: 'var(--calan-cream)' }}>
+            {spread?.name} - Select {requiredCards} {requiredCards === 1 ? 'card' : 'cards'}
+          </p>
+          <p className="text-lg mt-2" style={{ color: 'var(--calan-cream)', opacity: 0.8 }}>
+            Cards selected: {selectedCards.length} / {requiredCards}
           </p>
         </div>
 
-        <CelticBorder>
-          <div className="p-8">
-            <div className="mb-6">
-              <div className="relative">
-                <div className="absolute -top-2 -left-2 w-6 h-6 border-t-2 border-l-2 border-amber-500/60" />
-                <div className="absolute -top-2 -right-2 w-6 h-6 border-t-2 border-r-2 border-amber-500/60" />
-                <div className="absolute -bottom-2 -left-2 w-6 h-6 border-b-2 border-l-2 border-amber-500/60" />
-                <div className="absolute -bottom-2 -right-2 w-6 h-6 border-b-2 border-r-2 border-amber-500/60" />
-                <textarea
-                  value={question}
-                  onChange={(e) => setQuestion(e.target.value.slice(0, maxLength))}
-                  placeholder="What weighs upon your heart? What path do you seek to illuminate?"
-                  className="w-full h-48 bg-black/40 border-2 border-amber-600/40 p-6 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 resize-none rounded-sm text-lg leading-relaxed"
-                  style={{ 
-                    fontFamily: 'Crimson Text, serif',
-                    color: '#f5e6d3',
-                    textShadow: '0 1px 2px rgba(0,0,0,0.5)'
-                  }}
-                />
-                <style>{`
-                  textarea::placeholder {
-                    color: #f5e6d3;
-                    opacity: 0.5;
-                  }
-                `}</style>
-              </div>
-
-              <div className="mt-4 flex items-center justify-between px-2">
-                <span className="text-sm italic" style={{ 
-                  color: '#f5e6d3', 
-                  opacity: 0.7,
-                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+        {selectedCards.length > 0 && (
+          <div className="mb-8">
+            <CelticBorder>
+              <div className="p-6">
+                <h3 className="text-xl font-bold mb-4 text-center" style={{
+                  fontFamily: 'Cinzel, serif',
+                  color: 'var(--calan-accent-gold)'
                 }}>
-                  Speak from the heart...
-                </span>
-                <span className={`text-sm font-semibold ${question.length >= maxLength ? 'text-orange-400' : ''}`}
-                  style={{
-                    color: question.length >= maxLength ? '#fb923c' : '#d4af37',
-                    textShadow: '0 1px 2px rgba(0,0,0,0.8)'
-                  }}>
-                  {question.length} / {maxLength}
-                </span>
+                  Your Selected Cards
+                </h3>
+                <div className="flex flex-wrap justify-center gap-4">
+                  {selectedCards.map((selectedCard, index) => (
+                    <div key={index} className="text-center">
+                      <TarotCardVisual
+                        card={selectedCard.card}
+                        revealed={true}
+                        size="small"
+                        isReversed={selectedCard.isReversed}
+                        cardBackUrl={cardBackUrl}
+                      />
+                      <p className="mt-2 text-sm font-semibold" style={{ color: 'var(--calan-accent-gold)' }}>
+                        {selectedCard.position}
+                      </p>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-
-            <div className="border-t-2 border-amber-600/40 pt-6 mt-6">
-              <div className="grid grid-cols-2 gap-4">
-                <button
-                  onClick={handleSkip}
-                  className="px-8 py-4 bg-purple-900/50 border-2 border-amber-600/50 hover:border-amber-500 hover:bg-purple-900/70 hover:shadow-lg hover:shadow-amber-500/20 transition-all duration-300 font-semibold rounded"
-                  style={{ 
-                    fontFamily: 'Cinzel, serif',
-                    color: '#f5e6d3',
-                    textShadow: '0 1px 2px rgba(0,0,0,0.8)'
-                  }}
-                >
-                  Skip
-                </button>
-                <button
-                  onClick={handleSubmit}
-                  className="calan-btn calan-btn-primary px-8 py-4 font-bold rounded relative overflow-hidden group"
-                  style={{ fontFamily: 'Cinzel, serif' }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
-                  <span className="relative z-10" style={{ color: '#1a0b2e' }}>Continue Journey</span>
-                </button>
-              </div>
-            </div>
+            </CelticBorder>
           </div>
-        </CelticBorder>
+        )}
+
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
+          {shuffledDeck.slice(0, 32).map((card, index) => (
+            <button
+              key={index}
+              onClick={() => handleCardClick(index)}
+              disabled={selectedCards.length >= requiredCards || isShuffling}
+              className={`transform transition-all duration-300 ${
+                selectedCards.length < requiredCards && !isShuffling
+                  ? 'hover:scale-110 hover:-translate-y-2 cursor-pointer'
+                  : 'opacity-50 cursor-not-allowed'
+              }`}
+            >
+              <TarotCardVisual
+                card={card}
+                revealed={false}
+                size="small"
+                cardBackUrl={cardBackUrl}
+              />
+            </button>
+          ))}
+        </div>
 
         <div className="mt-8 text-center">
-          <p className="text-sm italic" style={{ 
-            color: '#f5e6d3', 
-            opacity: 0.7,
-            textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+          <p className="text-sm italic" style={{
+            color: 'var(--calan-cream)',
+            opacity: 0.7
           }}>
-            "The clearer your question, the more profound the wisdom revealed"
+            "Trust your intuition - the cards that call to you hold your answers"
           </p>
         </div>
       </div>
