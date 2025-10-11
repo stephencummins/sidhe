@@ -70,15 +70,15 @@ export default function LandingPage() {
         <div className="flex justify-center mb-16">
           <button
             onClick={handleStartReading}
-            className="calan-btn calan-btn-primary group relative px-16 py-5 text-xl font-bold transition-all duration-500 transform hover:scale-105 overflow-hidden"
+            className="calan-btn calan-btn-primary group relative px-16 py-5 text-xl font-bold transition-all duration-500 transform hover:scale-105 overflow-hidden bg-gradient-to-br from-amber-200 via-amber-300 to-amber-400 border-2 border-amber-500 shadow-xl hover:shadow-2xl"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
-            <span className="relative z-10 tracking-wide text-amber-950 drop-shadow-[0_2px_2px_rgba(255,255,255,0.5)]" style={{ fontFamily: 'Cinzel, serif' }}>Begin Your Journey</span>
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
+            <span className="relative z-10 tracking-wide text-amber-900 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]" style={{ fontFamily: 'Cinzel, serif' }}>Begin Your Journey</span>
 
-            <div className="absolute -top-1 -left-1 w-6 h-6 border-t-4 border-l-4 border-amber-950" />
-            <div className="absolute -top-1 -right-1 w-6 h-6 border-t-4 border-r-4 border-amber-950" />
-            <div className="absolute -bottom-1 -left-1 w-6 h-6 border-b-4 border-l-4 border-amber-950" />
-            <div className="absolute -bottom-1 -right-1 w-6 h-6 border-b-4 border-r-4 border-amber-950" />
+            <div className="absolute -top-1 -left-1 w-6 h-6 border-t-4 border-l-4 border-amber-600" />
+            <div className="absolute -top-1 -right-1 w-6 h-6 border-t-4 border-r-4 border-amber-600" />
+            <div className="absolute -bottom-1 -left-1 w-6 h-6 border-b-4 border-l-4 border-amber-600" />
+            <div className="absolute -bottom-1 -right-1 w-6 h-6 border-b-4 border-r-4 border-amber-600" />
           </button>
         </div>
 
