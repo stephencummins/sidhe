@@ -94,14 +94,17 @@ export default function TarotCardVisual({ card, revealed = false, size = 'medium
   if (card.image_url) {
     return (
       <div className={`${sizeClasses[size]} aspect-[2/3] relative group`}>
-        <div className={`absolute inset-0 rounded-lg shadow-2xl overflow-hidden ${isReversed ? 'filter contrast-125 saturate-150 hue-rotate-15' : ''}`}>
+        <div className={`absolute inset-0 rounded-lg shadow-2xl overflow-hidden ${isReversed ? 'filter contrast-200 saturate-200 hue-rotate-45 brightness-75 sepia-25' : ''}`}>
           <img
             src={card.image_url}
             alt={card.name}
             className="w-full h-full object-cover"
           />
           {isReversed && (
-            <div className="absolute inset-0 bg-gradient-to-br from-teal-500/20 via-cyan-500/10 to-teal-500/20 mix-blend-overlay pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-600/40 via-indigo-600/30 to-teal-600/40 mix-blend-multiply pointer-events-none" />
+          )}
+          {isReversed && (
+            <div className="absolute inset-0 bg-gradient-to-tl from-red-500/15 via-orange-500/10 to-yellow-500/15 mix-blend-overlay pointer-events-none" />
           )}
         </div>
       </div>
