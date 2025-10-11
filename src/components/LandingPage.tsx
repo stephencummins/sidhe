@@ -54,7 +54,7 @@ export default function LandingPage() {
               color: 'var(--calan-accent-gold)',
               textShadow: '0 0 20px rgba(212, 175, 55, 0.4), 0 2px 10px rgba(212, 175, 55, 0.3)'
             }}>
-              CALAN
+              SÍDHE
             </h1>
             <div className="w-48 h-1 mx-auto bg-gradient-to-r from-transparent via-[var(--calan-accent-gold)] to-transparent" />
           </div>

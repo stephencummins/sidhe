@@ -22,7 +22,7 @@ export default function Layout({ children }: LayoutProps) {
                 className="h-12 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity cursor-pointer"
               />
             </Link>
-            <h1 className="text-xl font-serif calan-text-gold">CALAN Tarot</h1>
+            <h1 className="text-xl font-serif calan-text-gold">Sídhe Tarot</h1>
           </div>
           <div className="flex items-center gap-4">
             <Link to="/" className="transition-opacity hover:opacity-100">
