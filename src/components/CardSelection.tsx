@@ -65,36 +65,49 @@ export default function CardSelection({ spreadType, onCardsSelected }: CardSelec
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-teal-50 p-4 py-12 relative overflow-hidden">
+    <div className="calan-branded min-h-screen p-4 py-12 relative overflow-hidden">
+      {/* Celtic Pattern Background */}
       <div className="absolute inset-0 opacity-10">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="card-pattern" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
-              <rect x="20" y="20" width="40" height="60" stroke="#b45309" strokeWidth="1.5" fill="none" opacity="0.3" />
-              <circle cx="40" cy="50" r="5" fill="#d97706" opacity="0.2" />
+              <rect x="20" y="20" width="40" height="60" stroke="#d4af37" strokeWidth="1.5" fill="none" opacity="0.3" />
+              <circle cx="40" cy="50" r="5" fill="#cd7f32" opacity="0.2" />
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#card-pattern)" />
         </svg>
       </div>
 
+      {/* Gradient Overlays */}
+      <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black/20 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/20 to-transparent" />
+
       <div className="max-w-7xl mx-auto relative z-10">
+        {/* Header */}
         <div className="text-center mb-12">
           <div className="mb-6">
-            <h2 className="text-5xl font-bold mb-4 bg-gradient-to-r from-amber-800 via-orange-700 to-red-800 bg-clip-text text-transparent" style={{ fontFamily: 'Cinzel, serif' }}>Select Your Cards</h2>
-            <div className="w-64 h-1 mx-auto bg-gradient-to-r from-transparent via-amber-700 to-transparent" />
+            <h2 className="text-5xl font-bold mb-4" style={{ 
+              fontFamily: 'Cinzel, serif',
+              color: 'var(--calan-accent-gold)',
+              textShadow: '0 0 20px rgba(212, 175, 55, 0.4)'
+            }}>
+              Select Your Cards
+            </h2>
+            <div className="w-64 h-1 mx-auto bg-gradient-to-r from-transparent via-[var(--calan-accent-gold)] to-transparent" />
           </div>
-          <p className="text-xl text-amber-900/80 mb-6 italic">
+          <p className="text-xl mb-6 italic" style={{ color: 'var(--calan-cream)', opacity: 0.9 }}>
             {selectedCards.length === 0
               ? 'Let your spirit guide you to the cards meant for you'
               : `Card ${selectedCards.length} of ${cardsNeeded} drawn from the ancient deck`
             }
           </p>
 
+          {/* Shuffle Button */}
           <button
             onClick={handleShuffle}
             disabled={isShuffling || selectedCards.length > 0}
-            className="inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-amber-700 via-orange-600 to-red-700 text-amber-50 border-2 border-amber-900 hover:border-orange-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 font-bold shadow-xl hover:shadow-amber-900/50 rounded overflow-hidden group"
+            className="calan-btn calan-btn-primary inline-flex items-center gap-3 px-10 py-4 disabled:opacity-50 disabled:cursor-not-allowed font-bold shadow-xl rounded overflow-hidden group relative"
             style={{ fontFamily: 'Cinzel, serif' }}
           >
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
@@ -103,6 +116,7 @@ export default function CardSelection({ spreadType, onCardsSelected }: CardSelec
           </button>
         </div>
 
+        {/* Card Grid */}
         <div className="relative">
           <div className={`grid grid-cols-3 md:grid-cols-5 gap-6 transition-all duration-600 ${isShuffling ? 'blur-sm scale-95 opacity-50' : ''}`}>
             {deck.map((card, index) => {
@@ -125,8 +139,13 @@ export default function CardSelection({ spreadType, onCardsSelected }: CardSelec
                 >
                   <TarotCardVisual card={card} revealed={false} size="small" cardBackUrl={cardBackUrl} />
 
+                  {/* Selection Number Badge */}
                   {selected && selectionOrder >= 0 && (
-                    <div className="absolute -top-3 -right-3 w-10 h-10 rounded-full bg-gradient-to-br from-amber-700 to-orange-800 text-amber-50 border-3 border-amber-300 flex items-center justify-center font-bold shadow-xl z-10" style={{ fontFamily: 'Cinzel, serif' }}>
+                    <div className="absolute -top-3 -right-3 w-10 h-10 rounded-full bg-gradient-to-br from-amber-600 to-amber-700 border-3 border-amber-300 flex items-center justify-center font-bold shadow-xl z-10" 
+                      style={{ 
+                        fontFamily: 'Cinzel, serif',
+                        color: 'var(--calan-cream)'
+                      }}>
                       {selectionOrder + 1}
                     </div>
                   )}
@@ -136,17 +155,37 @@ export default function CardSelection({ spreadType, onCardsSelected }: CardSelec
           </div>
         </div>
 
+        {/* Selected Cards Summary */}
         {selectedCards.length > 0 && (
           <div className="mt-12 max-w-4xl mx-auto">
             <CelticBorder>
-              <div className="p-8">
-                <h3 className="text-2xl font-bold text-amber-900 mb-6 text-center" style={{ fontFamily: 'Cinzel, serif' }}>Your Chosen Cards</h3>
+              <div className="p-8 bg-gradient-to-br from-purple-950/80 to-purple-900/60">
+                <h3 className="text-2xl font-bold mb-6 text-center" style={{ 
+                  fontFamily: 'Cinzel, serif',
+                  color: 'var(--calan-accent-gold)'
+                }}>
+                  Your Chosen Cards
+                </h3>
                 <div className="flex flex-wrap gap-4 justify-center">
                   {selectedCards.map((sc, idx) => (
-                    <div key={idx} className="bg-gradient-to-br from-amber-100 to-orange-100 px-6 py-3 border-2 border-amber-700/50 rounded-lg shadow-md">
-                      <span className="text-amber-900 font-bold" style={{ fontFamily: 'Cinzel, serif' }}>{sc.position}</span>
-                      <span className="text-orange-700 mx-2">•</span>
-                      <span className="text-amber-800" style={{ fontFamily: 'Crimson Text, serif' }}>{sc.card.name}</span>
+                    <div key={idx} className="px-6 py-3 border-2 rounded-lg shadow-md"
+                      style={{
+                        background: 'rgba(212, 175, 55, 0.15)',
+                        borderColor: 'rgba(212, 175, 55, 0.4)'
+                      }}>
+                      <span className="font-bold" style={{ 
+                        fontFamily: 'Cinzel, serif',
+                        color: 'var(--calan-accent-gold)'
+                      }}>
+                        {sc.position}
+                      </span>
+                      <span className="mx-2" style={{ color: 'var(--calan-accent-bronze)' }}>•</span>
+                      <span style={{ 
+                        fontFamily: 'Crimson Text, serif',
+                        color: 'var(--calan-cream)'
+                      }}>
+                        {sc.card.name}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -154,6 +193,13 @@ export default function CardSelection({ spreadType, onCardsSelected }: CardSelec
             </CelticBorder>
           </div>
         )}
+
+        {/* Footer Quote */}
+        <div className="mt-12 text-center">
+          <p className="text-sm italic" style={{ color: 'var(--calan-cream)', opacity: 0.6 }}>
+            "Trust in the cards that call to you"
+          </p>
+        </div>
       </div>
     </div>
   );
