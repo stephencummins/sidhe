@@ -73,12 +73,12 @@ export default function LandingPage() {
             className="calan-btn calan-btn-primary group relative px-16 py-5 text-xl font-bold transition-all duration-500 transform hover:scale-105 overflow-hidden"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
-            <span className="relative z-10 tracking-wide" style={{ fontFamily: 'Cinzel, serif' }}>Begin Your Journey</span>
+            <span className="relative z-10 tracking-wide text-amber-950 drop-shadow-[0_2px_2px_rgba(255,255,255,0.5)]" style={{ fontFamily: 'Cinzel, serif' }}>Begin Your Journey</span>
 
-            <div className="absolute -top-1 -left-1 w-6 h-6 border-t-4 border-l-4" style={{ borderColor: 'var(--calan-accent-gold)' }} />
-            <div className="absolute -top-1 -right-1 w-6 h-6 border-t-4 border-r-4" style={{ borderColor: 'var(--calan-accent-gold)' }} />
-            <div className="absolute -bottom-1 -left-1 w-6 h-6 border-b-4 border-l-4" style={{ borderColor: 'var(--calan-accent-gold)' }} />
-            <div className="absolute -bottom-1 -right-1 w-6 h-6 border-b-4 border-r-4" style={{ borderColor: 'var(--calan-accent-gold)' }} />
+            <div className="absolute -top-1 -left-1 w-6 h-6 border-t-4 border-l-4 border-amber-950" />
+            <div className="absolute -top-1 -right-1 w-6 h-6 border-t-4 border-r-4 border-amber-950" />
+            <div className="absolute -bottom-1 -left-1 w-6 h-6 border-b-4 border-l-4 border-amber-950" />
+            <div className="absolute -bottom-1 -right-1 w-6 h-6 border-b-4 border-r-4 border-amber-950" />
           </button>
         </div>
 
