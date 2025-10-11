@@ -751,10 +751,10 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => onToggleActive(deckId, deck.is_active)}
-              className={`px-4 py-2 rounded-lg transition-colors border-2 ${
+              className={`px-4 py-2 rounded-lg transition-colors border-2 font-semibold shadow-sm ${
                 deck.is_active
-                  ? 'bg-green-600/20 text-green-800 border-green-700/40 hover:bg-green-600/30'
-                  : 'bg-amber-100 text-amber-900 border-amber-700/40 hover:bg-amber-200'
+                  ? 'bg-green-700 text-white border-green-800 hover:bg-green-600'
+                  : 'bg-amber-700 text-white border-amber-800 hover:bg-amber-600'
               }`}
             >
               {deck.is_active ? 'Active' : 'Set Active'}
@@ -762,14 +762,14 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
             <button
               onClick={() => onSyncMeanings(deckId)}
               disabled={syncing}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600/20 text-blue-900 border-2 border-blue-700/40 rounded-lg hover:bg-blue-600/30 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 px-4 py-2 bg-blue-700 text-white border-2 border-blue-800 rounded-lg hover:bg-blue-600 transition-colors font-semibold shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <RefreshCw className={`w-4 h-4 ${syncing ? 'animate-spin' : ''}`} />
               Sync Meanings
             </button>
             <button
               onClick={() => setShowCelticImport(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-emerald-600/20 text-emerald-900 border-2 border-emerald-700/40 rounded-lg hover:bg-emerald-600/30 transition-colors font-medium"
+              className="flex items-center gap-2 px-4 py-2 bg-emerald-700 text-white border-2 border-emerald-800 rounded-lg hover:bg-emerald-600 transition-colors font-semibold shadow-sm"
             >
               <BookOpen className="w-4 h-4" />
               Import Celtic
@@ -777,12 +777,12 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
             <button
               onClick={generateThumbnailsForExisting}
               disabled={generatingThumbnails}
-              className="flex items-center gap-2 px-4 py-2 bg-purple-600/20 text-purple-900 border-2 border-purple-700/40 rounded-lg hover:bg-purple-600/30 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 px-4 py-2 bg-violet-700 text-white border-2 border-violet-800 rounded-lg hover:bg-violet-600 transition-colors font-semibold shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <RefreshCw className={`w-4 h-4 ${generatingThumbnails ? 'animate-spin' : ''}`} />
               Generate Thumbnails
             </button>
-            <label className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-700 to-orange-700 text-amber-50 rounded-lg hover:from-amber-600 hover:to-orange-600 transition-colors cursor-pointer font-medium">
+            <label className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-700 to-orange-700 text-white border-2 border-orange-800 rounded-lg hover:from-amber-600 hover:to-orange-600 transition-colors cursor-pointer font-semibold shadow-sm">
               <Upload className="w-4 h-4" />
               Upload Cards
               <input
