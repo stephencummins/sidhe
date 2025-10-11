@@ -90,8 +90,8 @@ export default function LandingPage() {
                   <span className="text-3xl text-amber-50">I</span>
                 </div>
               </div>
-              <h3 className="text-xl font-bold mb-3 calan-text-gold" style={{ fontFamily: 'Cinzel, serif' }}>Choose Your Spread</h3>
-              <p className="calan-text-cream leading-relaxed">Select from sacred spreading patterns passed down through ages</p>
+              <h3 className="text-xl font-bold mb-3 text-amber-900" style={{ fontFamily: 'Cinzel, serif' }}>Choose Your Spread</h3>
+              <p className="text-amber-950 leading-relaxed">Select from sacred spreading patterns passed down through ages</p>
             </div>
           </CelticBorder>
 
@@ -102,8 +102,8 @@ export default function LandingPage() {
                   <span className="text-3xl text-amber-50">II</span>
                 </div>
               </div>
-              <h3 className="text-xl font-bold mb-3 calan-text-gold" style={{ fontFamily: 'Cinzel, serif' }}>Draw Your Cards</h3>
-              <p className="calan-text-cream leading-relaxed">Channel the ancient energies through mystical cards</p>
+              <h3 className="text-xl font-bold mb-3 text-amber-900" style={{ fontFamily: 'Cinzel, serif' }}>Draw Your Cards</h3>
+              <p className="text-amber-950 leading-relaxed">Channel the ancient energies through mystical cards</p>
             </div>
           </CelticBorder>
 
@@ -114,8 +114,8 @@ export default function LandingPage() {
                   <span className="text-3xl text-amber-50">III</span>
                 </div>
               </div>
-              <h3 className="text-xl font-bold mb-3 calan-text-gold" style={{ fontFamily: 'Cinzel, serif' }}>Receive Wisdom</h3>
-              <p className="calan-text-cream leading-relaxed">Discover insights illuminated by divine guidance</p>
+              <h3 className="text-xl font-bold mb-3 text-amber-900" style={{ fontFamily: 'Cinzel, serif' }}>Receive Wisdom</h3>
+              <p className="text-amber-950 leading-relaxed">Discover insights illuminated by divine guidance</p>
             </div>
           </CelticBorder>
         </div>
@@ -131,14 +131,14 @@ export default function LandingPage() {
                   <img src="/The_World copy.gif" alt="The World" className="w-24 h-36 object-cover rounded shadow-lg border-2 border-amber-700" />
                 </div>
                 <div className="flex-1 text-center md:text-left">
-                  <h3 className="text-2xl font-bold calan-text-gold mb-3" style={{ fontFamily: 'Cinzel, serif' }}>
+                  <h3 className="text-2xl font-bold text-amber-900 mb-3" style={{ fontFamily: 'Cinzel, serif' }}>
                     Illuminated by Celtic Art
                   </h3>
-                  <p className="calan-text-cream leading-relaxed mb-4">
+                  <p className="text-amber-950 leading-relaxed mb-4">
                     Each card is a masterwork inspired by the intricate beauty of Celtic tradition,
                     blending ancient artistry with the turning of the seasons.
                   </p>
-                  <p className="calan-text-bronze italic text-sm">
+                  <p className="text-amber-800 italic text-sm">
                     "In every season, a story. In every turn, wisdom eternal."
                   </p>
                 </div>
