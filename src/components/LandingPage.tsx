@@ -42,7 +42,7 @@ export default function LandingPage() {
         <div className="calan-ornate-container text-center mb-12">
           <div className="inline-block mb-8">
             <img
-              src="/SIDHE.png"
+              src="/SIDHE_LOGO.png"
               alt="SIDHE Celtic Tarot"
               className="w-64 h-auto object-contain drop-shadow-2xl filter brightness-110 contrast-110"
             />
