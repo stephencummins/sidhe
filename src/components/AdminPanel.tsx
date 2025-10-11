@@ -424,6 +424,7 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
   const [uploading, setUploading] = useState(false);
   const [showCelticImport, setShowCelticImport] = useState(false);
   const [uploadingCardBack, setUploadingCardBack] = useState(false);
+  const [selectedCard, setSelectedCard] = useState<TarotCardDB | null>(null);
 
   useEffect(() => {
     loadCards();
@@ -779,7 +780,10 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
                       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                         {sortedMajorArcana.map(card => (
                           <div key={card.id} className="group relative">
-                            <div className="aspect-[2/3] bg-amber-100/50 rounded-lg overflow-hidden border-2 border-amber-700/30">
+                            <div
+                              className="aspect-[2/3] bg-amber-100/50 rounded-lg overflow-hidden border-2 border-amber-700/30 cursor-pointer hover:border-amber-600 transition-colors"
+                              onClick={() => setSelectedCard(card)}
+                            >
                               <img
                                 src={card.image_url}
                                 alt={card.name}
@@ -787,8 +791,11 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
                               />
                             </div>
                             <button
-                              onClick={() => deleteCard(card.id)}
-                              className="absolute top-2 right-2 p-1.5 bg-red-700 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                deleteCard(card.id);
+                              }}
+                              className="absolute top-2 right-2 p-1.5 bg-red-700 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity shadow-lg z-10"
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
@@ -809,7 +816,10 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
                           {suitCards.map(card => (
                             <div key={card.id} className="group relative">
-                              <div className="aspect-[2/3] bg-amber-100/50 rounded-lg overflow-hidden border-2 border-amber-700/30">
+                              <div
+                                className="aspect-[2/3] bg-amber-100/50 rounded-lg overflow-hidden border-2 border-amber-700/30 cursor-pointer hover:border-amber-600 transition-colors"
+                                onClick={() => setSelectedCard(card)}
+                              >
                                 <img
                                   src={card.image_url}
                                   alt={card.name}
@@ -817,8 +827,11 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
                                 />
                               </div>
                               <button
-                                onClick={() => deleteCard(card.id)}
-                                className="absolute top-2 right-2 p-1.5 bg-red-700 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  deleteCard(card.id);
+                                }}
+                                className="absolute top-2 right-2 p-1.5 bg-red-700 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity shadow-lg z-10"
                               >
                                 <Trash2 className="w-4 h-4" />
                               </button>
@@ -836,6 +849,98 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
         )}
       </div>
     </CelticBorder>
+
+    {selectedCard && (
+      <div
+        className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+        onClick={() => setSelectedCard(null)}
+      >
+        <div
+          className="relative bg-gradient-to-br from-amber-50 via-orange-50 to-teal-50 border-4 border-amber-700/60 shadow-2xl p-6 sm:p-8 max-w-5xl w-full max-h-[90vh] overflow-y-auto"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            onClick={() => setSelectedCard(null)}
+            className="absolute top-4 right-4 z-10 text-amber-900 hover:text-amber-700 transition-colors bg-amber-100/80 rounded-full p-2"
+          >
+            <X className="w-6 h-6" />
+          </button>
+
+          <div className="flex flex-col lg:flex-row gap-6 sm:gap-8">
+            <div className="flex-shrink-0 flex items-start justify-center">
+              <div className="w-64 aspect-[2/3] rounded-lg overflow-hidden border-4 border-amber-700/40 shadow-xl">
+                <img
+                  src={selectedCard.image_url}
+                  alt={selectedCard.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+
+            <div className="flex-1">
+              <div className="mb-6">
+                <h3 className="text-3xl sm:text-4xl font-bold text-amber-900 mb-2" style={{ fontFamily: 'Cinzel, serif' }}>
+                  {selectedCard.name}
+                </h3>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {selectedCard.keywords?.map((keyword, idx) => (
+                    <span
+                      key={idx}
+                      className="px-3 py-1 bg-amber-700/20 border-2 border-amber-700/40 text-amber-900 text-sm font-medium"
+                    >
+                      {keyword}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                <div className="bg-white/50 border-2 border-amber-700/30 p-4">
+                  <h4 className="text-lg font-bold text-amber-900 mb-2" style={{ fontFamily: 'Cinzel, serif' }}>Upright Meaning</h4>
+                  <p className="text-amber-950/90 leading-relaxed">
+                    {selectedCard.meaning_upright || 'No upright meaning available'}
+                  </p>
+                </div>
+
+                <div className="bg-white/50 border-2 border-amber-700/30 p-4">
+                  <h4 className="text-lg font-bold text-amber-900 mb-2" style={{ fontFamily: 'Cinzel, serif' }}>Reversed Meaning</h4>
+                  <p className="text-amber-950/90 leading-relaxed">
+                    {selectedCard.meaning_reversed || 'No reversed meaning available'}
+                  </p>
+                </div>
+
+                {selectedCard.celtic_meaning_upright && (
+                  <div className="bg-emerald-100/50 border-2 border-emerald-700/40 p-4">
+                    <h4 className="text-lg font-bold text-emerald-900 mb-2" style={{ fontFamily: 'Cinzel, serif' }}>Celtic Upright Meaning</h4>
+                    <p className="text-emerald-950/90 leading-relaxed">
+                      {selectedCard.celtic_meaning_upright}
+                    </p>
+                  </div>
+                )}
+
+                {selectedCard.celtic_meaning_reversed && (
+                  <div className="bg-emerald-100/50 border-2 border-emerald-700/40 p-4">
+                    <h4 className="text-lg font-bold text-emerald-900 mb-2" style={{ fontFamily: 'Cinzel, serif' }}>Celtic Reversed Meaning</h4>
+                    <p className="text-emerald-950/90 leading-relaxed">
+                      {selectedCard.celtic_meaning_reversed}
+                    </p>
+                  </div>
+                )}
+
+                {selectedCard.celtic_mythology && (
+                  <div className="bg-emerald-100/50 border-2 border-emerald-700/40 p-4">
+                    <h4 className="text-lg font-bold text-emerald-900 mb-2" style={{ fontFamily: 'Cinzel, serif' }}>Celtic Mythology</h4>
+                    <p className="text-emerald-950/90 leading-relaxed">
+                      {selectedCard.celtic_mythology}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
     </>
   );
 }
