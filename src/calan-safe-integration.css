@@ -18,8 +18,8 @@
 
   :root,
   .calan-branded {
-    --calan-primary-dark: #0a0515;
-    --calan-primary-purple: #1a0b2e;
+    --calan-primary-dark: #051414;
+    --calan-primary-teal: #0f3a3a;
     --calan-accent-gold: #d4af37;
     --calan-accent-bronze: #cd7f32;
     --calan-deep-teal: #1b4d4d;
@@ -27,7 +27,7 @@
     --calan-silver: #c0c0c0;
 
     /* Gradients */
-    --calan-bg-gradient: linear-gradient(135deg, #000000 0%, #0a0515 50%, #1a0b2e 100%);
+    --calan-bg-gradient: linear-gradient(135deg, #000000 0%, #051414 50%, #0f3a3a 100%);
     --calan-card-gradient: linear-gradient(180deg, rgba(29, 27, 46, 0.95) 0%, rgba(26, 11, 46, 0.98) 100%);
     --calan-gold-gradient: linear-gradient(135deg, #d4af37 0%, #cd7f32 100%);
 
@@ -140,7 +140,7 @@
   
   .calan-branded .calan-btn-primary {
     background: linear-gradient(135deg, #f5d76e 0%, #d4af37 100%);
-    color: #1a0b2e;
+    color: #0f3a3a;
     border-color: #f5d76e;
     font-weight: 700;
     box-shadow: 0 0 30px rgba(245, 215, 110, 0.7), 0 10px 40px rgba(0, 0, 0, 0.6);
@@ -194,7 +194,7 @@
   
   .calan-branded .calan-card-back {
     background: url('/celtic_back.gif') center/cover;
-    background-color: var(--calan-primary-purple);
+    background-color: var(--calan-primary-teal);
   }
   
   .calan-branded .calan-card-front {

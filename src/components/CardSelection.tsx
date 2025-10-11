@@ -144,10 +144,10 @@ export default function CardSelection({ spreadType, onCardsSelected }: CardSelec
 
                   {/* Selection Number Badge */}
                   {selected && selectionOrder >= 0 && (
-                    <div className="absolute -top-3 -right-3 w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 border-3 border-amber-300 flex items-center justify-center font-bold shadow-xl z-10" 
-                      style={{ 
+                    <div className="absolute -top-3 -right-3 w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 border-3 border-amber-300 flex items-center justify-center font-bold shadow-xl z-10"
+                      style={{
                         fontFamily: 'Cinzel, serif',
-                        color: '#1a0b2e'
+                        color: '#0f3a3a'
                       }}>
                       {selectionOrder + 1}
                     </div>

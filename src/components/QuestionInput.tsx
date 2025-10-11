@@ -115,7 +115,7 @@ export default function QuestionInput({ onSubmit }: QuestionInputProps) {
                   style={{ fontFamily: 'Cinzel, serif' }}
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
-                  <span className="relative z-10" style={{ color: '#1a0b2e' }}>Continue Journey</span>
+                  <span className="relative z-10" style={{ color: '#0f3a3a' }}>Continue Journey</span>
                 </button>
               </div>
             </div>
