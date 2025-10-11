@@ -51,18 +51,24 @@ export default function LandingPage() {
           <div className="mb-6">
             <h1 className="text-7xl font-bold mb-2 text-shadow-lg" style={{
               fontFamily: 'Cinzel, serif',
-              color: 'var(--calan-accent-gold)',
-              textShadow: '0 0 20px rgba(212, 175, 55, 0.4), 0 2px 10px rgba(212, 175, 55, 0.3)'
+              color: '#d4af37',
+              textShadow: '0 0 20px rgba(212, 175, 55, 0.6), 0 2px 10px rgba(212, 175, 55, 0.3)'
             }}>
               SÍDHE
             </h1>
-            <div className="w-48 h-1 mx-auto bg-gradient-to-r from-transparent via-[var(--calan-accent-gold)] to-transparent" />
+            <div className="w-48 h-1 mx-auto bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" />
           </div>
 
-          <p className="text-2xl mb-4 leading-relaxed italic" style={{ color: 'var(--calan-cream)' }}>
+          <p className="text-2xl mb-4 leading-relaxed italic" style={{ 
+            color: '#f5e6d3',
+            textShadow: '0 1px 3px rgba(0,0,0,0.8)'
+          }}>
             Celtic Seasonal Tarot
           </p>
-          <p className="text-lg max-w-2xl mx-auto" style={{ color: 'var(--calan-cream)', opacity: 0.9 }}>
+          <p className="text-lg max-w-2xl mx-auto" style={{ 
+            color: '#f5e6d3',
+            textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+          }}>
             Where ancient Celtic wisdom meets the turning of the seasons
           </p>
         </div>
@@ -86,36 +92,69 @@ export default function LandingPage() {
           <CelticBorder className="transform hover:scale-105 transition-transform duration-300">
             <div className="p-8 text-center">
               <div className="mb-4 flex justify-center">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-600 to-orange-700 flex items-center justify-center shadow-lg">
-                  <span className="text-3xl text-amber-50">I</span>
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center shadow-lg border-2 border-amber-300">
+                  <span className="text-3xl font-bold text-amber-950">I</span>
                 </div>
               </div>
-              <h3 className="text-xl font-bold mb-3 text-amber-900" style={{ fontFamily: 'Cinzel, serif' }}>Choose Your Spread</h3>
-              <p className="text-amber-950 leading-relaxed">Select from sacred spreading patterns passed down through ages</p>
+              <h3 className="text-xl font-bold mb-3" style={{ 
+                fontFamily: 'Cinzel, serif',
+                color: '#d4af37',
+                textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+              }}>
+                Choose Your Spread
+              </h3>
+              <p className="leading-relaxed" style={{
+                color: '#f5e6d3',
+                textShadow: '0 1px 2px rgba(0,0,0,0.7)'
+              }}>
+                Select from sacred spreading patterns passed down through ages
+              </p>
             </div>
           </CelticBorder>
 
           <CelticBorder className="transform hover:scale-105 transition-transform duration-300">
             <div className="p-8 text-center">
               <div className="mb-4 flex justify-center">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-orange-600 to-red-700 flex items-center justify-center shadow-lg">
-                  <span className="text-3xl text-amber-50">II</span>
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center shadow-lg border-2 border-amber-300">
+                  <span className="text-3xl font-bold text-amber-50">II</span>
                 </div>
               </div>
-              <h3 className="text-xl font-bold mb-3 text-amber-900" style={{ fontFamily: 'Cinzel, serif' }}>Draw Your Cards</h3>
-              <p className="text-amber-950 leading-relaxed">Channel the ancient energies through mystical cards</p>
+              <h3 className="text-xl font-bold mb-3" style={{ 
+                fontFamily: 'Cinzel, serif',
+                color: '#d4af37',
+                textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+              }}>
+                Draw Your Cards
+              </h3>
+              <p className="leading-relaxed" style={{
+                color: '#f5e6d3',
+                textShadow: '0 1px 2px rgba(0,0,0,0.7)'
+              }}>
+                Channel the ancient energies through mystical cards
+              </p>
             </div>
           </CelticBorder>
 
           <CelticBorder className="transform hover:scale-105 transition-transform duration-300">
             <div className="p-8 text-center">
               <div className="mb-4 flex justify-center">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-red-600 to-amber-700 flex items-center justify-center shadow-lg">
-                  <span className="text-3xl text-amber-50">III</span>
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-red-500 to-amber-600 flex items-center justify-center shadow-lg border-2 border-amber-300">
+                  <span className="text-3xl font-bold text-amber-50">III</span>
                 </div>
               </div>
-              <h3 className="text-xl font-bold mb-3 text-amber-900" style={{ fontFamily: 'Cinzel, serif' }}>Receive Wisdom</h3>
-              <p className="text-amber-950 leading-relaxed">Discover insights illuminated by divine guidance</p>
+              <h3 className="text-xl font-bold mb-3" style={{ 
+                fontFamily: 'Cinzel, serif',
+                color: '#d4af37',
+                textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+              }}>
+                Receive Wisdom
+              </h3>
+              <p className="leading-relaxed" style={{
+                color: '#f5e6d3',
+                textShadow: '0 1px 2px rgba(0,0,0,0.7)'
+              }}>
+                Discover insights illuminated by divine guidance
+              </p>
             </div>
           </CelticBorder>
         </div>
@@ -125,20 +164,30 @@ export default function LandingPage() {
             <div className="p-8">
               <div className="flex flex-col md:flex-row gap-8 items-center">
                 <div className="grid grid-cols-2 gap-4 flex-shrink-0">
-                  <img src="/The_Star copy.gif" alt="The Star" className="w-24 h-36 object-cover rounded shadow-lg border-2 border-amber-700" />
-                  <img src="/The_Moon copy.gif" alt="The Moon" className="w-24 h-36 object-cover rounded shadow-lg border-2 border-amber-700" />
-                  <img src="/The_Sun copy.gif" alt="The Sun" className="w-24 h-36 object-cover rounded shadow-lg border-2 border-amber-700" />
-                  <img src="/The_World copy.gif" alt="The World" className="w-24 h-36 object-cover rounded shadow-lg border-2 border-amber-700" />
+                  <img src="/The_Star copy.gif" alt="The Star" className="w-24 h-36 object-cover rounded shadow-lg border-2 border-amber-600" />
+                  <img src="/The_Moon copy.gif" alt="The Moon" className="w-24 h-36 object-cover rounded shadow-lg border-2 border-amber-600" />
+                  <img src="/The_Sun copy.gif" alt="The Sun" className="w-24 h-36 object-cover rounded shadow-lg border-2 border-amber-600" />
+                  <img src="/The_World copy.gif" alt="The World" className="w-24 h-36 object-cover rounded shadow-lg border-2 border-amber-600" />
                 </div>
                 <div className="flex-1 text-center md:text-left">
-                  <h3 className="text-2xl font-bold text-amber-900 mb-3" style={{ fontFamily: 'Cinzel, serif' }}>
+                  <h3 className="text-2xl font-bold mb-3" style={{ 
+                    fontFamily: 'Cinzel, serif',
+                    color: '#d4af37',
+                    textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                  }}>
                     Illuminated by Celtic Art
                   </h3>
-                  <p className="text-amber-950 leading-relaxed mb-4">
+                  <p className="leading-relaxed mb-4" style={{
+                    color: '#f5e6d3',
+                    textShadow: '0 1px 2px rgba(0,0,0,0.7)'
+                  }}>
                     Each card is a masterwork inspired by the intricate beauty of Celtic tradition,
                     blending ancient artistry with the turning of the seasons.
                   </p>
-                  <p className="text-amber-800 italic text-sm">
+                  <p className="italic text-sm" style={{
+                    color: '#cd7f32',
+                    textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                  }}>
                     "In every season, a story. In every turn, wisdom eternal."
                   </p>
                 </div>
@@ -174,15 +223,23 @@ export default function LandingPage() {
           </button>
           <Link
             to="/admin/login"
-            className="text-amber-800 hover:text-orange-700 font-medium transition-colors duration-200 underline decoration-amber-600/30 hover:decoration-orange-600"
+            className="font-medium transition-colors duration-200 underline"
+            style={{
+              color: '#d4af37',
+              textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+            }}
           >
             Admin Portal
           </Link>
         </div>
 
         <div className="mt-16 text-center">
-          <div className="w-full h-px bg-gradient-to-r from-transparent via-[var(--calan-accent-gold)] to-transparent opacity-50 mb-8" />
-          <p className="calan-text-cream opacity-60 text-sm italic">
+          <div className="w-full h-px bg-gradient-to-r from-transparent via-[#d4af37] to-transparent opacity-50 mb-8" />
+          <p className="text-sm italic" style={{
+            color: '#f5e6d3',
+            opacity: 0.7,
+            textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+          }}>
             "The threads of fate are woven through the seasons of the soul"
           </p>
         </div>
