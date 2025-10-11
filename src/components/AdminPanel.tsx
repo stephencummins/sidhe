@@ -6,6 +6,7 @@ import { TarotDeck, TarotCardDB } from '../types/database';
 import CelticBorder from './CelticBorder';
 import { tarotDeck } from '../data/tarotDeck';
 import CelticMeaningsImport from './CelticMeaningsImport';
+import { createThumbnail } from '../utils/imageUtils';
 
 export default function AdminPanel() {
   const { user, signOut } = useAuth();
@@ -535,8 +536,11 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
       for (const file of Array.from(files)) {
         const fileName = file.name.replace(/\.[^/.]+$/, '');
         const fileExt = file.name.split('.').pop();
-        const filePath = `${deckId}/${crypto.randomUUID()}.${fileExt}`;
+        const fileId = crypto.randomUUID();
+        const filePath = `${deckId}/${fileId}.${fileExt}`;
+        const thumbPath = `${deckId}/thumbnails/${fileId}.${fileExt}`;
 
+        // Upload original image
         const { error: uploadError } = await supabase.storage
           .from('tarot-cards')
           .upload(filePath, file);
@@ -546,6 +550,25 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
         const { data: { publicUrl } } = supabase.storage
           .from('tarot-cards')
           .getPublicUrl(filePath);
+
+        // Generate and upload thumbnail
+        let thumbnailUrl = null;
+        try {
+          const thumbnail = await createThumbnail(file, 300, 450);
+          const { error: thumbError } = await supabase.storage
+            .from('tarot-cards')
+            .upload(thumbPath, thumbnail);
+
+          if (!thumbError) {
+            const { data: { publicUrl: thumbUrl } } = supabase.storage
+              .from('tarot-cards')
+              .getPublicUrl(thumbPath);
+            thumbnailUrl = thumbUrl;
+          }
+        } catch (thumbError) {
+          console.warn('Failed to create thumbnail:', thumbError);
+          // Continue without thumbnail
+        }
 
         const arcana = fileName.toLowerCase().includes('major') ? 'major' : 'minor';
         let suit = null;
@@ -564,6 +587,7 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
             arcana,
             suit,
             image_url: publicUrl,
+            thumbnail_url: thumbnailUrl,
             meaning_upright: '',
             meaning_reversed: '',
             keywords: []
@@ -827,7 +851,7 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
                               onClick={() => setSelectedCard(card)}
                             >
                               <img
-                                src={card.image_url}
+                                src={card.thumbnail_url || card.image_url}
                                 alt={card.name}
                                 loading="lazy"
                                 className="w-full h-full object-cover"
@@ -868,7 +892,7 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
                                 onClick={() => setSelectedCard(card)}
                               >
                                 <img
-                                  src={card.image_url}
+                                  src={card.thumbnail_url || card.image_url}
                                   alt={card.name}
                                   loading="lazy"
                                   className="w-full h-full object-cover"

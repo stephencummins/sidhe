@@ -18,6 +18,7 @@ export interface TarotCardDB {
   meaning_upright: string;
   meaning_reversed: string;
   image_url: string;
+  thumbnail_url?: string;
   keywords: string[];
   celtic_meaning_upright?: string;
   celtic_meaning_reversed?: string;
