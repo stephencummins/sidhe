@@ -218,12 +218,12 @@ export default function AdminPanel() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-teal-50 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-stone-100 via-amber-100 to-orange-100 p-4">
       <div className="max-w-6xl mx-auto space-y-6">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-amber-900" style={{ fontFamily: 'Cinzel, serif' }}>Admin Panel</h1>
-            <p className="text-orange-800/80 mt-1">Manage your tarot decks</p>
+            <h1 className="text-3xl font-bold text-stone-900" style={{ fontFamily: 'Cinzel, serif' }}>Admin Panel</h1>
+            <p className="text-stone-800 mt-1 font-semibold">Manage your tarot decks</p>
           </div>
           <button
             onClick={signOut}
@@ -239,7 +239,7 @@ export default function AdminPanel() {
             <CelticBorder>
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-bold text-amber-900" style={{ fontFamily: 'Cinzel, serif' }}>Your Decks</h2>
+                  <h2 className="text-xl font-bold text-stone-900" style={{ fontFamily: 'Cinzel, serif' }}>Your Decks</h2>
                   <button
                     onClick={() => setShowNewDeckForm(!showNewDeckForm)}
                     className="p-2 bg-amber-700 text-amber-50 rounded-lg hover:bg-amber-600 transition-colors"
@@ -283,9 +283,9 @@ export default function AdminPanel() {
                 )}
 
                 {loading ? (
-                  <p className="text-amber-900 text-center py-8">Loading...</p>
+                  <p className="text-stone-900 text-center py-8 font-semibold">Loading...</p>
                 ) : decks.length === 0 ? (
-                  <p className="text-amber-900 text-center py-8">No decks yet. Create one to get started!</p>
+                  <p className="text-stone-900 text-center py-8 font-semibold">No decks yet. Create one to get started!</p>
                 ) : (
                   <div className="space-y-2">
                     {decks.map(deck => (
@@ -341,9 +341,9 @@ export default function AdminPanel() {
                         ) : (
                           <div className="flex items-start justify-between gap-2">
                             <div className="flex-1 min-w-0">
-                              <h3 className="text-amber-900 font-semibold truncate">{deck.name}</h3>
+                              <h3 className="text-stone-900 font-bold truncate">{deck.name}</h3>
                               {deck.description && (
-                                <p className="text-orange-800/80 text-sm mt-1 line-clamp-2">{deck.description}</p>
+                                <p className="text-stone-800 font-semibold text-sm mt-1 line-clamp-2">{deck.description}</p>
                               )}
                               {deck.is_active && (
                                 <span className="inline-block mt-2 px-2 py-1 bg-green-600/20 text-green-800 text-xs rounded border border-green-700/30">
@@ -395,7 +395,7 @@ export default function AdminPanel() {
             ) : (
               <CelticBorder>
                 <div className="p-12">
-                  <p className="text-amber-900 text-center">
+                  <p className="text-stone-900 font-semibold text-center">
                     Select a deck to edit or create a new one
                   </p>
                 </div>
@@ -627,8 +627,8 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
       <div className="p-6">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-amber-900" style={{ fontFamily: 'Cinzel, serif' }}>{deck.name}</h2>
-            <p className="text-orange-800/80 mt-1">{cards.length} cards</p>
+            <h2 className="text-2xl font-bold text-stone-900" style={{ fontFamily: 'Cinzel, serif' }}>{deck.name}</h2>
+            <p className="text-stone-800 font-semibold mt-1">{cards.length} cards</p>
           </div>
           <div className="flex flex-wrap gap-2">
             <button
@@ -686,8 +686,8 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
         <div className="mb-6 p-4 bg-amber-100/50 rounded-lg border-2 border-amber-700/30">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-lg font-bold text-amber-900 mb-1" style={{ fontFamily: 'Cinzel, serif' }}>Card Back Image</h3>
-              <p className="text-sm text-amber-800/80">This image will be shown when users select cards for their reading</p>
+              <h3 className="text-lg font-bold text-stone-900 mb-1" style={{ fontFamily: 'Cinzel, serif' }}>Card Back Image</h3>
+              <p className="text-sm text-stone-800 font-semibold">This image will be shown when users select cards for their reading</p>
             </div>
             <label className="flex items-center gap-2 px-4 py-2 bg-amber-700 text-amber-50 rounded-lg hover:bg-amber-600 transition-colors cursor-pointer font-medium">
               <Upload className="w-4 h-4" />
@@ -717,12 +717,12 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
         </div>
 
         {loading ? (
-          <p className="text-amber-900 text-center py-12">Loading cards...</p>
+          <p className="text-stone-900 font-semibold text-center py-12">Loading cards...</p>
         ) : cards.length === 0 ? (
           <div className="text-center py-12">
             <Upload className="w-12 h-12 text-amber-700 mx-auto mb-3" />
-            <p className="text-amber-900">No cards yet. Upload images to get started.</p>
-            <p className="text-xs text-amber-700 mt-2">Debug: Deck ID = {deckId}</p>
+            <p className="text-stone-900 font-semibold">No cards yet. Upload images to get started.</p>
+            <p className="text-xs text-stone-800 font-semibold mt-2">Debug: Deck ID = {deckId}</p>
           </div>
         ) : (
           <div className="space-y-8">
@@ -778,9 +778,9 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
                 <>
                   {sortedMajorArcana.length > 0 && (
                     <div>
-                      <h3 className="text-xl font-bold text-amber-900 mb-4 flex items-center gap-2" style={{ fontFamily: 'Cinzel, serif' }}>
+                      <h3 className="text-xl font-bold text-stone-900 mb-4 flex items-center gap-2" style={{ fontFamily: 'Cinzel, serif' }}>
                         Major Arcana
-                        <span className="text-sm text-orange-800/70">({sortedMajorArcana.length})</span>
+                        <span className="text-sm text-stone-700 font-semibold">({sortedMajorArcana.length})</span>
                       </h3>
                       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                         {sortedMajorArcana.map(card => (
@@ -792,6 +792,7 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
                               <img
                                 src={card.image_url}
                                 alt={card.name}
+                                loading="lazy"
                                 className="w-full h-full object-cover"
                               />
                             </div>
@@ -804,7 +805,7 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
-                            <p className="mt-2 text-sm text-amber-900 truncate font-medium">{card.name}</p>
+                            <p className="mt-2 text-sm text-stone-900 truncate font-bold">{card.name}</p>
                           </div>
                         ))}
                       </div>
@@ -814,9 +815,9 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
                   {Object.entries(minorBySuit).map(([suit, suitCards]) => (
                     suitCards.length > 0 && (
                       <div key={suit}>
-                        <h3 className="text-xl font-bold text-amber-900 mb-4 flex items-center gap-2 capitalize" style={{ fontFamily: 'Cinzel, serif' }}>
+                        <h3 className="text-xl font-bold text-stone-900 mb-4 flex items-center gap-2 capitalize" style={{ fontFamily: 'Cinzel, serif' }}>
                           {suit}
-                          <span className="text-sm text-orange-800/70">({suitCards.length})</span>
+                          <span className="text-sm text-stone-700 font-semibold">({suitCards.length})</span>
                         </h3>
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
                           {suitCards.map(card => (
@@ -828,6 +829,7 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
                                 <img
                                   src={card.image_url}
                                   alt={card.name}
+                                  loading="lazy"
                                   className="w-full h-full object-cover"
                                 />
                               </div>
@@ -840,7 +842,7 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
                               >
                                 <Trash2 className="w-4 h-4" />
                               </button>
-                              <p className="mt-2 text-sm text-amber-900 truncate font-medium">{card.name}</p>
+                              <p className="mt-2 text-sm text-stone-900 truncate font-bold">{card.name}</p>
                             </div>
                           ))}
                         </div>
