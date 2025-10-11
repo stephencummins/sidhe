@@ -18,8 +18,8 @@
 
   :root,
   .calan-branded {
-    --calan-primary-dark: #1a0b2e;
-    --calan-primary-purple: #2d1b4e;
+    --calan-primary-dark: #0a0515;
+    --calan-primary-purple: #1a0b2e;
     --calan-accent-gold: #d4af37;
     --calan-accent-bronze: #cd7f32;
     --calan-deep-teal: #1b4d4d;
@@ -27,7 +27,7 @@
     --calan-silver: #c0c0c0;
 
     /* Gradients */
-    --calan-bg-gradient: linear-gradient(135deg, #0a0515 0%, #1a0b2e 50%, #2d1b4e 100%);
+    --calan-bg-gradient: linear-gradient(135deg, #000000 0%, #0a0515 50%, #1a0b2e 100%);
     --calan-card-gradient: linear-gradient(180deg, rgba(29, 27, 46, 0.95) 0%, rgba(26, 11, 46, 0.98) 100%);
     --calan-gold-gradient: linear-gradient(135deg, #d4af37 0%, #cd7f32 100%);
 
