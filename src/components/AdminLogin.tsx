@@ -16,8 +16,15 @@ export default function AdminLogin() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-teal-50 flex items-center justify-center">
-        <p className="text-amber-900">Loading...</p>
+      <div className="calan-branded min-h-screen flex items-center justify-center">
+        <p style={{ 
+          color: '#d4af37',
+          textShadow: '0 1px 2px rgba(0,0,0,0.8)',
+          fontFamily: 'Cinzel, serif',
+          fontSize: '1.25rem'
+        }}>
+          Loading...
+        </p>
       </div>
     );
   }
@@ -31,16 +38,42 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-teal-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="calan-branded min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Celtic Pattern Background */}
+      <div className="absolute inset-0 opacity-10">
+        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="admin-pattern" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
+              <path d="M60 20 Q75 35 60 50 Q45 35 60 20" stroke="#d4af37" strokeWidth="1.5" fill="none" opacity="0.4" />
+              <circle cx="60" cy="60" r="15" stroke="#d4af37" strokeWidth="1" fill="none" opacity="0.3" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#admin-pattern)" />
+        </svg>
+      </div>
+
+      <div className="w-full max-w-md relative z-10">
         <CelticBorder>
           <div className="p-8 space-y-6">
             <div className="text-center space-y-2">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-amber-700/20 mb-4 border-2 border-amber-700/40">
-                <Lock className="w-8 h-8 text-amber-800" />
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 border-2"
+                style={{
+                  background: 'rgba(212, 175, 55, 0.2)',
+                  borderColor: 'rgba(212, 175, 55, 0.6)'
+                }}>
+                <Lock className="w-8 h-8" style={{ color: '#d4af37' }} />
               </div>
-              <h1 className="text-3xl font-bold text-amber-900" style={{ fontFamily: 'Cinzel, serif' }}>Admin Portal</h1>
-              <p className="text-orange-800/80">
+              <h1 className="text-3xl font-bold" style={{ 
+                fontFamily: 'Cinzel, serif',
+                color: '#d4af37',
+                textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+              }}>
+                Admin Portal
+              </h1>
+              <p style={{
+                color: '#f5e6d3',
+                textShadow: '0 1px 2px rgba(0,0,0,0.7)'
+              }}>
                 Sign in to manage tarot decks
               </p>
             </div>
