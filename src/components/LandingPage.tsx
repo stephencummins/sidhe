@@ -42,9 +42,9 @@ export default function LandingPage() {
         <div className="calan-ornate-container text-center mb-12">
           <div className="inline-block mb-8">
             <img
-              src="/Copilot_20251009_124652.png"
+              src="/u6125288155_Create_a_logo_for_a_celtic_tarot_deck_called_Sdhe_2e405472-026e-41eb-a1aa-c97f336c6fb1_2.png"
               alt="SIDHE"
-              className="w-56 h-56 object-contain drop-shadow-2xl filter brightness-110 contrast-110"
+              className="w-56 h-auto object-contain drop-shadow-2xl filter brightness-110 contrast-110"
             />
           </div>
 
