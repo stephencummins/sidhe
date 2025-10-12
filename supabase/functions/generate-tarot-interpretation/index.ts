@@ -29,7 +29,7 @@ Deno.serve(async (req: Request) => {
     const { cards, question, spreadName, meaningType = 'traditional' }: RequestBody = await req.json();
 
     const cardsDescription = cards
-      .map(card => `${card.position}: ${card.name}${card.isReversed ? ' (Reversed)' : ''}`)
+      .map(card => `${card.position}: ${card.name}${card.isReversed ? ' (Inverted)' : ''}`)
       .join('\n');
 
     const celticContext = meaningType === 'celtic'
