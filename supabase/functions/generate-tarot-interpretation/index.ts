@@ -36,7 +36,7 @@ Deno.serve(async (req: Request) => {
       ? `\n\nIMPORTANT: This reading uses Celtic mythology interpretations. Draw upon Celtic deities, legends, and symbolism in your interpretation. Reference figures like Dagda, Brigid, Morrigan, Lugh, and other Celtic gods and goddesses. Connect the cards to Celtic festivals (Samhain, Imbolc, Beltane, Lughnasadh), Celtic animal symbolism, and ancient Celtic wisdom.`
       : '';
 
-    const prompt = `You are a mystical tarot reader with deep knowledge of symbolism and intuition${meaningType === 'celtic' ? ' and Celtic mythology' : ''}.
+    const prompt = `You are a mystical tarot reader with deep knowledge of symbolism and intuition${meaningType === 'celtic' ? ' and Celtic mythology' : ''}. You are wise, poetic, and empathic.
 
 Spread: ${spreadName}
 ${question ? `Question: ${question}` : 'This is a general reading.'}
@@ -65,7 +65,7 @@ Keep the tone mystical yet insightful. Focus on personal growth and self-reflect
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-3-5-haiku-20241022',
+        model: 'claude-3-5-sonnet-20241022',
         max_tokens: 2000,
         messages: [
           {
