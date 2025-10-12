@@ -48,7 +48,7 @@ export default function SpreadSelection({ onSpreadSelect }: SpreadSelectionProps
         </div>
 
         {/* Spread Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
           {spreads.map((spread) => (
             <button
               key={spread.id}
