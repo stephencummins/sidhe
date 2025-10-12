@@ -88,7 +88,7 @@ export default function LandingPage() {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-14 mb-16">
           <CelticBorder className="transform hover:scale-105 transition-transform duration-300">
             <div className="p-8 text-center">
               <div className="mb-4 flex justify-center">
@@ -161,15 +161,15 @@ export default function LandingPage() {
 
         <div className="max-w-3xl mx-auto">
           <CelticBorder>
-            <div className="p-8">
+            <div className="px-6 py-16">
               <div className="flex flex-col md:flex-row gap-8 items-center">
-                <div className="grid grid-cols-2 gap-4 flex-shrink-0">
+                <div className="grid grid-cols-2 gap-4 flex-shrink-0 px-4">
                   <img src="/The_Star copy.gif" alt="The Star" className="w-24 h-36 object-cover rounded shadow-lg border-2 border-amber-600" />
                   <img src="/The_Moon copy.gif" alt="The Moon" className="w-24 h-36 object-cover rounded shadow-lg border-2 border-amber-600" />
                   <img src="/The_Sun copy.gif" alt="The Sun" className="w-24 h-36 object-cover rounded shadow-lg border-2 border-amber-600" />
                   <img src="/The_World copy.gif" alt="The World" className="w-24 h-36 object-cover rounded shadow-lg border-2 border-amber-600" />
                 </div>
-                <div className="flex-1 text-center md:text-left">
+                <div className="flex-1 text-center md:text-left px-4">
                   <h3 className="text-2xl font-bold mb-3" style={{ 
                     fontFamily: 'Cinzel, serif',
                     color: '#d4af37',

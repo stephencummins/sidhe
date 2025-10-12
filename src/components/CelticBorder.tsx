@@ -4,6 +4,9 @@ export default function CelticBorder({ children, className = "" }: { children?: 
       {/* Main border background - darker */}
       <div className="absolute inset-0 bg-gradient-to-br from-amber-900/80 via-orange-900/70 to-amber-900/80 rounded-sm shadow-2xl" />
 
+      {/* Teal interior background - MOVED UP */}
+      <div className="absolute inset-3 bg-gradient-to-br from-teal-950/90 via-teal-900/80 to-teal-950/90 rounded-sm" />
+
       {/* Triple border layers */}
       <div className="absolute inset-0 border-4 border-double border-amber-400 rounded-sm" />
       <div className="absolute inset-1 border-2 border-orange-500 rounded-sm" />
@@ -67,10 +70,10 @@ export default function CelticBorder({ children, className = "" }: { children?: 
       <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-transparent via-amber-400 to-transparent" />
       <div className="absolute top-1/2 left-3/4 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-transparent via-amber-400 to-transparent" />
 
-      {/* FIXED: Dark interior instead of light */}
-      <div className="relative bg-gradient-to-br from-teal-950/90 via-teal-900/80 to-teal-950/90 rounded-sm m-4">
+      {/* Content layer */}
+      <div className="relative">
         {children}
       </div>
     </div>
-  );
+  ); 
 }
