@@ -64,12 +64,6 @@ export default function CelticBorder({ children, className = "" }: { children?: 
         <circle cx="24" cy="24" r="3" fill="currentColor" />
       </svg>
 
-      {/* Decorative lines */}
-      <div className="absolute top-[15%] left-1/2 -translate-x-1/2 w-8 h-1 bg-gradient-to-r from-transparent via-amber-400 to-transparent" />
-      <div className="absolute bottom-[15%] left-1/2 -translate-x-1/2 w-8 h-1 bg-gradient-to-r from-transparent via-amber-400 to-transparent" />
-      <div className="absolute top-1/2 left-[15%] -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-transparent via-amber-400 to-transparent" />
-      <div className="absolute top-1/2 right-[15%] -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-transparent via-amber-400 to-transparent" />
-
       {/* Content layer */}
       <div className="relative">
         {children}
