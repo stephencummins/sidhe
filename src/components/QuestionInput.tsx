@@ -111,11 +111,14 @@ export default function QuestionInput({ onSubmit }: QuestionInputProps) {
                 </button>
                 <button
                   onClick={handleSubmit}
-                  className="calan-btn calan-btn-primary px-8 py-4 font-bold rounded relative overflow-hidden group"
-                  style={{ fontFamily: 'Cinzel, serif' }}
+                  className="px-8 py-4 bg-teal-900/50 border-2 border-amber-600/50 hover:border-amber-500 hover:bg-teal-900/70 hover:shadow-lg hover:shadow-amber-500/20 transition-all duration-300 font-semibold rounded"
+                  style={{
+                    fontFamily: 'Cinzel, serif',
+                    color: '#f5e6d3',
+                    textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                  }}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
-                  <span className="relative z-10" style={{ color: '#0f3a3a' }}>Continue Journey</span>
+                  Continue Journey
                 </button>
               </div>
             </div>
