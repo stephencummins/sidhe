@@ -1113,7 +1113,7 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
                 )}
 
                 {selectedCard.celtic_mythology && (
-                  <div className="bg-emerald-100/50 border-2 border-emerald-700/40 p-4">
+                  <div className="bg-emerald-100/50 border-2 border-emerald-700/40 p-4 backdrop-blur-sm shadow-lg">
                     <h4 className="text-lg font-bold text-emerald-900 mb-2" style={{ fontFamily: 'Cinzel, serif' }}>Celtic Mythology</h4>
                     <p className="text-emerald-950/90 leading-relaxed">
                       {selectedCard.celtic_mythology}
