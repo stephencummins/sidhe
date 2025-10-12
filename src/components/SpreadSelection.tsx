@@ -48,15 +48,15 @@ export default function SpreadSelection({ onSpreadSelect }: SpreadSelectionProps
         </div>
 
         {/* Spread Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {spreads.map((spread) => (
             <button
               key={spread.id}
               onClick={() => onSpreadSelect(spread.id)}
-              className="group transform hover:scale-105 transition-all duration-500 text-left"
+              className="group transform hover:scale-105 transition-all duration-500 text-left h-full"
             >
-              <CelticBorder>
-                <div className="p-8">
+              <CelticBorder className="h-full">
+                <div className="p-8 h-full flex flex-col">
                   {/* Card Count Badge */}
                   <div className="flex items-center justify-between mb-6">
                     <div className="w-14 h-14 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center shadow-lg group-hover:shadow-amber-500/50 transition-shadow border-2 border-amber-300">
@@ -81,7 +81,7 @@ export default function SpreadSelection({ onSpreadSelect }: SpreadSelectionProps
                   </h3>
 
                   {/* Description */}
-                  <p className="leading-relaxed mb-6 text-lg" style={{ 
+                  <p className="leading-relaxed mb-6 text-lg" style={{
                     color: '#f5e6d3',
                     textShadow: '0 1px 2px rgba(0,0,0,0.7)'
                   }}>
@@ -89,7 +89,7 @@ export default function SpreadSelection({ onSpreadSelect }: SpreadSelectionProps
                   </p>
 
                   {/* Positions Preview */}
-                  <div className="pt-4 border-t-2 border-amber-600/40">
+                  <div className="pt-4 border-t-2 border-amber-600/40 mt-auto">
                     <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ 
                       fontFamily: 'Cinzel, serif',
                       color: '#cd7f32',
