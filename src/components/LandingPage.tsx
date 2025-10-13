@@ -159,39 +159,41 @@ export default function LandingPage() {
           </CelticBorder>
         </div>
 
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           <CelticBorder>
-            <div className="px-6 py-16">
-              <div className="flex flex-col md:flex-row gap-8 items-center">
-                <div className="grid grid-cols-2 gap-4 flex-shrink-0 px-4">
-                  <img src="/The_Star copy.gif" alt="The Star" className="w-24 h-36 object-cover rounded shadow-lg border-2 border-amber-600" />
-                  <img src="/The_Moon copy.gif" alt="The Moon" className="w-24 h-36 object-cover rounded shadow-lg border-2 border-amber-600" />
-                  <img src="/The_Sun copy.gif" alt="The Sun" className="w-24 h-36 object-cover rounded shadow-lg border-2 border-amber-600" />
-                  <img src="/The_World copy.gif" alt="The World" className="w-24 h-36 object-cover rounded shadow-lg border-2 border-amber-600" />
-                </div>
-                <div className="flex-1 text-center md:text-left px-4">
-                  <h3 className="text-2xl font-bold mb-3" style={{ 
-                    fontFamily: 'Cinzel, serif',
-                    color: '#d4af37',
-                    textShadow: '0 1px 2px rgba(0,0,0,0.8)'
-                  }}>
-                    Illuminated by Celtic Art
-                  </h3>
-                  <p className="leading-relaxed mb-4" style={{
-                    color: '#f5e6d3',
-                    textShadow: '0 1px 2px rgba(0,0,0,0.7)'
-                  }}>
-                    Each card is a masterwork inspired by the intricate beauty of Celtic tradition,
-                    blending ancient artistry with the turning of the seasons.
-                  </p>
-                  <p className="italic text-sm" style={{
-                    color: '#cd7f32',
-                    textShadow: '0 1px 2px rgba(0,0,0,0.8)'
-                  }}>
-                    "In every season, a story. In every turn, wisdom eternal."
-                  </p>
-                </div>
+            <div className="px-6 py-8">
+              <h3 className="text-2xl font-bold mb-6 text-center" style={{
+                fontFamily: 'Cinzel, serif',
+                color: '#d4af37',
+                textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+              }}>
+                Experience the Magic
+              </h3>
+              <div className="relative rounded-lg overflow-hidden shadow-2xl border-4 border-amber-600/40">
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full h-auto"
+                >
+                  <source src="/tarot-reading.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
               </div>
+              <p className="mt-6 text-center leading-relaxed" style={{
+                color: '#f5e6d3',
+                textShadow: '0 1px 2px rgba(0,0,0,0.7)'
+              }}>
+                Each card is a masterwork inspired by the intricate beauty of Celtic tradition,
+                blending ancient artistry with the turning of the seasons.
+              </p>
+              <p className="mt-3 text-center italic text-sm" style={{
+                color: '#cd7f32',
+                textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+              }}>
+                "In every season, a story. In every turn, wisdom eternal."
+              </p>
             </div>
           </CelticBorder>
         </div>
