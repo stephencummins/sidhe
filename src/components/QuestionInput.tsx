@@ -17,6 +17,13 @@ export default function QuestionInput({ onSubmit }: QuestionInputProps) {
     onSubmit('');
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit();
+    }
+  };
+
   return (
     <div className="calan-branded min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
       <div className="absolute inset-0 opacity-10">
@@ -62,9 +69,10 @@ export default function QuestionInput({ onSubmit }: QuestionInputProps) {
                 <textarea
                   value={question}
                   onChange={(e) => setQuestion(e.target.value.slice(0, maxLength))}
+                  onKeyDown={handleKeyDown}
                   placeholder="What weighs upon your heart? What path do you seek to illuminate?"
                   className="w-full h-48 bg-black/40 border-2 border-amber-600/40 p-6 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 resize-none rounded-sm text-lg leading-relaxed"
-                  style={{ 
+                  style={{
                     fontFamily: 'Crimson Text, serif',
                     color: '#f5e6d3',
                     textShadow: '0 1px 2px rgba(0,0,0,0.5)'
