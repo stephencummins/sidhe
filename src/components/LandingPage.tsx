@@ -39,38 +39,42 @@ export default function LandingPage() {
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/20 to-transparent" />
 
       <div className="max-w-4xl mx-auto px-4 py-16 relative z-10">
-        <div className="calan-ornate-container text-center mb-12">
-          <div className="inline-block mb-8">
-            <img
-              src="/SIDHE_LOGO.png"
-              alt="SIDHE Celtic Tarot"
-              className="w-64 h-auto object-contain drop-shadow-2xl filter brightness-110 contrast-110"
-            />
-          </div>
+        <div className="mb-12">
+          <CelticBorder>
+            <div className="p-8 flex flex-col md:flex-row items-center justify-center gap-8">
+              <div className="flex-shrink-0">
+                <img
+                  src="/SIDHE_LOGO.png"
+                  alt="SIDHE Celtic Tarot"
+                  className="w-48 md:w-56 h-auto object-contain drop-shadow-2xl filter brightness-110 contrast-110"
+                />
+              </div>
 
-          <div className="mb-6">
-            <h1 className="text-7xl font-bold mb-2 text-shadow-lg" style={{
-              fontFamily: 'Cinzel, serif',
-              color: '#d4af37',
-              textShadow: '0 0 20px rgba(212, 175, 55, 0.6), 0 2px 10px rgba(212, 175, 55, 0.3)'
-            }}>
-              SÍDHE
-            </h1>
-            <div className="w-48 h-1 mx-auto bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" />
-          </div>
+              <div className="text-center md:text-left">
+                <h1 className="text-6xl md:text-7xl font-bold mb-2 text-shadow-lg" style={{
+                  fontFamily: 'Cinzel, serif',
+                  color: '#d4af37',
+                  textShadow: '0 0 20px rgba(212, 175, 55, 0.6), 0 2px 10px rgba(212, 175, 55, 0.3)'
+                }}>
+                  SÍDHE
+                </h1>
+                <div className="w-48 h-1 mx-auto md:mx-0 mb-4 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" />
 
-          <p className="text-2xl mb-4 leading-relaxed italic" style={{ 
-            color: '#f5e6d3',
-            textShadow: '0 1px 3px rgba(0,0,0,0.8)'
-          }}>
-            Celtic Seasonal Tarot
-          </p>
-          <p className="text-lg max-w-2xl mx-auto" style={{ 
-            color: '#f5e6d3',
-            textShadow: '0 1px 2px rgba(0,0,0,0.8)'
-          }}>
-            Where ancient Celtic wisdom meets the turning of the seasons
-          </p>
+                <p className="text-2xl mb-2 leading-relaxed italic" style={{
+                  color: '#f5e6d3',
+                  textShadow: '0 1px 3px rgba(0,0,0,0.8)'
+                }}>
+                  Celtic Seasonal Tarot
+                </p>
+                <p className="text-base" style={{
+                  color: '#f5e6d3',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                }}>
+                  Where ancient Celtic wisdom meets the turning of the seasons
+                </p>
+              </div>
+            </div>
+          </CelticBorder>
         </div>
 
         <div className="flex justify-center mb-16">
