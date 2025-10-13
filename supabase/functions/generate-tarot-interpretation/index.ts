@@ -65,7 +65,7 @@ Keep the tone mystical yet insightful. Focus on personal growth and self-reflect
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-3-5-sonnet-20240620',
         max_tokens: 2000,
         messages: [
           {
