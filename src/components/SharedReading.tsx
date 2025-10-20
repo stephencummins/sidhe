@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
 import { supabase } from '../lib/supabase';
 
 interface Card {
@@ -167,8 +168,8 @@ export default function SharedReading() {
         {reading.interpretation && (
           <div className="bg-amber-500/5 border-l-4 border-amber-600 rounded-r-lg p-8 mb-8">
             <h3 className="font-serif text-amber-300 text-xl mb-4">Today's Guidance</h3>
-            <div className="text-stone-200 leading-relaxed whitespace-pre-wrap">
-              {reading.interpretation}
+            <div className="text-stone-200 leading-relaxed prose prose-invert prose-amber max-w-none">
+              <ReactMarkdown>{reading.interpretation}</ReactMarkdown>
             </div>
           </div>
         )}
