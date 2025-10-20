@@ -10,6 +10,7 @@ interface Card {
   upright_meaning: string;
   reversed_meaning: string;
   celtic_mythology?: string;
+  image_url?: string;
 }
 
 interface Reading {
@@ -114,7 +115,10 @@ export default function SharedReading() {
               key={index}
               className="bg-gradient-to-br from-stone-900 to-stone-800 border-2 border-amber-600 rounded-lg p-6 shadow-xl"
             >
-              <div className="mb-4">
+              <div className="mb-4 flex justify-between items-center">
+                <span className="text-amber-600 text-sm font-medium">
+                  {card.position}
+                </span>
                 <span
                   className={`inline-block px-3 py-1 rounded text-sm font-medium ${
                     card.isReversed
@@ -125,12 +129,23 @@ export default function SharedReading() {
                   {card.isReversed ? 'Inverted' : 'Upright'}
                 </span>
               </div>
-              <h3 className="font-serif text-amber-100 text-2xl mb-2 text-center">
+
+              {/* Card Image */}
+              {card.image_url && (
+                <div className="mb-4 flex justify-center">
+                  <img
+                    src={card.image_url}
+                    alt={card.name}
+                    className={`w-48 h-auto rounded-lg shadow-lg ${
+                      card.isReversed ? 'transform rotate-180' : ''
+                    }`}
+                  />
+                </div>
+              )}
+
+              <h3 className="font-serif text-amber-100 text-2xl mb-4 text-center">
                 {card.name}
               </h3>
-              <p className="text-amber-600 text-sm font-medium mb-4 text-center">
-                {card.position}
-              </p>
               <div className="flex flex-wrap gap-2 justify-center mb-4">
                 {card.keywords.map((keyword, idx) => (
                   <span

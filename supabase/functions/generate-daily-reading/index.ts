@@ -70,7 +70,7 @@ const tarotDeck: TarotCard[] = [
   // Minor Arcana - Cups
   { id: 'cups-ace', name: 'Ace of Cups', suit: 'cups', arcana: 'minor', keywords: ['love', 'new relationships', 'compassion', 'creativity'], upright_meaning: 'Love, new relationships, compassion, creativity', reversed_meaning: 'Self-love, intuition, repressed emotions' },
   { id: 'cups-2', name: 'Two of Cups', suit: 'cups', arcana: 'minor', keywords: ['unified love', 'partnership', 'mutual attraction', 'relationships'], upright_meaning: 'Unified love, partnership, mutual attraction, relationships', reversed_meaning: 'Self-love, break-ups, disharmony, distrust' },
-  { id: 'cups-3', name: 'Three of Cups', suit: 'cups', arcana: 'minor', keywords: ['celebration', 'friendship', 'creativity', 'community'], upright_meaning: 'Celebration, friendship, creativity, collaborations', reversed_meaning: 'Independence, alone time, hardcore partying, 'three\'s a crowd'' },
+  { id: 'cups-3', name: 'Three of Cups', suit: 'cups', arcana: 'minor', keywords: ['celebration', 'friendship', 'creativity', 'community'], upright_meaning: 'Celebration, friendship, creativity, collaborations', reversed_meaning: 'Independence, alone time, hardcore partying, three\'s a crowd' },
   { id: 'cups-4', name: 'Four of Cups', suit: 'cups', arcana: 'minor', keywords: ['meditation', 'contemplation', 'apathy', 'reevaluation'], upright_meaning: 'Meditation, contemplation, apathy, reevaluation', reversed_meaning: 'Retreat, withdrawal, checking in for alignment' },
   { id: 'cups-5', name: 'Five of Cups', suit: 'cups', arcana: 'minor', keywords: ['regret', 'failure', 'disappointment', 'pessimism'], upright_meaning: 'Regret, failure, disappointment, pessimism', reversed_meaning: 'Personal setbacks, self-forgiveness, moving on' },
   { id: 'cups-6', name: 'Six of Cups', suit: 'cups', arcana: 'minor', keywords: ['revisiting the past', 'childhood memories', 'innocence', 'joy'], upright_meaning: 'Revisiting the past, childhood memories, innocence, joy', reversed_meaning: 'Living in the past, forgiveness, lacking playfulness' },
@@ -139,9 +139,33 @@ Deno.serve(async (req: Request) => {
 
     console.log('Generating daily 3-card reading...');
 
-    // Shuffle deck and select 3 random cards
-    const shuffledDeck = shuffleArray(tarotDeck);
-    const selectedCards = shuffledDeck.slice(0, 3);
+    // Initialize Supabase client first to fetch cards from database
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || Deno.env.get('SUPABASE_ANON_KEY');
+
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error('Supabase configuration missing');
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // Fetch all cards from the active deck in database
+    const { data: dbCards, error: cardsError } = await supabase
+      .from('tarot_cards')
+      .select('id, name, arcana, suit, meaning_upright, meaning_reversed, image_url, keywords')
+      .limit(78);
+
+    if (cardsError || !dbCards || dbCards.length === 0) {
+      console.error('Database cards error:', cardsError);
+      // Fall back to hardcoded deck if database fails
+      console.log('Falling back to hardcoded deck');
+      var selectedCards = shuffleArray(tarotDeck).slice(0, 3);
+      var usingDatabase = false;
+    } else {
+      console.log(`Fetched ${dbCards.length} cards from database`);
+      selectedCards = shuffleArray(dbCards).slice(0, 3);
+      usingDatabase = true;
+    }
 
     // Three-card spread positions
     const positions = ['Past', 'Present', 'Future'];
@@ -151,10 +175,10 @@ Deno.serve(async (req: Request) => {
       name: card.name,
       position: positions[index],
       isReversed: Math.random() < 0.5,
-      keywords: card.keywords,
-      upright_meaning: meaningType === 'celtic' && card.celtic_upright ? card.celtic_upright : card.upright_meaning,
-      reversed_meaning: meaningType === 'celtic' && card.celtic_reversed ? card.celtic_reversed : card.reversed_meaning,
-      celtic_mythology: card.celtic_mythology
+      keywords: card.keywords || [],
+      upright_meaning: card.meaning_upright || card.upright_meaning,
+      reversed_meaning: card.meaning_reversed || card.reversed_meaning,
+      image_url: usingDatabase ? card.image_url : undefined
     }));
 
     // Prepare request for interpretation function
@@ -170,13 +194,6 @@ Deno.serve(async (req: Request) => {
     };
 
     // Call the existing interpretation function
-    const supabaseUrl = Deno.env.get('SUPABASE_URL');
-    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || Deno.env.get('SUPABASE_ANON_KEY');
-
-    if (!supabaseUrl || !supabaseKey) {
-      throw new Error('Supabase configuration missing');
-    }
-
     console.log('Calling interpretation function...');
     const interpretationResponse = await fetch(`${supabaseUrl}/functions/v1/generate-tarot-interpretation`, {
       method: 'POST',
@@ -194,12 +211,6 @@ Deno.serve(async (req: Request) => {
     }
 
     const { interpretation } = await interpretationResponse.json();
-
-    // Initialize Supabase client
-    const supabase = createClient(
-      supabaseUrl,
-      supabaseKey
-    );
 
     // Get today's date in YYYY-MM-DD format
     const today = new Date().toISOString().split('T')[0];

@@ -1,0 +1,132 @@
+{
+  "name": "Daily Three Card Reading (Resend + Supabase)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 7 * * *"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Schedule: Every Day at 7 AM",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://ktjbtkkltvkmdwzkcwij.supabase.co/functions/v1/generate-daily-reading",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt0amJ0a2tsdHZrbWR3emtjd2lqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5NDY4NDQsImV4cCI6MjA3NTUyMjg0NH0.IFlD2U9xp2WoTK4FnCY86D9TGNGE38kZZXeiFBiHRlA"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "meaningType",
+              "value": "celtic"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "http-request-reading",
+      "name": "Generate Daily 3-Card Reading",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse the reading response\nconst reading = $input.item.json;\n\n// Format the date\nconst date = new Date(reading.date || new Date());\nconst formattedDate = date.toLocaleDateString('en-GB', { \n  weekday: 'long', \n  year: 'numeric', \n  month: 'long', \n  day: 'numeric' \n});\n\n// Build HTML for all three cards\nconst cardsHTML = reading.cards.map(card => {\n  const orientation = card.isReversed ? 'Inverted' : 'Upright';\n  const orientationColor = card.isReversed ? '#5eead4' : '#d4af37';\n  const meaning = card.isReversed \n    ? (card.reversed_meaning || card.reversed || 'No meaning available') \n    : (card.upright_meaning || card.upright || 'No meaning available');\n  const keywordsHTML = card.keywords.map(kw => '<span style=\"display: inline-block; padding: 4px 12px; margin: 2px 4px 2px 0; background: rgba(212, 175, 55, 0.2); border: 1px solid #d4af37; color: #fbbf24; font-size: 13px; border-radius: 4px; font-family: \\'Georgia\\', serif;\">' + kw + '</span>').join('');\n  \n  return '<div style=\"margin-bottom: 25px; padding: 25px; background: linear-gradient(135deg, #1c1917 0%, #292524 100%); border: 2px solid #d4af37; border-radius: 8px;\"><div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;\"><span style=\"font-family: \\'Georgia\\', serif; color: #d4af37; font-size: 16px; font-weight: bold;\">' + card.position + '</span><span style=\"font-family: \\'Georgia\\', serif; color: ' + orientationColor + '; font-size: 14px; font-weight: bold;\">' + orientation + '</span></div><h2 style=\"font-family: \\'Georgia\\', serif; color: #fef3c7; margin: 0 0 12px 0; font-size: 28px; text-align: center;\">' + card.name + '</h2><div style=\"margin-bottom: 12px; text-align: center;\">' + keywordsHTML + '</div><p style=\"font-family: \\'Georgia\\', serif; color: #e7e5e4; line-height: 1.7; margin: 15px 0 0 0; text-align: center; font-size: 15px;\">' + meaning + '</p></div>';\n}).join('');\n\n// Build interpretation section\nconst interpretationHTML = reading.interpretation ? '<div style=\"margin-bottom: 35px; padding: 25px; background: rgba(212, 175, 55, 0.05); border-left: 3px solid #d4af37; border-radius: 4px;\"><h3 style=\"font-family: \\'Georgia\\', serif; color: #fbbf24; font-size: 18px; margin: 0 0 15px 0;\">Today\\'s Guidance</h3><div style=\"font-family: \\'Georgia\\', serif; color: #d6d3d1; line-height: 1.8; font-size: 15px;\">' + reading.interpretation.replace(/\\n/g, '<br>') + '</div></div>' : '';\n\n// Build view online button\nconst viewOnlineButton = reading.shareableUrl ? '<div style=\"text-align: center; margin: 30px 0;\"><a href=\"' + reading.shareableUrl + '\" style=\"display: inline-block; padding: 12px 24px; background: #d4af37; color: #1c1917; text-decoration: none; border-radius: 6px; font-family: \\'Georgia\\', serif; font-weight: bold; font-size: 16px;\">View Full Reading Online</a></div>' : '';\n\n// Build email HTML\nconst emailHTML = '<!DOCTYPE html><html lang=\"en-GB\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Daily Tarot Reading</title></head><body style=\"margin: 0; padding: 0; background: linear-gradient(135deg, #292524 0%, #1c1917 50%, #292524 100%); font-family: Georgia, serif;\"><div style=\"max-width: 600px; margin: 0 auto; padding: 40px 20px;\"><div style=\"text-align: center; margin-bottom: 40px;\"><h1 style=\"font-family: \\'Georgia\\', serif; color: #d4af37; font-size: 42px; margin: 0 0 10px 0; text-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);\">🌙 SÍDHE 🌙</h1><div style=\"width: 200px; height: 2px; margin: 15px auto; background: linear-gradient(to right, transparent, #d4af37, transparent);\"></div><h2 style=\"font-family: \\'Georgia\\', serif; color: #fbbf24; font-size: 24px; margin: 15px 0 5px 0; font-weight: normal;\">Your Daily Three Card Reading</h2><p style=\"font-family: \\'Georgia\\', serif; color: #a8a29e; font-size: 16px; font-style: italic; margin: 5px 0 0 0;\">' + formattedDate + '</p></div>' + cardsHTML + interpretationHTML + viewOnlineButton + '<div style=\"text-align: center; padding-top: 30px; border-top: 1px solid rgba(212, 175, 55, 0.3);\"><p style=\"font-family: \\'Georgia\\', serif; color: #78716c; font-size: 13px; font-style: italic; margin: 10px 0;\">\"Trust in the wisdom of the cards\"</p><p style=\"font-family: \\'Georgia\\', serif; color: #57534e; font-size: 12px; margin: 15px 0 0 0;\">SÍDHE Celtic Tarot</p></div></div></body></html>';\n\n// Build plain text version\nconst textCards = reading.cards.map(card => {\n  const orientation = card.isReversed ? 'Inverted' : 'Upright';\n  const meaning = card.isReversed ? (card.reversed_meaning || card.reversed || 'No meaning available') : (card.upright_meaning || card.upright || 'No meaning available');\n  return card.position + ': ' + card.name + ' (' + orientation + ')\\n' + 'Keywords: ' + card.keywords.join(', ') + '\\n' + meaning;\n}).join('\\n\\n');\n\nreturn {\n  subject: '🌙 Daily Reading: Past, Present, Future',\n  html: emailHTML,\n  text: 'Your Daily Tarot Reading - ' + formattedDate + '\\n\\n' + textCards + (reading.interpretation ? '\\n\\nToday\\'s Guidance:\\n' + reading.interpretation : '') + (reading.shareableUrl ? '\\n\\nView online: ' + reading.shareableUrl : '')\n};"
+      },
+      "id": "format-email",
+      "name": "Format Email",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.resend.com/emails",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer re_UzKzoQW2_HW2q6BwQTd5sYCrUvPSSYhj9"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { from: 'Sídhe <sidhe@stephen8n.com>', to: ['stephencummins@gmail.com'], subject: $json.subject, html: $json.html } }}",
+        "options": {}
+      },
+      "id": "send-email-resend",
+      "name": "Send Email via Resend",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [850, 300]
+    }
+  ],
+  "connections": {
+    "Schedule: Every Day at 7 AM": {
+      "main": [
+        [
+          {
+            "node": "Generate Daily 3-Card Reading",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Daily 3-Card Reading": {
+      "main": [
+        [
+          {
+            "node": "Format Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Email": {
+      "main": [
+        [
+          {
+            "node": "Send Email via Resend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

@@ -1,0 +1,16 @@
+# Supabase Configuration
+
+project_id = "ktjbtkkltvkmdwzkcwij"
+
+[api]
+enabled = true
+port = 54321
+
+[db]
+port = 54322
+
+[functions.generate-daily-reading]
+verify_jwt = false
+
+[functions.generate-tarot-interpretation]
+verify_jwt = false
