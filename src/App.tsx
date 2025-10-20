@@ -5,6 +5,7 @@ import LandingPage from './components/LandingPage';
 import AdminLogin from './components/AdminLogin';
 import AdminPanel from './components/AdminPanel';
 import TarotFlow from './components/TarotFlow';
+import SharedReading from './components/SharedReading';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -22,19 +23,24 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 function AppContent() {
   return (
-    <Layout>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/reading/*" element={<TarotFlow />} />
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin" element={
-          <ProtectedRoute>
-            <AdminPanel />
-          </ProtectedRoute>
-        } />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </Layout>
+    <Routes>
+      <Route path="/reading/:id" element={<SharedReading />} />
+      <Route path="*" element={
+        <Layout>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/reading/*" element={<TarotFlow />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={
+              <ProtectedRoute>
+                <AdminPanel />
+              </ProtectedRoute>
+            } />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Layout>
+      } />
+    </Routes>
   );
 }
 

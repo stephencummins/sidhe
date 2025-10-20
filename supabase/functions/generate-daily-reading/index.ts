@@ -1,4 +1,5 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import { createClient } from 'jsr:@supabase/supabase-js@2';
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -194,15 +195,53 @@ Deno.serve(async (req: Request) => {
 
     const { interpretation } = await interpretationResponse.json();
 
+    // Initialize Supabase client
+    const supabase = createClient(
+      supabaseUrl,
+      supabaseKey
+    );
+
+    // Get today's date in YYYY-MM-DD format
+    const today = new Date().toISOString().split('T')[0];
+
+    // Save reading to database (upsert - update if exists for today)
+    const readingData = {
+      reading_date: today,
+      spread_name: 'Three Card Spread',
+      meaning_type: meaningType,
+      question: question || null,
+      cards: cardsWithOrientation,
+      interpretation
+    };
+
+    const { data: savedReading, error: dbError } = await supabase
+      .from('daily_readings')
+      .upsert(readingData, { onConflict: 'reading_date' })
+      .select('id')
+      .single();
+
+    if (dbError) {
+      console.error('Database error:', dbError);
+      // Continue even if database save fails
+    }
+
+    const readingId = savedReading?.id;
+    const shareableUrl = readingId ? `https://sidhe.netlify.app/reading/${readingId}` : null;
+
+    console.log(`Reading saved with ID: ${readingId}`);
+    console.log(`Shareable URL: ${shareableUrl}`);
+
     // Return complete reading
     return new Response(
       JSON.stringify({
+        id: readingId,
         date: new Date().toISOString(),
         spread: 'Three Card Spread',
         meaningType,
         question: question || null,
         cards: cardsWithOrientation,
-        interpretation
+        interpretation,
+        shareableUrl
       }),
       {
         headers: {
