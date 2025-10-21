@@ -170,7 +170,7 @@ export default function SharedReading() {
         {reading.interpretation && (
           <div className="bg-gradient-to-br from-amber-500/10 to-amber-600/5 border-l-4 border-amber-500 rounded-r-lg p-8 mb-8 shadow-lg">
             <h3 className="font-serif text-amber-300 text-2xl mb-6">Today's Guidance</h3>
-            <div className="prose prose-invert prose-amber max-w-none prose-headings:text-amber-400 prose-headings:font-serif prose-h1:text-amber-400 prose-h2:text-amber-400 prose-h3:text-amber-400 prose-h4:text-amber-400 prose-p:text-white prose-p:text-base prose-p:leading-8 prose-p:mb-6 prose-strong:text-amber-300 prose-em:text-teal-300 prose-ul:text-white prose-ul:list-disc prose-ul:ml-6 prose-ul:space-y-2 prose-ul:my-4 prose-li:text-white prose-li:leading-8 prose-li:pl-2">
+            <div className="prose prose-invert max-w-none prose-headings:text-amber-400 prose-headings:font-serif prose-h1:text-amber-400 prose-h2:text-amber-400 prose-h3:text-amber-400 prose-h4:text-amber-400 prose-p:text-white prose-p:text-base prose-p:leading-8 prose-p:mb-6 prose-strong:text-amber-300 prose-em:text-teal-300 prose-ul:text-white prose-ul:list-disc prose-ul:ml-6 prose-ul:space-y-2 prose-ul:my-4 prose-li:text-white prose-li:leading-8 prose-li:pl-2 [&>*]:text-white [&_h1]:text-amber-400 [&_h2]:text-amber-400 [&_h3]:text-amber-400 [&_h4]:text-amber-400">
               <ReactMarkdown>{reading.interpretation}</ReactMarkdown>
             </div>
           </div>
