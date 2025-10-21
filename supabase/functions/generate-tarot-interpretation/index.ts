@@ -49,6 +49,16 @@ Provide a comprehensive tarot interpretation that includes:
 2. How the cards relate to each other and the overall message
 3. Actionable guidance or reflection questions
 
+FORMAT YOUR RESPONSE USING PROPER MARKDOWN:
+- Use ## for main headings and ### for subheadings
+- When listing multiple related points, ALWAYS use bullet points with the - symbol
+- For example, if listing things someone may experience, format as:
+  - First point here
+  - Second point here
+  - Third point here
+- Use **bold** for emphasis on key concepts
+- Use *italics* for mystical or poetic phrases
+
 Keep the tone mystical yet insightful. Focus on personal growth and self-reflection.`;
 
     const apiKey = Deno.env.get('ANTHROPIC_API_KEY');
