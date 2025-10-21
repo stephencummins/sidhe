@@ -30,6 +30,7 @@ export default function SharedReading() {
   const [reading, setReading] = useState<Reading | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<{ url: string; name: string; isReversed: boolean } | null>(null);
 
   useEffect(() => {
     async function fetchReading() {
@@ -137,7 +138,8 @@ export default function SharedReading() {
                   <img
                     src={card.image_url}
                     alt={card.name}
-                    className={`w-48 h-auto rounded-lg shadow-lg ${
+                    onClick={() => setSelectedImage({ url: card.image_url!, name: card.name, isReversed: card.isReversed })}
+                    className={`w-48 h-auto rounded-lg shadow-lg cursor-pointer hover:opacity-90 transition-opacity ${
                       card.isReversed ? 'transform rotate-180' : ''
                     }`}
                   />
@@ -188,6 +190,34 @@ export default function SharedReading() {
           </a>
         </div>
       </div>
+
+      {/* Image Modal */}
+      {selectedImage && (
+        <div
+          className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4"
+          onClick={() => setSelectedImage(null)}
+        >
+          <div className="relative max-w-4xl max-h-[90vh]">
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute -top-12 right-0 text-white hover:text-amber-400 text-4xl font-light transition-colors"
+            >
+              ×
+            </button>
+            <img
+              src={selectedImage.url}
+              alt={selectedImage.name}
+              className={`max-w-full max-h-[90vh] object-contain rounded-lg ${
+                selectedImage.isReversed ? 'transform rotate-180' : ''
+              }`}
+              onClick={(e) => e.stopPropagation()}
+            />
+            <p className="text-center text-amber-300 font-serif text-xl mt-4">
+              {selectedImage.name}
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
