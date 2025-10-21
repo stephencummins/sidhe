@@ -30,7 +30,7 @@ export default function SharedReading() {
   const [reading, setReading] = useState<Reading | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedImage, setSelectedImage] = useState<{ url: string; name: string; isReversed: boolean } | null>(null);
+  const [selectedCard, setSelectedCard] = useState<Card | null>(null);
 
   useEffect(() => {
     async function fetchReading() {
@@ -138,7 +138,7 @@ export default function SharedReading() {
                   <img
                     src={card.image_url}
                     alt={card.name}
-                    onClick={() => setSelectedImage({ url: card.image_url!, name: card.name, isReversed: card.isReversed })}
+                    onClick={() => setSelectedCard(card)}
                     className={`w-48 h-auto rounded-lg shadow-lg cursor-pointer hover:opacity-90 transition-opacity ${
                       card.isReversed ? 'transform rotate-180' : ''
                     }`}
@@ -191,30 +191,75 @@ export default function SharedReading() {
         </div>
       </div>
 
-      {/* Image Modal */}
-      {selectedImage && (
+      {/* Card Modal */}
+      {selectedCard && (
         <div
-          className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4"
-          onClick={() => setSelectedImage(null)}
+          className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4 overflow-y-auto"
+          onClick={() => setSelectedCard(null)}
         >
-          <div className="relative max-w-4xl max-h-[90vh]">
+          <div className="relative max-w-4xl w-full my-8" onClick={(e) => e.stopPropagation()}>
             <button
-              onClick={() => setSelectedImage(null)}
-              className="absolute -top-12 right-0 text-white hover:text-amber-400 text-4xl font-light transition-colors"
+              onClick={() => setSelectedCard(null)}
+              className="absolute -top-4 right-0 text-white hover:text-amber-400 text-5xl font-light transition-colors z-10"
             >
               ×
             </button>
-            <img
-              src={selectedImage.url}
-              alt={selectedImage.name}
-              className={`max-w-full max-h-[90vh] object-contain rounded-lg ${
-                selectedImage.isReversed ? 'transform rotate-180' : ''
-              }`}
-              onClick={(e) => e.stopPropagation()}
-            />
-            <p className="text-center text-amber-300 font-serif text-xl mt-4">
-              {selectedImage.name}
-            </p>
+
+            <div className="bg-gradient-to-br from-stone-900 to-stone-800 border-2 border-amber-600 rounded-lg p-8 shadow-2xl">
+              {/* Header with Position and Orientation */}
+              <div className="flex justify-between items-center mb-6">
+                <span className="text-amber-600 text-lg font-medium font-serif">
+                  {selectedCard.position}
+                </span>
+                <span
+                  className={`inline-block px-4 py-2 rounded text-base font-medium ${
+                    selectedCard.isReversed
+                      ? 'bg-teal-400/20 text-teal-400 border border-teal-400'
+                      : 'bg-amber-500/20 text-amber-500 border border-amber-500'
+                  }`}
+                >
+                  {selectedCard.isReversed ? 'Inverted' : 'Upright'}
+                </span>
+              </div>
+
+              {/* Card Image */}
+              {selectedCard.image_url && (
+                <div className="mb-6 flex justify-center">
+                  <img
+                    src={selectedCard.image_url}
+                    alt={selectedCard.name}
+                    className={`max-w-md w-full h-auto rounded-lg shadow-lg ${
+                      selectedCard.isReversed ? 'transform rotate-180' : ''
+                    }`}
+                  />
+                </div>
+              )}
+
+              {/* Card Name */}
+              <h3 className="font-serif text-amber-100 text-4xl mb-6 text-center">
+                {selectedCard.name}
+              </h3>
+
+              {/* Keywords */}
+              <div className="flex flex-wrap gap-2 justify-center mb-6">
+                {selectedCard.keywords.map((keyword, idx) => (
+                  <span
+                    key={idx}
+                    className="px-4 py-2 text-sm bg-amber-500/10 border border-amber-600 text-amber-300 rounded font-serif"
+                  >
+                    {keyword}
+                  </span>
+                ))}
+              </div>
+
+              {/* Meaning */}
+              <div className="bg-amber-500/5 border-l-4 border-amber-600 rounded-r-lg p-6">
+                <h4 className="font-serif text-amber-300 text-xl mb-3">Meaning</h4>
+                <p className="text-stone-200 text-lg leading-relaxed">
+                  {selectedCard.isReversed ? selectedCard.reversed_meaning : selectedCard.upright_meaning}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       )}
