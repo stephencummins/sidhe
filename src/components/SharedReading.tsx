@@ -168,9 +168,9 @@ export default function SharedReading() {
 
         {/* Interpretation */}
         {reading.interpretation && (
-          <div className="bg-amber-500/5 border-l-4 border-amber-600 rounded-r-lg p-8 mb-8">
-            <h3 className="font-serif text-amber-300 text-xl mb-4">Today's Guidance</h3>
-            <div className="text-stone-200 leading-relaxed prose prose-invert prose-amber max-w-none">
+          <div className="bg-gradient-to-br from-amber-500/10 to-amber-600/5 border-l-4 border-amber-500 rounded-r-lg p-8 mb-8 shadow-lg">
+            <h3 className="font-serif text-amber-300 text-2xl mb-6">Today's Guidance</h3>
+            <div className="prose prose-invert prose-amber max-w-none prose-headings:text-amber-200 prose-headings:font-serif prose-p:text-stone-100 prose-p:text-lg prose-p:leading-8 prose-p:mb-6 prose-strong:text-amber-300 prose-em:text-teal-300 prose-ul:text-stone-100 prose-ul:text-lg prose-ul:leading-8 prose-ul:space-y-3 prose-li:mb-3 prose-li:pl-2">
               <ReactMarkdown>{reading.interpretation}</ReactMarkdown>
             </div>
           </div>
