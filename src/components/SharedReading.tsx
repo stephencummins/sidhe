@@ -134,12 +134,12 @@ export default function SharedReading() {
 
               {/* Card Image */}
               {card.image_url && (
-                <div className="mb-4 flex justify-center">
+                <div className="mb-4 flex justify-center items-center h-64">
                   <img
                     src={card.image_url}
                     alt={card.name}
                     onClick={() => setSelectedCard(card)}
-                    className={`w-48 h-auto rounded-lg shadow-lg cursor-pointer hover:opacity-90 transition-opacity ${
+                    className={`max-w-full max-h-full object-contain rounded-lg shadow-lg cursor-pointer hover:opacity-90 transition-opacity ${
                       card.isReversed ? 'transform rotate-180' : ''
                     }`}
                   />
