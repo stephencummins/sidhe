@@ -24,22 +24,26 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 function AppContent() {
   return (
     <Routes>
-      <Route path="/reading/:id" element={<SharedReading />} />
-      <Route path="*" element={
+      {/* Landing page */}
+      <Route path="/" element={<Layout><LandingPage /></Layout>} />
+
+      {/* Admin routes */}
+      <Route path="/admin/login" element={<Layout><AdminLogin /></Layout>} />
+      <Route path="/admin" element={
         <Layout>
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/reading/*" element={<TarotFlow />} />
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin" element={
-              <ProtectedRoute>
-                <AdminPanel />
-              </ProtectedRoute>
-            } />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
+          <ProtectedRoute>
+            <AdminPanel />
+          </ProtectedRoute>
         </Layout>
       } />
+
+      {/* Reading routes */}
+      <Route path="/reading/:id" element={<SharedReading />} />
+      <Route path="/reading/*" element={<Layout><TarotFlow /></Layout>} />
+
+
+      {/* Catch-all redirect */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }

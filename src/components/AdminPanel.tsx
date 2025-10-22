@@ -1035,21 +1035,88 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
       </div>
     </CelticBorder>
 
-    {selectedCard && (
-      <div
-        className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-        onClick={() => setSelectedCard(null)}
-      >
+    {selectedCard && (() => {
+      const currentIndex = cards.findIndex(c => c.id === selectedCard.id);
+      const hasPrev = currentIndex > 0;
+      const hasNext = currentIndex < cards.length - 1;
+
+      const goToPrev = () => {
+        if (hasPrev) setSelectedCard(cards[currentIndex - 1]);
+      };
+
+      const goToNext = () => {
+        if (hasNext) setSelectedCard(cards[currentIndex + 1]);
+      };
+
+      // Touch/swipe handling
+      let touchStartX = 0;
+      let touchEndX = 0;
+
+      const handleTouchStart = (e: React.TouchEvent) => {
+        touchStartX = e.touches[0].clientX;
+      };
+
+      const handleTouchMove = (e: React.TouchEvent) => {
+        touchEndX = e.touches[0].clientX;
+      };
+
+      const handleTouchEnd = () => {
+        const swipeThreshold = 50;
+        const diff = touchStartX - touchEndX;
+
+        if (Math.abs(diff) > swipeThreshold) {
+          if (diff > 0 && hasNext) {
+            goToNext(); // Swipe left = next
+          } else if (diff < 0 && hasPrev) {
+            goToPrev(); // Swipe right = previous
+          }
+        }
+      };
+
+      return (
         <div
-          className="relative bg-gradient-to-br from-amber-50 via-orange-50 to-teal-50 border-4 border-amber-700/60 shadow-2xl p-6 sm:p-8 max-w-5xl w-full max-h-[90vh] overflow-y-auto"
-          onClick={(e) => e.stopPropagation()}
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => setSelectedCard(null)}
         >
-          <button
-            onClick={() => setSelectedCard(null)}
-            className="absolute top-4 right-4 z-10 text-amber-900 hover:text-amber-700 transition-colors bg-amber-100/80 rounded-full p-2"
+          <div
+            className="relative bg-gradient-to-br from-amber-50 via-orange-50 to-teal-50 border-4 border-amber-700/60 shadow-2xl p-6 sm:p-8 max-w-5xl w-full max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
           >
-            <X className="w-6 h-6" />
-          </button>
+            <button
+              onClick={() => setSelectedCard(null)}
+              className="absolute top-4 right-4 z-10 text-amber-900 hover:text-amber-700 transition-colors bg-amber-100/80 rounded-full p-2"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            {/* Previous button */}
+            {hasPrev && (
+              <button
+                onClick={goToPrev}
+                className="absolute left-2 top-1/2 -translate-y-1/2 z-10 text-amber-900 hover:text-amber-700 transition-colors bg-amber-100/80 rounded-full p-3 shadow-lg"
+                aria-label="Previous card"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+            )}
+
+            {/* Next button */}
+            {hasNext && (
+              <button
+                onClick={goToNext}
+                className="absolute right-2 top-1/2 -translate-y-1/2 z-10 text-amber-900 hover:text-amber-700 transition-colors bg-amber-100/80 rounded-full p-3 shadow-lg"
+                aria-label="Next card"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            )}
 
           <div className="flex flex-col lg:flex-row gap-6 sm:gap-8">
             <div className="flex-shrink-0 flex items-start justify-center">
@@ -1123,9 +1190,10 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
               </div>
             </div>
           </div>
+          </div>
         </div>
-      </div>
-    )}
+      );
+    })()}
     </>
   );
 }

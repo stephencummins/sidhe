@@ -140,7 +140,7 @@ export default function SharedReading() {
                     alt={card.name}
                     onClick={() => setSelectedCard(card)}
                     className={`max-w-full max-h-full object-contain rounded-lg shadow-lg cursor-pointer hover:opacity-90 transition-opacity ${
-                      card.isReversed ? 'transform rotate-180' : ''
+                      card.isReversed ? 'grayscale' : ''
                     }`}
                   />
                 </div>
@@ -229,7 +229,7 @@ export default function SharedReading() {
                     src={selectedCard.image_url}
                     alt={selectedCard.name}
                     className={`max-w-md w-full h-auto rounded-lg shadow-lg ${
-                      selectedCard.isReversed ? 'transform rotate-180' : ''
+                      selectedCard.isReversed ? 'grayscale' : ''
                     }`}
                   />
                 </div>

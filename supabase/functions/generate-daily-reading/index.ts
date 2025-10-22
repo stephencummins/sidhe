@@ -137,9 +137,6 @@ Deno.serve(async (req: Request) => {
   try {
     const { meaningType = 'celtic', question }: RequestBody = await req.json().catch(() => ({}));
 
-    console.log('Generating daily 3-card reading...');
-
-    // Initialize Supabase client first to fetch cards from database
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || Deno.env.get('SUPABASE_ANON_KEY');
 
@@ -148,6 +145,34 @@ Deno.serve(async (req: Request) => {
     }
 
     const supabase = createClient(supabaseUrl, supabaseKey);
+    const today = new Date().toISOString().split('T')[0];
+
+    // Check if a reading already exists for today
+    const { data: existingReading, error: existingError } = await supabase
+      .from('daily_readings')
+      .select('*')
+      .eq('reading_date', today)
+      .single();
+
+    if (existingError && existingError.code !== 'PGRST116') { // Ignore 'single row not found'
+      throw existingError;
+    }
+
+    if (existingReading) {
+      console.log(`Returning existing reading for ${today} with ID: ${existingReading.id}`);
+      const shareableUrl = `https://sidhe.netlify.app/reading/${existingReading.id}`;
+      return new Response(
+        JSON.stringify({
+          ...existingReading,
+          shareableUrl,
+          date: new Date(existingReading.created_at).toISOString(),
+          spread: existingReading.spread_name,
+        }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    console.log(`No existing reading for ${today}. Generating a new one...`);
 
     // Fetch all cards from the active deck in database
     const { data: dbCards, error: cardsError } = await supabase
@@ -212,10 +237,7 @@ Deno.serve(async (req: Request) => {
 
     const { interpretation } = await interpretationResponse.json();
 
-    // Get today's date in YYYY-MM-DD format
-    const today = new Date().toISOString().split('T')[0];
-
-    // Save reading to database (upsert - update if exists for today)
+    // Save reading to database (INSERT, not upsert)
     const readingData = {
       reading_date: today,
       spread_name: 'Three Card Spread',
@@ -227,32 +249,45 @@ Deno.serve(async (req: Request) => {
 
     const { data: savedReading, error: dbError } = await supabase
       .from('daily_readings')
-      .upsert(readingData, { onConflict: 'reading_date' })
-      .select('id')
+      .insert(readingData)
+      .select('*')
       .single();
 
     if (dbError) {
-      console.error('Database error:', dbError);
-      // Continue even if database save fails
+      console.error('Database error on insert:', dbError);
+      // If there's a race condition and another process inserted it, fetch it again
+      if (dbError.code === '23505') { // unique_violation
+        console.log('Race condition detected. Fetching existing reading again.');
+        const { data: raceReading, error: raceError } = await supabase
+          .from('daily_readings')
+          .select('*')
+          .eq('reading_date', today)
+          .single();
+        
+        if (raceError) throw raceError;
+
+        const shareableUrl = `https://sidhe.netlify.app/reading/${raceReading.id}`;
+        return new Response(
+          JSON.stringify({ ...raceReading, shareableUrl }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+      throw dbError;
     }
 
-    const readingId = savedReading?.id;
-    const shareableUrl = readingId ? `https://sidhe.netlify.app/reading/${readingId}` : null;
+    const readingId = savedReading.id;
+    const shareableUrl = `https://sidhe.netlify.app/reading/${readingId}`;
 
-    console.log(`Reading saved with ID: ${readingId}`);
+    console.log(`New reading saved with ID: ${readingId}`);
     console.log(`Shareable URL: ${shareableUrl}`);
 
     // Return complete reading
     return new Response(
       JSON.stringify({
-        id: readingId,
-        date: new Date().toISOString(),
-        spread: 'Three Card Spread',
-        meaningType,
-        question: question || null,
-        cards: cardsWithOrientation,
-        interpretation,
-        shareableUrl
+        ...savedReading,
+        shareableUrl,
+        date: new Date(savedReading.created_at).toISOString(),
+        spread: savedReading.spread_name,
       }),
       {
         headers: {
