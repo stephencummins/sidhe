@@ -20,15 +20,13 @@
     },
     {
       "parameters": {
-        "url": "={{ $env.SUPABASE_URL }}/functions/v1/generate-daily-reading",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
+        "url": "https://ktjbtkkltvkmdwzkcwij.supabase.co/functions/v1/generate-daily-reading",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
               "name": "Authorization",
-              "value": "=Bearer {{ $env.SUPABASE_ANON_KEY }}"
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt0amJ0a2tsdHZrbWR3emtjd2lqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5NDY4NDQsImV4cCI6MjA3NTUyMjg0NH0.IFlD2U9xp2WoTK4FnCY86D9TGNGE38kZZXeiFBiHRlA"
             },
             {
               "name": "Content-Type",
@@ -37,6 +35,7 @@
           ]
         },
         "sendBody": true,
+        "contentType": "json",
         "bodyParameters": {
           "parameters": [
             {
@@ -55,7 +54,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Parse the reading response\nconst reading = $input.item.json;\n\n// Format the date\nconst date = new Date(reading.date);\nconst formattedDate = date.toLocaleDateString('en-US', { \n  weekday: 'long', \n  year: 'numeric', \n  month: 'long', \n  day: 'numeric' \n});\n\n// Build card HTML\nlet cardsHTML = '';\nreading.cards.forEach((card, index) => {\n  const orientation = card.isReversed ? '⟲ Inverted' : 'Upright';\n  const orientationColor = card.isReversed ? '#5eead4' : '#d4af37';\n  const meaning = card.isReversed ? card.reversed_meaning : card.upright_meaning;\n  \n  cardsHTML += `\n    <div style=\"margin-bottom: 30px; padding: 20px; background: linear-gradient(135deg, #1c1917 0%, #292524 100%); border: 2px solid #d4af37; border-radius: 8px;\">\n      <div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;\">\n        <h3 style=\"font-family: 'Georgia', serif; color: #d4af37; margin: 0; font-size: 20px;\">${card.position}</h3>\n        <span style=\"font-family: 'Georgia', serif; color: ${orientationColor}; font-size: 14px; font-weight: bold;\">${orientation}</span>\n      </div>\n      <h2 style=\"font-family: 'Georgia', serif; color: #fef3c7; margin: 0 0 12px 0; font-size: 26px;\">${card.name}</h2>\n      <div style=\"margin-bottom: 12px;\">\n        ${card.keywords.map(kw => `<span style=\"display: inline-block; padding: 4px 12px; margin: 2px 4px 2px 0; background: rgba(212, 175, 55, 0.2); border: 1px solid #d4af37; color: #fbbf24; font-size: 13px; border-radius: 4px; font-family: 'Georgia', serif;\">${kw}</span>`).join('')}\n      </div>\n      <p style=\"font-family: 'Georgia', serif; color: #e7e5e4; line-height: 1.7; margin: 12px 0 0 0;\">${meaning}</p>\n    </div>\n  `;\n});\n\n// Convert markdown to HTML (basic conversion)\nlet interpretationHTML = reading.interpretation\n  .replace(/### (.*?)$/gm, '<h3 style=\"font-family: Georgia, serif; color: #fbbf24; font-size: 20px; margin: 20px 0 10px 0;\">$1</h3>')\n  .replace(/## (.*?)$/gm, '<h2 style=\"font-family: Georgia, serif; color: #fde047; font-size: 24px; margin: 25px 0 12px 0;\">$1</h2>')\n  .replace(/# (.*?)$/gm, '<h1 style=\"font-family: Georgia, serif; color: #fef3c7; font-size: 28px; margin: 30px 0 15px 0;\">$1</h1>')\n  .replace(/\\*\\*(.*?)\\*\\*/g, '<strong style=\"color: #fef3c7; font-weight: bold;\">$1</strong>')\n  .replace(/\\*(.*?)\\*/g, '<em style=\"color: #fbbf24; font-style: italic;\">$1</em>')\n  .replace(/^- (.*?)$/gm, '<li style=\"margin: 8px 0; line-height: 1.7;\">$1</li>')\n  .replace(/\\n\\n/g, '</p><p style=\"font-family: Georgia, serif; color: #e7e5e4; line-height: 1.8; margin: 15px 0;\">');\n\n// Wrap list items in ul tags\nif (interpretationHTML.includes('<li')) {\n  interpretationHTML = interpretationHTML.replace(/(<li.*?<\\/li>)/gs, '<ul style=\"font-family: Georgia, serif; color: #e7e5e4; margin: 15px 0; padding-left: 25px;\">$1</ul>');\n}\n\n// Wrap in paragraph tags if not already wrapped\nif (!interpretationHTML.startsWith('<')) {\n  interpretationHTML = `<p style=\"font-family: Georgia, serif; color: #e7e5e4; line-height: 1.8; margin: 15px 0;\">${interpretationHTML}</p>`;\n}\n\n// Build complete HTML email\nconst emailHTML = `\n<!DOCTYPE html>\n<html lang=\"en-GB\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Daily Tarot Reading</title>\n</head>\n<body style=\"margin: 0; padding: 0; background: linear-gradient(135deg, #292524 0%, #1c1917 50%, #292524 100%); font-family: Georgia, serif;\">\n  <div style=\"max-width: 680px; margin: 0 auto; padding: 40px 20px;\">\n    \n    <!-- Header -->\n    <div style=\"text-align: center; margin-bottom: 40px;\">\n      <h1 style=\"font-family: 'Georgia', serif; color: #d4af37; font-size: 42px; margin: 0 0 10px 0; text-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);\">🌙 SÍDHE 🌙</h1>\n      <div style=\"width: 200px; height: 2px; margin: 15px auto; background: linear-gradient(to right, transparent, #d4af37, transparent);\"></div>\n      <h2 style=\"font-family: 'Georgia', serif; color: #fbbf24; font-size: 24px; margin: 15px 0 5px 0; font-weight: normal;\">Your Daily Tarot Reading</h2>\n      <p style=\"font-family: 'Georgia', serif; color: #a8a29e; font-size: 16px; font-style: italic; margin: 5px 0 0 0;\">${formattedDate}</p>\n    </div>\n\n    <!-- Spread Type -->\n    <div style=\"text-align: center; margin-bottom: 35px;\">\n      <div style=\"display: inline-block; padding: 12px 30px; background: rgba(212, 175, 55, 0.15); border: 2px solid #d4af37; border-radius: 6px;\">\n        <p style=\"font-family: 'Georgia', serif; color: #fbbf24; font-size: 16px; margin: 0; font-weight: 600;\">Three Card Spread: Past • Present • Future</p>\n      </div>\n    </div>\n\n    <!-- Cards Section -->\n    <div style=\"margin-bottom: 45px;\">\n      <h2 style=\"font-family: 'Georgia', serif; color: #d4af37; font-size: 28px; margin: 0 0 25px 0; text-align: center;\">✨ The Cards Drawn ✨</h2>\n      ${cardsHTML}\n    </div>\n\n    <!-- Interpretation Section -->\n    <div style=\"margin-bottom: 40px; padding: 30px; background: linear-gradient(135deg, #1c1917 0%, #292524 100%); border: 2px solid #cd7f32; border-radius: 8px;\">\n      <h2 style=\"font-family: 'Georgia', serif; color: #d4af37; font-size: 28px; margin: 0 0 20px 0; text-align: center;\">🔮 The Interpretation 🔮</h2>\n      <div style=\"font-family: 'Georgia', serif; color: #e7e5e4; font-size: 16px; line-height: 1.8;\">\n        ${interpretationHTML}\n      </div>\n    </div>\n\n    <!-- Celtic Mythology Note -->\n    ${reading.meaningType === 'celtic' ? `\n    <div style=\"text-align: center; padding: 20px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 6px; margin-bottom: 30px;\">\n      <p style=\"font-family: 'Georgia', serif; color: #6ee7b7; font-size: 14px; margin: 0; font-style: italic;\">✦ This reading incorporates Celtic mythology and symbolism ✦</p>\n    </div>\n    ` : ''}\n\n    <!-- Footer -->\n    <div style=\"text-align: center; padding-top: 30px; border-top: 1px solid rgba(212, 175, 55, 0.3);\">\n      <p style=\"font-family: 'Georgia', serif; color: #78716c; font-size: 13px; font-style: italic; margin: 10px 0;\">\"The threads of fate are woven through the seasons of the soul\"</p>\n      <p style=\"font-family: 'Georgia', serif; color: #57534e; font-size: 12px; margin: 15px 0 0 0;\">Generated by SÍDHE Celtic Tarot • Powered by Claude Sonnet 4.5</p>\n    </div>\n\n  </div>\n</body>\n</html>\n`;\n\nreturn {\n  subject: `🌙 Your Daily Tarot Reading - ${formattedDate}`,\n  html: emailHTML,\n  text: `Your Daily Tarot Reading - ${formattedDate}\\n\\n${reading.cards.map(c => `${c.position}: ${c.name} ${c.isReversed ? '(Inverted)' : ''}\\nKeywords: ${c.keywords.join(', ')}\\n${c.isReversed ? c.reversed_meaning : c.upright_meaning}\\n`).join('\\n')}\\n\\nInterpretation:\\n${reading.interpretation}`\n};"
+        "jsCode": "// Parse the reading response\nconst reading = $input.item.json;\n\n// Format the date\nconst date = new Date(reading.date);\nconst formattedDate = date.toLocaleDateString('en-US', { \n  weekday: 'long', \n  year: 'numeric', \n  month: 'long', \n  day: 'numeric' \n});\n\n// Build card HTML\nlet cardsHTML = '';\nreading.cards.forEach((card, index) => {\n  const orientation = card.isReversed ? '⟲ Inverted' : 'Upright';\n  const orientationColor = card.isReversed ? '#5eead4' : '#d4af37';\n  const meaning = card.isReversed ? card.reversed_meaning : card.upright_meaning;\n  \n  // Card image HTML - centered and sized appropriately\n  const cardImageHTML = card.image_url ? `\n    <div style=\"text-align: center; margin-bottom: 20px;\">\n      <img src=\"${card.image_url}\" alt=\"${card.name}\" style=\"max-width: 250px; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3); ${card.isReversed ? 'transform: rotate(180deg);' : ''}\" />\n    </div>\n  ` : '';\n  \n  cardsHTML += `\n    <div style=\"margin-bottom: 30px; padding: 20px; background: linear-gradient(135deg, #1c1917 0%, #292524 100%); border: 2px solid #d4af37; border-radius: 8px;\">\n      <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"margin-bottom: 15px;\">\n        <tr>\n          <td style=\"text-align: left;\">\n            <h3 style=\"font-family: 'Georgia', serif; color: #d4af37; margin: 0; font-size: 20px;\">${card.position}</h3>\n          </td>\n          <td style=\"text-align: right;\">\n            <span style=\"font-family: 'Georgia', serif; color: ${orientationColor}; font-size: 14px; font-weight: bold;\">${orientation}</span>\n          </td>\n        </tr>\n      </table>\n      <h2 style=\"font-family: 'Georgia', serif; color: #fef3c7; margin: 0 0 12px 0; font-size: 26px; text-align: center;\">${card.name}</h2>\n      ${cardImageHTML}\n      <div style=\"margin-bottom: 12px; text-align: center;\">\n        ${card.keywords.map(kw => `<span style=\"display: inline-block; padding: 4px 12px; margin: 2px 4px 2px 0; background: rgba(212, 175, 55, 0.2); border: 1px solid #d4af37; color: #fbbf24; font-size: 13px; border-radius: 4px; font-family: 'Georgia', serif;\">${kw}</span>`).join('')}\n      </div>\n      <p style=\"font-family: 'Georgia', serif; color: #e7e5e4; line-height: 1.7; margin: 12px 0 0 0;\">${meaning}</p>\n    </div>\n  `;\n});\n\n// Summarize interpretation to about 1/3 length - keep only key points\nlet interpretationText = reading.interpretation;\n// Take just the first 2-3 paragraphs or first ~300 characters\nconst paragraphs = interpretationText.split('\\n\\n');\nif (paragraphs.length > 2) {\n  interpretationText = paragraphs.slice(0, 2).join('\\n\\n');\n}\n\n// Convert markdown to HTML (basic conversion)\nlet interpretationHTML = interpretationText\n  .replace(/### (.*?)$/gm, '<h3 style=\"font-family: Georgia, serif; color: #fbbf24; font-size: 20px; margin: 20px 0 10px 0;\">$1</h3>')\n  .replace(/## (.*?)$/gm, '<h2 style=\"font-family: Georgia, serif; color: #fde047; font-size: 24px; margin: 25px 0 12px 0;\">$1</h2>')\n  .replace(/# (.*?)$/gm, '<h1 style=\"font-family: Georgia, serif; color: #fef3c7; font-size: 28px; margin: 30px 0 15px 0;\">$1</h1>')\n  .replace(/\\*\\*(.*?)\\*\\*/g, '<strong style=\"color: #fef3c7; font-weight: bold;\">$1</strong>')\n  .replace(/\\*(.*?)\\*/g, '<em style=\"color: #fbbf24; font-style: italic;\">$1</em>')\n  .replace(/^- (.*?)$/gm, '<li style=\"margin: 8px 0; line-height: 1.7;\">$1</li>')\n  .replace(/\\n\\n/g, '</p><p style=\"font-family: Georgia, serif; color: #e7e5e4; line-height: 1.8; margin: 15px 0;\">');\n\n// Wrap list items in ul tags\nif (interpretationHTML.includes('<li')) {\n  interpretationHTML = interpretationHTML.replace(/(<li.*?<\\/li>)/gs, '<ul style=\"font-family: Georgia, serif; color: #e7e5e4; margin: 15px 0; padding-left: 25px;\">$1</ul>');\n}\n\n// Wrap in paragraph tags if not already wrapped\nif (!interpretationHTML.startsWith('<')) {\n  interpretationHTML = `<p style=\"font-family: Georgia, serif; color: #e7e5e4; line-height: 1.8; margin: 15px 0;\">${interpretationHTML}</p>`;\n}\n\n// Build complete HTML email\nconst emailHTML = `\n<!DOCTYPE html>\n<html lang=\"en-GB\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Daily Tarot Reading</title>\n</head>\n<body style=\"margin: 0; padding: 0; background: linear-gradient(135deg, #292524 0%, #1c1917 50%, #292524 100%); font-family: Georgia, serif;\">\n  <div style=\"max-width: 680px; margin: 0 auto; padding: 40px 20px;\">\n    \n    <!-- Header -->\n    <div style=\"text-align: center; margin-bottom: 40px;\">\n      <h1 style=\"font-family: 'Georgia', serif; color: #d4af37; font-size: 42px; margin: 0 0 10px 0; text-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);\">🌙 SÍDHE 🌙</h1>\n      <div style=\"width: 200px; height: 2px; margin: 15px auto; background: linear-gradient(to right, transparent, #d4af37, transparent);\"></div>\n      <h2 style=\"font-family: 'Georgia', serif; color: #fbbf24; font-size: 24px; margin: 15px 0 5px 0; font-weight: normal;\">Your Daily Tarot Reading</h2>\n      <p style=\"font-family: 'Georgia', serif; color: #a8a29e; font-size: 16px; font-style: italic; margin: 5px 0 0 0;\">${formattedDate}</p>\n    </div>\n\n    <!-- Spread Type -->\n    <div style=\"text-align: center; margin-bottom: 35px;\">\n      <div style=\"display: inline-block; padding: 12px 30px; background: rgba(212, 175, 55, 0.15); border: 2px solid #d4af37; border-radius: 6px;\">\n        <p style=\"font-family: 'Georgia', serif; color: #fbbf24; font-size: 16px; margin: 0; font-weight: 600;\">Three Card Spread: Past • Present • Future</p>\n      </div>\n    </div>\n\n    <!-- Cards Section -->\n    <div style=\"margin-bottom: 45px;\">\n      <h2 style=\"font-family: 'Georgia', serif; color: #d4af37; font-size: 28px; margin: 0 0 25px 0; text-align: center;\">✨ The Cards Drawn ✨</h2>\n      ${cardsHTML}\n    </div>\n\n    <!-- Interpretation Section -->\n    <div style=\"margin-bottom: 40px; padding: 30px; background: linear-gradient(135deg, #1c1917 0%, #292524 100%); border: 2px solid #cd7f32; border-radius: 8px;\">\n      <h2 style=\"font-family: 'Georgia', serif; color: #d4af37; font-size: 28px; margin: 0 0 20px 0; text-align: center;\">🔮 The Interpretation 🔮</h2>\n      <div style=\"font-family: 'Georgia', serif; color: #e7e5e4; font-size: 16px; line-height: 1.8;\">\n        ${interpretationHTML}\n      </div>\n    </div>\n\n    <!-- Celtic Mythology Note -->\n    ${reading.meaningType === 'celtic' ? `\n    <div style=\"text-align: center; padding: 20px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 6px; margin-bottom: 30px;\">\n      <p style=\"font-family: 'Georgia', serif; color: #6ee7b7; font-size: 14px; margin: 0; font-style: italic;\">✦ This reading incorporates Celtic mythology and symbolism ✦</p>\n    </div>\n    ` : ''}\n\n    <!-- Footer -->\n    <div style=\"text-align: center; padding-top: 30px; border-top: 1px solid rgba(212, 175, 55, 0.3);\">\n      <p style=\"font-family: 'Georgia', serif; color: #78716c; font-size: 13px; font-style: italic; margin: 10px 0;\">\"The threads of fate are woven through the seasons of the soul\"</p>\n      <p style=\"font-family: 'Georgia', serif; color: #57534e; font-size: 12px; margin: 15px 0 0 0;\">Generated by SÍDHE Celtic Tarot • Powered by Claude Sonnet 4.5</p>\n    </div>\n\n  </div>\n</body>\n</html>\n`;\n\nreturn {\n  subject: `🌙 Your Daily Tarot Reading - ${formattedDate}`,\n  html: emailHTML,\n  text: `Your Daily Tarot Reading - ${formattedDate}\\n\\n${reading.cards.map(c => `${c.position}: ${c.name} ${c.isReversed ? '(Inverted)' : ''}\\nKeywords: ${c.keywords.join(', ')}\\n${c.isReversed ? c.reversed_meaning : c.upright_meaning}\\n`).join('\\n')}\\n\\nInterpretation:\\n${reading.interpretation}`\n};"
       },
       "id": "format-email",
       "name": "Format Email",
@@ -67,44 +66,29 @@
       "parameters": {
         "method": "POST",
         "url": "https://api.resend.com/emails",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
-        "sendBody": true,
-        "contentType": "json",
-        "bodyParameters": {
+        "sendHeaders": true,
+        "headerParameters": {
           "parameters": [
             {
-              "name": "from",
-              "value": "={{ $env.FROM_EMAIL || 'onboarding@resend.dev' }}"
+              "name": "Authorization",
+              "value": "Bearer re_XzbNK7iq_2WVmt3Pp8He8pqRMM1ki5vmh"
             },
             {
-              "name": "to",
-              "value": "={{ [$env.TO_EMAIL] }}"
-            },
-            {
-              "name": "subject",
-              "value": "={{ $json.subject }}"
-            },
-            {
-              "name": "html",
-              "value": "={{ $json.html }}"
+              "name": "Content-Type",
+              "value": "application/json"
             }
           ]
         },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { from: 'Sídhe <sidhe@stephen8n.com>', to: ['stephencummins@gmail.com'], subject: $json.subject, html: $json.html } }}",
         "options": {}
       },
       "id": "send-email-resend",
       "name": "Send Email via Resend",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
-      "position": [850, 300],
-      "credentials": {
-        "httpHeaderAuth": {
-          "id": "1",
-          "name": "Resend API"
-        }
-      },
-      "notes": "Configure Header Auth credential:\nName: Authorization\nValue: Bearer re_YOUR_API_KEY"
+      "position": [850, 300]
     }
   ],
   "connections": {
