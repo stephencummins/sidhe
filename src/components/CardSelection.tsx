@@ -37,7 +37,7 @@ export default function CardSelection({ spreadType, onCardsSelected }: CardSelec
     }
   }, [deckLoading, tarotDeck, handleShuffle]);
 
-  const handleCardClick = (card: TarotCard, index: number) => {
+  const handleCardClick = (card: TarotCard) => {
     if (selectedCards.length >= cardsNeeded) return;
     if (selectedCards.some(sc => sc.card.id === card.id)) return;
 
@@ -129,7 +129,7 @@ export default function CardSelection({ spreadType, onCardsSelected }: CardSelec
               return (
                 <button
                   key={`${card.id}-${index}`}
-                  onClick={() => handleCardClick(card, index)}
+                  onClick={() => handleCardClick(card)}
                   disabled={selected || selectedCards.length >= cardsNeeded}
                   className={`group relative transition-all duration-300 ${
                     selected

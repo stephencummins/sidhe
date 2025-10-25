@@ -9,8 +9,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="calan-branded min-h-screen flex flex-col">
       <header className="w-full border-b backdrop-blur-sm" style={{
-        borderColor: 'var(--calan-accent-gold)',
-        borderOpacity: 0.2,
+        borderColor: 'rgba(212, 175, 55, 0.2)',
         background: 'rgba(26, 11, 46, 0.8)'
       }}>
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -41,8 +40,7 @@ export default function Layout({ children }: LayoutProps) {
       </main>
 
       <footer className="w-full border-t backdrop-blur-sm" style={{
-        borderColor: 'var(--calan-accent-gold)',
-        borderOpacity: 0.2,
+        borderColor: 'rgba(212, 175, 55, 0.2)',
         background: 'rgba(26, 11, 46, 0.8)'
       }}>
         <div className="container mx-auto px-4 py-6">

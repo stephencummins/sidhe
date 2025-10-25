@@ -1,8 +1,20 @@
-import { TarotCard } from '../data/tarotDeck';
 import RunicSymbol from './RunicSymbol';
 
 interface TarotCardVisualProps {
-  card: TarotCard;
+  card: {
+    id: string;
+    name: string;
+    suit?: string;
+    arcana: string;
+    keywords: string[];
+    upright_meaning: string;
+    reversed_meaning: string;
+    image_url?: string;
+    celtic_upright?: string;
+    celtic_reversed?: string;
+    celtic_keywords?: string[];
+    celtic_mythology?: string;
+  };
   revealed?: boolean;
   size?: 'small' | 'medium' | 'large' | 'xlarge';
   isReversed?: boolean;
@@ -46,13 +58,13 @@ export default function TarotCardVisual({ card, revealed = false, size = 'medium
       return majorSymbols[card.name] || '✦';
     }
 
-    const suitSymbols = {
+    const suitSymbols: Record<string, string> = {
       wands: '|',
       cups: '⌒',
       swords: '†',
       pentacles: '⬟'
     };
-    return suitSymbols[card.suit || 'wands'];
+    return suitSymbols[card.suit || 'wands'] || '✦';
   };
 
   if (!revealed) {

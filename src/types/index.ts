@@ -12,7 +12,7 @@ export interface SelectedCard {
   card: {
     id: string;
     name: string;
-    suit?: string;
+    suit?: 'wands' | 'cups' | 'swords' | 'pentacles' | string;
     arcana: string;
     keywords: string[];
     upright_meaning: string;

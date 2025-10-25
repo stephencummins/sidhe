@@ -57,7 +57,7 @@ export default function CelticMeaningsImport({ deckId, onClose, onSuccess }: Cel
       setValidationError('');
       return data as CelticDeckData;
     } catch (error) {
-      setValidationError(`Invalid JSON: ${error.message}`);
+      setValidationError(`Invalid JSON: ${error instanceof Error ? error.message : String(error)}`);
       return null;
     }
   };
@@ -140,11 +140,11 @@ export default function CelticMeaningsImport({ deckId, onClose, onSuccess }: Cel
       if (status.success > 0 && status.failed === 0) {
         setTimeout(() => {
           onSuccess();
-          onClose();
+        onClose();
         }, 2000);
       }
     } catch (error) {
-      setValidationError(`Import failed: ${error.message}`);
+      setValidationError(`Import failed: ${error instanceof Error ? error.message : String(error)}`);
     } finally {
       setImporting(false);
     }

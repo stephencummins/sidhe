@@ -180,12 +180,15 @@ Deno.serve(async (req: Request) => {
       .select('id, name, arcana, suit, meaning_upright, meaning_reversed, image_url, keywords')
       .limit(78);
 
+    let selectedCards;
+    let usingDatabase;
+
     if (cardsError || !dbCards || dbCards.length === 0) {
       console.error('Database cards error:', cardsError);
       // Fall back to hardcoded deck if database fails
       console.log('Falling back to hardcoded deck');
-      var selectedCards = shuffleArray(tarotDeck).slice(0, 3);
-      var usingDatabase = false;
+      selectedCards = shuffleArray(tarotDeck).slice(0, 3);
+      usingDatabase = false;
     } else {
       console.log(`Fetched ${dbCards.length} cards from database`);
       selectedCards = shuffleArray(dbCards).slice(0, 3);

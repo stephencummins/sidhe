@@ -26,6 +26,7 @@ export default function AdminPanel() {
     if (user) {
       loadDecks();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const loadDecks = async () => {
@@ -68,6 +69,8 @@ export default function AdminPanel() {
 
   const createDeck = async () => {
     if (!newDeckName.trim()) return;
+
+    if (!user) return;
 
     try {
       const { data, error } = await supabase
@@ -464,6 +467,7 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
 
   useEffect(() => {
     loadCards();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deckId]);
 
   const sortCards = (cards: TarotCardDB[]): TarotCardDB[] => {
@@ -664,7 +668,7 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
         .from('tarot-cards')
         .getPublicUrl(filePath);
 
-      const { data, error: updateError } = await supabase
+      const { error: updateError } = await supabase
         .from('tarot_decks')
         .update({ card_back_url: publicUrl })
         .eq('id', deckId)
@@ -920,7 +924,7 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
 
               // Sort cards by rank
               const rankOrder = ['Ace', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Page', 'Knight', 'Queen', 'King'];
-              const sortByRank = (a: any, b: any) => {
+              const sortByRank = (a: TarotCardDB, b: TarotCardDB) => {
                 const aRank = rankOrder.findIndex(r => a.name.startsWith(r));
                 const bRank = rankOrder.findIndex(r => b.name.startsWith(r));
                 return aRank - bRank;
