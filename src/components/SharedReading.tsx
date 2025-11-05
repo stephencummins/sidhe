@@ -80,7 +80,7 @@ export default function SharedReading() {
           <h1 className="text-2xl font-serif text-amber-500 mb-4">Reading Not Found</h1>
           <p className="text-stone-400 mb-6">{error || 'This reading does not exist or has been removed.'}</p>
           <a
-            href="https://sidhe.netlify.app"
+            href="/"
             className="inline-block px-6 py-3 bg-amber-600 text-stone-900 rounded-lg hover:bg-amber-500 transition-colors font-medium"
           >
             Return to SÍDHE
@@ -183,7 +183,7 @@ export default function SharedReading() {
           </p>
           <p className="text-stone-600 text-xs mb-6">SÍDHE Celtic Tarot</p>
           <a
-            href="https://sidhe.netlify.app"
+            href="/"
             className="inline-block px-6 py-3 bg-amber-600 text-stone-900 rounded-lg hover:bg-amber-500 transition-colors font-medium"
           >
             Get Your Own Reading

@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import CelticBorder from './CelticBorder';
 import { useAuth } from '../contexts/AuthContext';
+import DailyReadingSubscription from './DailyReadingSubscription';
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -92,74 +93,80 @@ export default function LandingPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-14 mb-16">
-          <CelticBorder className="transform hover:scale-105 transition-transform duration-300">
-            <div className="p-10 text-center">
-              <div className="mb-4 flex justify-center">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center shadow-lg border-2 border-amber-300">
-                  <span className="text-3xl font-bold text-amber-950">I</span>
+          <button onClick={handleStartReading} className="text-left transform hover:scale-105 transition-transform duration-300 cursor-pointer">
+            <CelticBorder>
+              <div className="p-10 text-center">
+                <div className="mb-4 flex justify-center">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center shadow-lg border-2 border-amber-300">
+                    <span className="text-3xl font-bold text-amber-950">I</span>
+                  </div>
                 </div>
+                <h3 className="text-xl font-bold mb-3" style={{
+                  fontFamily: 'Cinzel, serif',
+                  color: '#d4af37',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                }}>
+                  Choose Your Spread
+                </h3>
+                <p className="leading-relaxed" style={{
+                  color: '#f5e6d3',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.7)'
+                }}>
+                  Select from sacred spreading patterns passed down through ages
+                </p>
               </div>
-              <h3 className="text-xl font-bold mb-3" style={{ 
-                fontFamily: 'Cinzel, serif',
-                color: '#d4af37',
-                textShadow: '0 1px 2px rgba(0,0,0,0.8)'
-              }}>
-                Choose Your Spread
-              </h3>
-              <p className="leading-relaxed" style={{
-                color: '#f5e6d3',
-                textShadow: '0 1px 2px rgba(0,0,0,0.7)'
-              }}>
-                Select from sacred spreading patterns passed down through ages
-              </p>
-            </div>
-          </CelticBorder>
+            </CelticBorder>
+          </button>
 
-          <CelticBorder className="transform hover:scale-105 transition-transform duration-300">
-            <div className="p-10 text-center">
-              <div className="mb-4 flex justify-center">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center shadow-lg border-2 border-amber-300">
-                  <span className="text-3xl font-bold text-amber-50">II</span>
+          <button onClick={handleStartReading} className="text-left transform hover:scale-105 transition-transform duration-300 cursor-pointer">
+            <CelticBorder>
+              <div className="p-10 text-center">
+                <div className="mb-4 flex justify-center">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center shadow-lg border-2 border-amber-300">
+                    <span className="text-3xl font-bold text-amber-50">II</span>
+                  </div>
                 </div>
+                <h3 className="text-xl font-bold mb-3" style={{
+                  fontFamily: 'Cinzel, serif',
+                  color: '#d4af37',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                }}>
+                  Draw Your Cards
+                </h3>
+                <p className="leading-relaxed" style={{
+                  color: '#f5e6d3',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.7)'
+                }}>
+                  Channel the ancient energies through mystical cards
+                </p>
               </div>
-              <h3 className="text-xl font-bold mb-3" style={{ 
-                fontFamily: 'Cinzel, serif',
-                color: '#d4af37',
-                textShadow: '0 1px 2px rgba(0,0,0,0.8)'
-              }}>
-                Draw Your Cards
-              </h3>
-              <p className="leading-relaxed" style={{
-                color: '#f5e6d3',
-                textShadow: '0 1px 2px rgba(0,0,0,0.7)'
-              }}>
-                Channel the ancient energies through mystical cards
-              </p>
-            </div>
-          </CelticBorder>
+            </CelticBorder>
+          </button>
 
-          <CelticBorder className="transform hover:scale-105 transition-transform duration-300">
-            <div className="p-10 text-center">
-              <div className="mb-4 flex justify-center">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-red-500 to-amber-600 flex items-center justify-center shadow-lg border-2 border-amber-300">
-                  <span className="text-3xl font-bold text-amber-50">III</span>
+          <button onClick={handleStartReading} className="text-left transform hover:scale-105 transition-transform duration-300 cursor-pointer">
+            <CelticBorder>
+              <div className="p-10 text-center">
+                <div className="mb-4 flex justify-center">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-red-500 to-amber-600 flex items-center justify-center shadow-lg border-2 border-amber-300">
+                    <span className="text-3xl font-bold text-amber-50">III</span>
+                  </div>
                 </div>
+                <h3 className="text-xl font-bold mb-3" style={{
+                  fontFamily: 'Cinzel, serif',
+                  color: '#d4af37',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                }}>
+                  Receive Wisdom
+                </h3>
+                <p className="leading-relaxed" style={{
+                  color: '#f5e6d3',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.7)'
+                }}>
+                  Discover insights illuminated by divine guidance
+                </p>
               </div>
-              <h3 className="text-xl font-bold mb-3" style={{ 
-                fontFamily: 'Cinzel, serif',
-                color: '#d4af37',
-                textShadow: '0 1px 2px rgba(0,0,0,0.8)'
-              }}>
-                Receive Wisdom
-              </h3>
-              <p className="leading-relaxed" style={{
-                color: '#f5e6d3',
-                textShadow: '0 1px 2px rgba(0,0,0,0.7)'
-              }}>
-                Discover insights illuminated by divine guidance
-              </p>
-            </div>
-          </CelticBorder>
+            </CelticBorder>
+          </button>
         </div>
 
         <div className="max-w-4xl mx-auto">
@@ -199,6 +206,11 @@ export default function LandingPage() {
               </p>
             </div>
           </CelticBorder>
+        </div>
+
+        {/* Personal Reading Subscription */}
+        <div className="mt-16 max-w-2xl mx-auto">
+          <DailyReadingSubscription />
         </div>
 
         <div className="mt-16 flex flex-col items-center gap-6">
