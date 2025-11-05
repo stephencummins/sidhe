@@ -115,51 +115,52 @@ export default function SharedReading() {
           {reading.cards.map((card, index) => (
             <div
               key={index}
-              className="bg-gradient-to-br from-stone-900 to-stone-800 border-2 border-amber-600 rounded-lg p-6 shadow-xl"
+              className="bg-stone-900/50 backdrop-blur-sm border border-amber-600/30 rounded-xl p-6 shadow-2xl flex flex-col h-full"
             >
-              <div className="mb-4 flex justify-between items-center">
-                <span className="text-amber-600 text-sm font-medium">
+              <div className="flex justify-between items-start mb-4">
+                <span className="text-amber-500 font-serif text-lg">
                   {card.position}
                 </span>
                 <span
-                  className={`inline-block px-3 py-1 rounded text-sm font-medium ${
+                  className={`px-3 py-1 text-xs font-semibold rounded-full ${
                     card.isReversed
-                      ? 'bg-teal-400/20 text-teal-400 border border-teal-400'
-                      : 'bg-amber-500/20 text-amber-500 border border-amber-500'
+                      ? 'bg-teal-400/20 text-teal-300'
+                      : 'bg-amber-500/20 text-amber-400'
                   }`}
                 >
                   {card.isReversed ? 'Inverted' : 'Upright'}
                 </span>
               </div>
 
-              {/* Card Image */}
               {card.image_url && (
-                <div className="mb-4 flex justify-center items-center h-64">
+                <div className="mb-6 flex-grow flex items-center justify-center">
                   <img
                     src={card.image_url}
                     alt={card.name}
                     onClick={() => setSelectedCard(card)}
-                    className={`max-w-full max-h-full object-contain rounded-lg shadow-lg cursor-pointer hover:opacity-90 transition-opacity ${
-                      card.isReversed ? 'grayscale' : ''
+                    className={`max-w-full max-h-64 object-contain rounded-lg shadow-lg cursor-pointer hover:shadow-amber-500/20 transition-shadow duration-300 ${
+                      card.isReversed ? 'transform -scale-y-100' : ''
                     }`}
                   />
                 </div>
               )}
 
-              <h3 className="font-serif text-amber-100 text-2xl mb-4 text-center">
+              <h3 className="font-serif text-amber-200 text-3xl mb-4 text-center">
                 {card.name}
               </h3>
-              <div className="flex flex-wrap gap-2 justify-center mb-4">
+
+              <div className="flex flex-wrap gap-2 justify-center mb-6">
                 {card.keywords.map((keyword, idx) => (
                   <span
                     key={idx}
-                    className="px-3 py-1 text-xs bg-amber-500/10 border border-amber-600 text-amber-300 rounded"
+                    className="px-2 py-1 text-xs bg-amber-800/50 text-amber-300 rounded"
                   >
                     {keyword}
                   </span>
                 ))}
               </div>
-              <p className="text-stone-300 text-center leading-relaxed">
+
+              <p className="text-stone-400 text-center text-sm leading-relaxed flex-shrink-0">
                 {card.isReversed ? card.reversed_meaning : card.upright_meaning}
               </p>
             </div>
