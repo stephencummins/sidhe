@@ -25,6 +25,45 @@ interface Reading {
   created_at: string;
 }
 
+const formatInterpretationText = (text: string) => {
+  const headings = [
+    'Guidance from the Ancient Ways',
+    'Reflection Questions',
+    'Actionable Wisdom',
+    'Ritual Suggestion',
+  ];
+
+  const lines = text.split('\n');
+  let inList = false;
+
+  const formattedLines = lines.map(line => {
+    const trimmedLine = line.trim();
+
+    if (trimmedLine === '') {
+      inList = false;
+      return '';
+    }
+
+    if (headings.includes(trimmedLine)) {
+      inList = false;
+      return `\n## ${trimmedLine}\n`;
+    }
+
+    if (trimmedLine.endsWith(':')) {
+      inList = true;
+      return `\n**${trimmedLine}**`;
+    }
+
+    if (inList) {
+      return `* ${trimmedLine}`;
+    }
+
+    return trimmedLine;
+  });
+
+  return formattedLines.join('\n');
+};
+
 export default function SharedReading() {
   const { id } = useParams<{ id: string }>();
   const [reading, setReading] = useState<Reading | null>(null);
@@ -139,7 +178,7 @@ export default function SharedReading() {
                     alt={card.name}
                     onClick={() => setSelectedCard(card)}
                     className={`max-w-full max-h-64 object-contain rounded-lg shadow-lg cursor-pointer hover:shadow-amber-500/20 transition-shadow duration-300 ${
-                      card.isReversed ? 'transform -scale-y-100' : ''
+                      card.isReversed ? 'filter invert' : ''
                     }`}
                   />
                 </div>
@@ -172,7 +211,7 @@ export default function SharedReading() {
           <div className="bg-gradient-to-br from-amber-500/10 to-amber-600/5 border-l-4 border-amber-500 rounded-r-lg p-8 mb-8 shadow-lg">
             <h3 className="font-serif text-amber-300 text-2xl mb-6">Today's Guidance</h3>
             <div className="prose prose-invert max-w-none prose-headings:text-amber-400 prose-headings:font-serif prose-h1:text-amber-400 prose-h2:text-amber-400 prose-h3:text-amber-400 prose-h4:text-amber-400 prose-p:text-white prose-p:text-base prose-p:leading-8 prose-p:mb-6 prose-strong:text-amber-300 prose-em:text-teal-300 prose-ul:text-white prose-ul:list-disc prose-ul:ml-6 prose-ul:space-y-2 prose-ul:my-4 prose-li:text-white prose-li:leading-8 prose-li:pl-2 [&>*]:text-white [&_h1]:text-amber-400 [&_h2]:text-amber-400 [&_h3]:text-amber-400 [&_h4]:text-amber-400">
-              <ReactMarkdown>{reading.interpretation}</ReactMarkdown>
+              <ReactMarkdown>{formatInterpretationText(reading.interpretation)}</ReactMarkdown>
             </div>
           </div>
         )}
@@ -230,7 +269,7 @@ export default function SharedReading() {
                     src={selectedCard.image_url}
                     alt={selectedCard.name}
                     className={`max-w-md w-full h-auto rounded-lg shadow-lg ${
-                      selectedCard.isReversed ? 'grayscale' : ''
+                      selectedCard.isReversed ? 'filter invert' : ''
                     }`}
                   />
                 </div>
