@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { LogOut, Plus, Trash2, Upload, Check, X, RefreshCw, BookOpen, Edit2 } from 'lucide-react';
+import { LogOut, Plus, Trash2, Upload, Check, X, RefreshCw, BookOpen, Edit2, Users } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 import { TarotDeck, TarotCardDB } from '../types/database';
@@ -7,9 +7,13 @@ import CelticBorder from './CelticBorder';
 import { tarotDeck } from '../data/tarotDeck';
 import CelticMeaningsImport from './CelticMeaningsImport';
 import { createThumbnail } from '../utils/imageUtils';
+import SubscriberManagement from './SubscriberManagement';
+
+type AdminTab = 'decks' | 'subscribers';
 
 export default function AdminPanel() {
   const { user, signOut } = useAuth();
+  const [activeTab, setActiveTab] = useState<AdminTab>('decks');
   const [decks, setDecks] = useState<TarotDeck[]>([]);
   const [selectedDeck, setSelectedDeck] = useState<string | null>(null);
   const [showNewDeckForm, setShowNewDeckForm] = useState(false);
@@ -255,7 +259,7 @@ export default function AdminPanel() {
             <p className="mt-2" style={{
               color: '#f5e6d3',
               textShadow: '0 1px 2px rgba(0,0,0,0.8)'
-            }}>Manage your tarot decks</p>
+            }}>Manage your tarot decks and subscribers</p>
           </div>
           <button
             onClick={signOut}
@@ -267,6 +271,36 @@ export default function AdminPanel() {
           </button>
         </div>
 
+        {/* Tab Navigation */}
+        <div className="flex gap-2 border-b-2 border-amber-600/40">
+          <button
+            onClick={() => setActiveTab('decks')}
+            className={`flex items-center gap-2 px-6 py-3 font-semibold transition-all duration-300 ${
+              activeTab === 'decks'
+                ? 'border-b-4 border-amber-600 text-amber-400 -mb-0.5'
+                : 'text-stone-400 hover:text-amber-300'
+            }`}
+            style={{ fontFamily: 'Cinzel, serif' }}
+          >
+            <BookOpen className="w-5 h-5" />
+            Deck Management
+          </button>
+          <button
+            onClick={() => setActiveTab('subscribers')}
+            className={`flex items-center gap-2 px-6 py-3 font-semibold transition-all duration-300 ${
+              activeTab === 'subscribers'
+                ? 'border-b-4 border-amber-600 text-amber-400 -mb-0.5'
+                : 'text-stone-400 hover:text-amber-300'
+            }`}
+            style={{ fontFamily: 'Cinzel, serif' }}
+          >
+            <Users className="w-5 h-5" />
+            Subscriber Management
+          </button>
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === 'decks' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-1 space-y-4">
             <CelticBorder>
@@ -440,6 +474,14 @@ export default function AdminPanel() {
             )}
           </div>
         </div>
+        )}
+
+        {/* Subscribers Tab */}
+        {activeTab === 'subscribers' && (
+          <div className="mt-6">
+            <SubscriberManagement />
+          </div>
+        )}
       </div>
     </div>
   );
