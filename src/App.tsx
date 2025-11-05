@@ -38,7 +38,7 @@ function AppContent() {
       } />
 
       {/* Reading routes */}
-      <Route path="/reading/:id" element={<SharedReading />} />
+      <Route path="/reading/share/:id" element={<SharedReading />} />
       <Route path="/reading/*" element={<Layout><TarotFlow /></Layout>} />
 
 
