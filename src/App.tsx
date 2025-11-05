@@ -42,6 +42,7 @@ function AppContent() {
 
       {/* Shared reading route */}
       <Route path="/r/:id" element={<SharedReading />} />
+      <Route path="/reading/:id" element={<SharedReading />} />
 
 
       {/* Catch-all redirect */}
