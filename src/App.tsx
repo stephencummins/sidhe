@@ -6,6 +6,7 @@ import AdminLogin from './components/AdminLogin';
 import AdminPanel from './components/AdminPanel';
 import TarotFlow from './components/TarotFlow';
 import SharedReading from './components/SharedReading';
+import DailyThreeCardReading from './components/DailyThreeCardReading';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -39,6 +40,9 @@ function AppContent() {
 
       {/* Reading routes */}
       <Route path="/reading/*" element={<Layout><TarotFlow /></Layout>} />
+
+      {/* Daily reading route */}
+      <Route path="/daily" element={<DailyThreeCardReading />} />
 
       {/* Shared reading route */}
       <Route path="/r/:id" element={<SharedReading />} />

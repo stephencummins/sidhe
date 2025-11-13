@@ -77,6 +77,19 @@ export default function LandingPage() {
           </CelticBorder>
         </div>
 
+        {/* Daily Reading Button */}
+        <div className="flex justify-center mb-8">
+          <button
+            onClick={() => navigate('/daily')}
+            className="group relative px-12 py-4 text-lg font-bold transition-all duration-500 transform hover:scale-105 overflow-hidden bg-gradient-to-br from-purple-200 via-purple-300 to-purple-400 border-2 border-purple-500 shadow-xl hover:shadow-2xl rounded-lg"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
+            <span className="relative z-10 tracking-wide text-purple-900 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]" style={{ fontFamily: 'Cinzel, serif' }}>
+              ✨ Today's Daily Reading
+            </span>
+          </button>
+        </div>
+
         <div className="flex justify-center mb-16">
           <button
             onClick={handleStartReading}
