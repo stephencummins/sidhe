@@ -323,28 +323,14 @@ export default function ViewSavedReading() {
               className={`${reading.spread_type === 'celtic-cross' ? getCelticCrossPosition(index) : ''} flex flex-col items-center`}
             >
               <div
-                className="group mb-4 cursor-pointer transition-all duration-300"
+                className="group mb-4 cursor-pointer transition-all duration-300 hover:scale-105"
                 onClick={() => setSelectedCardIndex(index)}
               >
-                {/* Ornate Celtic Border */}
-                <div className="relative p-4 border-4 border-double transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl group-hover:shadow-amber-500/30"
-                  style={{
-                    borderColor: '#d4af37',
-                    background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(205, 127, 50, 0.1) 100%)',
-                    boxShadow: '0 0 30px rgba(212, 175, 55, 0.2), inset 0 0 20px rgba(212, 175, 55, 0.05)'
-                  }}
-                >
-                  {/* Corner Ornaments */}
-                  <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 -translate-x-1 -translate-y-1" style={{ borderColor: '#cd7f32' }}></div>
-                  <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 translate-x-1 -translate-y-1" style={{ borderColor: '#cd7f32' }}></div>
-                  <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 -translate-x-1 translate-y-1" style={{ borderColor: '#cd7f32' }}></div>
-                  <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 translate-x-1 translate-y-1" style={{ borderColor: '#cd7f32' }}></div>
-
-                  {/* Card */}
-                  <div className="relative">
+                <CelticBorder>
+                  <div className="p-4">
                     <TarotCardVisual card={sc.card} revealed={true} size="medium" isReversed={sc.isReversed} />
                   </div>
-                </div>
+                </CelticBorder>
               </div>
               <div className="text-center">
                 <p className="font-semibold text-sm mb-1" style={{ fontFamily: 'Cinzel, serif', color: '#d4af37' }}>
