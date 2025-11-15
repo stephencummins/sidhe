@@ -156,11 +156,11 @@ export default function ViewSavedReading() {
       case 'single':
         return 'grid place-items-center';
       case 'three-card':
-        return 'grid grid-cols-3 gap-6';
+        return 'grid grid-cols-3 gap-16';
       case 'celtic-cross':
-        return 'grid grid-cols-4 gap-4';
+        return 'grid grid-cols-4 gap-12';
       default:
-        return 'grid grid-cols-3 gap-6';
+        return 'grid grid-cols-3 gap-16';
     }
   };
 
@@ -328,7 +328,7 @@ export default function ViewSavedReading() {
               >
                 <CelticBorder>
                   <div className="p-4">
-                    <TarotCardVisual card={sc.card} revealed={true} size="large" isReversed={sc.isReversed} />
+                    <TarotCardVisual card={sc.card} revealed={true} size="xlarge" isReversed={sc.isReversed} />
                   </div>
                 </CelticBorder>
               </div>
