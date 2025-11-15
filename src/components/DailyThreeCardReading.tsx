@@ -208,22 +208,22 @@ export default function DailyThreeCardReading() {
           {reading.cards.map((card, index) => (
             <div key={index} className="flex">
               <CelticBorder className="flex-1">
-                <div className="p-6 flex flex-col items-center h-full">
-                  <h3 className="text-2xl font-bold mb-4" style={{
+                <div className="p-8 flex flex-col items-center h-full">
+                  <h3 className="text-2xl font-bold mb-6" style={{
                     fontFamily: 'Cinzel, serif',
                     color: '#d4af37',
                     textShadow: '0 1px 2px rgba(0,0,0,0.8)'
                   }}>
                     {positions[index]}
                   </h3>
-                  <div className="mb-4 flex-shrink-0">
+                  <div className="mb-6 flex-shrink-0">
                     <TarotCardVisual
                       card={card}
                       revealed={true}
                       size="medium"
                     />
                   </div>
-                  <div className="text-center flex-1 flex flex-col">
+                  <div className="text-center flex-1 flex flex-col pb-4">
                     <h4 className="text-xl font-bold mb-2" style={{
                       fontFamily: 'Cinzel, serif',
                       color: '#d4af37',
