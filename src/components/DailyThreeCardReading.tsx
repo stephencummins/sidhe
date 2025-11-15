@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import { Save } from 'lucide-react';
 import TarotCardVisual from './TarotCardVisual';
 import SaveReadingModal from './SaveReadingModal';
+import CelticBorder from './CelticBorder';
 import { Card as TarotCard, Reading, SelectedCard } from '../types';
 
 const supabase = createClient(
@@ -31,10 +32,14 @@ export default function DailyThreeCardReading() {
       // Use a deterministic seed based on the date to get same cards each day
       const seed = hashDate(today);
 
-      // Fetch all cards from Supabase
+      // Fetch cards from the active Celtic deck
       const { data: allCards, error } = await supabase
         .from('tarot_cards')
-        .select('*')
+        .select(`
+          *,
+          tarot_decks!inner(name, is_active)
+        `)
+        .eq('tarot_decks.is_active', true)
         .order('id');
 
       if (error) throw error;
@@ -123,10 +128,12 @@ export default function DailyThreeCardReading() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-sidhe-deep-blue via-sidhe-navy to-sidhe-deep-blue flex items-center justify-center p-4">
+      <div className="calan-branded min-h-screen flex items-center justify-center p-4">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sidhe-gold mx-auto mb-4"></div>
-          <p className="text-sidhe-cream">Drawing your daily cards...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-amber-400 mx-auto mb-4"></div>
+          <p style={{ color: '#f5e6d3', fontFamily: 'Cinzel, serif', textShadow: '0 1px 2px rgba(0,0,0,0.8)' }}>
+            Drawing your daily cards...
+          </p>
         </div>
       </div>
     );
@@ -134,8 +141,8 @@ export default function DailyThreeCardReading() {
 
   if (!reading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-sidhe-deep-blue via-sidhe-navy to-sidhe-deep-blue flex items-center justify-center p-4">
-        <div className="text-center text-sidhe-cream">
+      <div className="calan-branded min-h-screen flex items-center justify-center p-4">
+        <div className="text-center" style={{ color: '#f5e6d3' }}>
           <p>Unable to load daily reading. Please try again later.</p>
         </div>
       </div>
@@ -143,75 +150,156 @@ export default function DailyThreeCardReading() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sidhe-deep-blue via-sidhe-navy to-sidhe-deep-blue py-12 px-4">
-      <div className="max-w-6xl mx-auto">
+    <div className="calan-branded min-h-screen relative overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-15">
+        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="calan-pattern" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
+              <path d="M60 20 Q75 35 60 50 Q45 35 60 20" stroke="#d4af37" strokeWidth="1.5" fill="none" opacity="0.4" />
+              <path d="M20 60 Q35 45 50 60 Q35 75 20 60" stroke="#cd7f32" strokeWidth="1.5" fill="none" opacity="0.4" />
+              <circle cx="60" cy="60" r="15" stroke="#d4af37" strokeWidth="1" fill="none" opacity="0.3" />
+              <path d="M100 60 Q85 75 70 60 Q85 45 100 60" stroke="#cd7f32" strokeWidth="1.5" fill="none" opacity="0.4" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#calan-pattern)" />
+        </svg>
+      </div>
+
+      <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black/20 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/20 to-transparent" />
+
+      <div className="max-w-6xl mx-auto px-4 py-12 relative z-10">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-serif font-bold text-sidhe-gold mb-4">
-            Daily Three Card Reading
-          </h1>
-          <p className="text-sidhe-cream text-lg">
-            {new Date(reading.date).toLocaleDateString('en-US', {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            })}
-          </p>
-          <p className="text-sidhe-cream/80 mt-2">
-            Past • Present • Future
-          </p>
+          <CelticBorder>
+            <div className="p-8">
+              <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{
+                fontFamily: 'Cinzel, serif',
+                color: '#d4af37',
+                textShadow: '0 0 20px rgba(212, 175, 55, 0.6), 0 2px 10px rgba(212, 175, 55, 0.3)'
+              }}>
+                Daily Three Card Reading
+              </h1>
+              <div className="w-48 h-1 mx-auto mb-4 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" />
+              <p className="text-xl mb-2" style={{
+                color: '#f5e6d3',
+                textShadow: '0 1px 3px rgba(0,0,0,0.8)'
+              }}>
+                {new Date(reading.date).toLocaleDateString('en-US', {
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </p>
+              <p className="text-lg italic" style={{
+                color: '#cd7f32',
+                textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+              }}>
+                Past • Present • Future
+              </p>
+            </div>
+          </CelticBorder>
         </div>
 
         {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           {reading.cards.map((card, index) => (
-            <div key={index} className="flex flex-col items-center">
-              <h3 className="text-2xl font-serif text-sidhe-gold mb-4">
-                {positions[index]}
-              </h3>
-              <div className="w-full max-w-sm">
-                <TarotCardVisual
-                  card={card}
-                  isRevealed={true}
-                />
-                <div className="mt-4 bg-sidhe-navy/50 rounded-lg p-4 border border-sidhe-gold/20">
-                  <h4 className="text-xl font-serif text-sidhe-cream mb-2">
-                    {card.name}
-                  </h4>
-                  <p className="text-sidhe-cream/80 text-sm mb-3">
-                    {card.arcana} • {card.suit || 'Major Arcana'}
-                  </p>
-                  <p className="text-sidhe-cream/90 leading-relaxed">
-                    {card.meaning}
-                  </p>
+            <div key={index}>
+              <CelticBorder>
+                <div className="p-6 flex flex-col items-center">
+                  <h3 className="text-2xl font-bold mb-4" style={{
+                    fontFamily: 'Cinzel, serif',
+                    color: '#d4af37',
+                    textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                  }}>
+                    {positions[index]}
+                  </h3>
+                  <div className="mb-4">
+                    <TarotCardVisual
+                      card={card}
+                      revealed={true}
+                      size="medium"
+                    />
+                  </div>
+                  <div className="text-center">
+                    <h4 className="text-xl font-bold mb-2" style={{
+                      fontFamily: 'Cinzel, serif',
+                      color: '#d4af37',
+                      textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                    }}>
+                      {card.name}
+                    </h4>
+                    <p className="text-sm mb-3" style={{
+                      color: '#cd7f32',
+                      textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                    }}>
+                      {card.arcana} {card.suit ? `• ${card.suit}` : ''}
+                    </p>
+                    {card.celtic_keywords && card.celtic_keywords.length > 0 && (
+                      <p className="text-sm mb-3 italic" style={{
+                        color: '#f5e6d3',
+                        textShadow: '0 1px 2px rgba(0,0,0,0.7)'
+                      }}>
+                        {card.celtic_keywords.slice(0, 3).join(' • ')}
+                      </p>
+                    )}
+                    <p className="leading-relaxed" style={{
+                      color: '#f5e6d3',
+                      textShadow: '0 1px 2px rgba(0,0,0,0.7)'
+                    }}>
+                      {card.celtic_meaning_upright || card.meaning_upright || card.upright_meaning}
+                    </p>
+                  </div>
                 </div>
-              </div>
+              </CelticBorder>
             </div>
           ))}
         </div>
 
-        {/* Footer */}
-        <div className="text-center">
-          <p className="text-sidhe-cream/60 text-sm mb-4">
-            These cards are drawn fresh each day and shared with all who seek guidance.
-            Return tomorrow for a new reading.
-          </p>
-          <div className="flex gap-4 justify-center">
-            <button
-              onClick={() => setShowSaveModal(true)}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-sidhe-gold/20 text-sidhe-gold border-2 border-sidhe-gold/50 font-semibold rounded-lg hover:bg-sidhe-gold/30 transition-colors"
-            >
+        {/* Description */}
+        <div className="mb-12">
+          <CelticBorder>
+            <div className="p-8 text-center">
+              <p className="leading-relaxed mb-3" style={{
+                color: '#f5e6d3',
+                textShadow: '0 1px 2px rgba(0,0,0,0.7)'
+              }}>
+                These cards are drawn fresh each day and shared with all who seek guidance from the ancient Celtic wisdom.
+                Return tomorrow for a new reading as the wheel of the seasons continues to turn.
+              </p>
+              <p className="text-sm italic" style={{
+                color: '#cd7f32',
+                textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+              }}>
+                "In every season, a story. In every turn, wisdom eternal."
+              </p>
+            </div>
+          </CelticBorder>
+        </div>
+
+        {/* Footer Buttons */}
+        <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
+          <button
+            onClick={() => setShowSaveModal(true)}
+            className="group relative px-10 py-4 text-lg font-bold transition-all duration-500 transform hover:scale-105 overflow-hidden bg-gradient-to-br from-purple-200 via-purple-300 to-purple-400 border-2 border-purple-500 shadow-xl hover:shadow-2xl"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
+            <span className="relative z-10 flex items-center gap-2 tracking-wide text-purple-900 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]" style={{ fontFamily: 'Cinzel, serif' }}>
               <Save className="w-5 h-5" />
               Save Reading
-            </button>
-            <a
-              href="/"
-              className="inline-block px-6 py-3 bg-sidhe-gold text-sidhe-deep-blue font-semibold rounded-lg hover:bg-sidhe-gold/90 transition-colors"
-            >
+            </span>
+          </button>
+          <a
+            href="/"
+            className="group relative px-10 py-4 text-lg font-bold transition-all duration-500 transform hover:scale-105 overflow-hidden bg-gradient-to-br from-amber-200 via-amber-300 to-amber-400 border-2 border-amber-500 shadow-xl hover:shadow-2xl"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
+            <span className="relative z-10 tracking-wide text-amber-900 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]" style={{ fontFamily: 'Cinzel, serif' }}>
               Back to Home
-            </a>
-          </div>
+            </span>
+          </a>
         </div>
       </div>
 
