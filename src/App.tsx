@@ -6,6 +6,10 @@ import AdminLogin from './components/AdminLogin';
 import AdminPanel from './components/AdminPanel';
 import TarotFlow from './components/TarotFlow';
 import SharedReading from './components/SharedReading';
+import DailyThreeCardReading from './components/DailyThreeCardReading';
+import SavedReadingsPage from './components/SavedReadingsPage';
+import ViewSavedReading from './components/ViewSavedReading';
+import ReadingAnalytics from './components/ReadingAnalytics';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -38,9 +42,29 @@ function AppContent() {
       } />
 
       {/* Reading routes */}
-      <Route path="/reading/:id" element={<SharedReading />} />
       <Route path="/reading/*" element={<Layout><TarotFlow /></Layout>} />
 
+      {/* Daily reading route */}
+      <Route path="/daily" element={<Layout><DailyThreeCardReading /></Layout>} />
+
+      {/* Shared reading route */}
+      <Route path="/r/:id" element={<SharedReading />} />
+      <Route path="/reading/:id" element={<SharedReading />} />
+
+      {/* Saved readings routes */}
+      <Route path="/saved-readings" element={
+        <ProtectedRoute>
+          <SavedReadingsPage />
+        </ProtectedRoute>
+      } />
+      <Route path="/saved/:id" element={<ViewSavedReading />} />
+
+      {/* Analytics route */}
+      <Route path="/analytics" element={
+        <ProtectedRoute>
+          <ReadingAnalytics />
+        </ProtectedRoute>
+      } />
 
       {/* Catch-all redirect */}
       <Route path="*" element={<Navigate to="/" replace />} />
