@@ -204,11 +204,11 @@ export default function DailyThreeCardReading() {
         </div>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-16 mb-12">
           {reading.cards.map((card, index) => (
-            <div key={index}>
-              <CelticBorder>
-                <div className="p-6 flex flex-col items-center">
+            <div key={index} className="flex">
+              <CelticBorder className="flex-1">
+                <div className="p-6 flex flex-col items-center h-full">
                   <h3 className="text-2xl font-bold mb-4" style={{
                     fontFamily: 'Cinzel, serif',
                     color: '#d4af37',
@@ -216,14 +216,14 @@ export default function DailyThreeCardReading() {
                   }}>
                     {positions[index]}
                   </h3>
-                  <div className="mb-4">
+                  <div className="mb-4 flex-shrink-0">
                     <TarotCardVisual
                       card={card}
                       revealed={true}
                       size="medium"
                     />
                   </div>
-                  <div className="text-center">
+                  <div className="text-center flex-1 flex flex-col">
                     <h4 className="text-xl font-bold mb-2" style={{
                       fontFamily: 'Cinzel, serif',
                       color: '#d4af37',
@@ -245,7 +245,7 @@ export default function DailyThreeCardReading() {
                         {card.celtic_keywords.slice(0, 3).join(' • ')}
                       </p>
                     )}
-                    <p className="leading-relaxed" style={{
+                    <p className="leading-relaxed text-sm" style={{
                       color: '#f5e6d3',
                       textShadow: '0 1px 2px rgba(0,0,0,0.7)'
                     }}>
