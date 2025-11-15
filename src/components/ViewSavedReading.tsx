@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Loader2, X, ChevronLeft, ChevronRight, Lock, Globe, Calendar, StickyNote } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
-import { getSavedReading } from '../services/savedReadings';
+import { getSavedReading, updateSavedReading } from '../services/savedReadings';
 import type { SavedReading } from '../types';
 import TarotCardVisual from './TarotCardVisual';
 import RunicSymbol from './RunicSymbol';
@@ -114,7 +114,22 @@ export default function ViewSavedReading() {
       }
 
       const data = await response.json();
-      setInterpretation(data.interpretation);
+      const generatedInterpretation = data.interpretation;
+
+      setInterpretation(generatedInterpretation);
+
+      // Save the interpretation to the database so it persists
+      try {
+        await updateSavedReading(readingData.id, {
+          interpretation: generatedInterpretation
+        });
+
+        // Update the reading state with the saved interpretation
+        setReading(prev => prev ? { ...prev, interpretation: generatedInterpretation } : null);
+      } catch (saveErr) {
+        console.error('Error saving interpretation:', saveErr);
+        // Continue even if save fails - user still sees the interpretation
+      }
     } catch (err) {
       console.error('Error generating interpretation:', err);
       setInterpretation('Unable to generate interpretation at this time.');
