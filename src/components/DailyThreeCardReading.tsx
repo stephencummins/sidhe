@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
+import { Save } from 'lucide-react';
 import TarotCardVisual from './TarotCardVisual';
-import { Card as TarotCard } from '../types';
+import SaveReadingModal from './SaveReadingModal';
+import { Card as TarotCard, Reading, SelectedCard } from '../types';
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -16,6 +18,7 @@ interface DailyReading {
 export default function DailyThreeCardReading() {
   const [reading, setReading] = useState<DailyReading | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showSaveModal, setShowSaveModal] = useState(false);
 
   useEffect(() => {
     loadDailyReading();
@@ -86,6 +89,37 @@ export default function DailyThreeCardReading() {
   };
 
   const positions = ['Past', 'Present', 'Future'];
+
+  // Convert daily reading to Reading format for saving
+  const convertToReading = (): Reading | null => {
+    if (!reading) return null;
+
+    const selectedCards: SelectedCard[] = reading.cards.map((card, index) => ({
+      card: {
+        id: card.id || '',
+        name: card.name || '',
+        suit: card.suit as 'wands' | 'cups' | 'swords' | 'pentacles' | undefined,
+        arcana: card.arcana || 'major',
+        keywords: card.keywords || [],
+        upright_meaning: card.upright_meaning || card.meaning_upright || '',
+        reversed_meaning: card.reversed_meaning || card.meaning_reversed || '',
+        image_url: card.image_url,
+        celtic_upright: card.celtic_meaning_upright,
+        celtic_reversed: card.celtic_meaning_reversed,
+        celtic_keywords: card.celtic_keywords,
+        celtic_mythology: card.celtic_mythology,
+      },
+      position: positions[index],
+      positionIndex: index,
+      isReversed: false,
+    }));
+
+    return {
+      spread: 'three-card',
+      cards: selectedCards,
+      timestamp: new Date(reading.date).getTime(),
+    };
+  };
 
   if (loading) {
     return (
@@ -163,14 +197,32 @@ export default function DailyThreeCardReading() {
             These cards are drawn fresh each day and shared with all who seek guidance.
             Return tomorrow for a new reading.
           </p>
-          <a
-            href="/"
-            className="inline-block px-6 py-3 bg-sidhe-gold text-sidhe-deep-blue font-semibold rounded-lg hover:bg-sidhe-gold/90 transition-colors"
-          >
-            Back to Home
-          </a>
+          <div className="flex gap-4 justify-center">
+            <button
+              onClick={() => setShowSaveModal(true)}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-sidhe-gold/20 text-sidhe-gold border-2 border-sidhe-gold/50 font-semibold rounded-lg hover:bg-sidhe-gold/30 transition-colors"
+            >
+              <Save className="w-5 h-5" />
+              Save Reading
+            </button>
+            <a
+              href="/"
+              className="inline-block px-6 py-3 bg-sidhe-gold text-sidhe-deep-blue font-semibold rounded-lg hover:bg-sidhe-gold/90 transition-colors"
+            >
+              Back to Home
+            </a>
+          </div>
         </div>
       </div>
+
+      {showSaveModal && convertToReading() && (
+        <SaveReadingModal
+          reading={convertToReading()!}
+          interpretation=""
+          onClose={() => setShowSaveModal(false)}
+          readingSource="daily"
+        />
+      )}
     </div>
   );
 }

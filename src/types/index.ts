@@ -36,4 +36,30 @@ export interface Reading {
   timestamp: number;
 }
 
+export interface SavedReading {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  user_id: string;
+  title?: string;
+  spread_type: SpreadType;
+  question?: string;
+  cards: SelectedCard[];
+  interpretation?: string;
+  is_public: boolean;
+  reading_source: 'personal' | 'daily';
+  notes?: string;
+}
+
+export interface SaveReadingInput {
+  title?: string;
+  spread_type: SpreadType;
+  question?: string;
+  cards: SelectedCard[];
+  interpretation?: string;
+  is_public?: boolean;
+  reading_source?: 'personal' | 'daily';
+  notes?: string;
+}
+
 export type AppScreen = 'landing' | 'spread-selection' | 'question-input' | 'card-selection' | 'reading-display' | 'admin';

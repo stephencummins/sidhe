@@ -1,11 +1,15 @@
 import { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
+import { BookOpen, Calendar, User } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 
 interface LayoutProps {
   children: ReactNode;
 }
 
 export default function Layout({ children }: LayoutProps) {
+  const { user } = useAuth();
+
   return (
     <div className="calan-branded min-h-screen flex flex-col">
       <header className="w-full border-b backdrop-blur-sm" style={{
@@ -23,15 +27,34 @@ export default function Layout({ children }: LayoutProps) {
             </Link>
             <h1 className="text-xl font-serif calan-text-gold">Sídhe Tarot</h1>
           </div>
-          <div className="flex items-center gap-4">
-            <Link to="/" className="transition-opacity hover:opacity-100">
-              <img
-                src="/The Fool.png"
-                alt="The Fool - Return to Home"
-                className="h-12 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity cursor-pointer transform scale-x-[-1]"
-              />
+          <nav className="flex items-center gap-6">
+            <Link
+              to="/daily"
+              className="flex items-center gap-2 text-amber-300/80 hover:text-amber-200 transition-colors text-sm"
+              style={{ fontFamily: 'Georgia, serif' }}
+            >
+              <Calendar className="w-4 h-4" />
+              <span className="hidden sm:inline">Daily Reading</span>
             </Link>
-          </div>
+            {user && (
+              <Link
+                to="/saved-readings"
+                className="flex items-center gap-2 text-amber-300/80 hover:text-amber-200 transition-colors text-sm"
+                style={{ fontFamily: 'Georgia, serif' }}
+              >
+                <BookOpen className="w-4 h-4" />
+                <span className="hidden sm:inline">My Readings</span>
+              </Link>
+            )}
+            <Link
+              to={user ? "/admin" : "/admin/login"}
+              className="flex items-center gap-2 text-amber-300/80 hover:text-amber-200 transition-colors text-sm"
+              style={{ fontFamily: 'Georgia, serif' }}
+            >
+              <User className="w-4 h-4" />
+              <span className="hidden sm:inline">{user ? 'Admin' : 'Sign In'}</span>
+            </Link>
+          </nav>
         </div>
       </header>
 
