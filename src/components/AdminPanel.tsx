@@ -1206,27 +1206,27 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
                 </div>
 
                 {selectedCard.celtic_meaning_upright && (
-                  <div className="bg-emerald-100/50 border-2 border-emerald-700/40 p-4">
+                  <div className="bg-emerald-100 border-2 border-emerald-700/50 p-4 shadow-sm">
                     <h4 className="text-lg font-bold text-emerald-900 mb-2" style={{ fontFamily: 'Cinzel, serif' }}>Celtic Upright Meaning</h4>
-                    <p className="text-emerald-950/90 leading-relaxed">
+                    <p className="text-emerald-950 leading-relaxed">
                       {selectedCard.celtic_meaning_upright}
                     </p>
                   </div>
                 )}
 
                 {selectedCard.celtic_meaning_reversed && (
-                  <div className="bg-emerald-100/50 border-2 border-emerald-700/40 p-4">
+                  <div className="bg-emerald-100 border-2 border-emerald-700/50 p-4 shadow-sm">
                     <h4 className="text-lg font-bold text-emerald-900 mb-2" style={{ fontFamily: 'Cinzel, serif' }}>Celtic Reversed Meaning</h4>
-                    <p className="text-emerald-950/90 leading-relaxed">
+                    <p className="text-emerald-950 leading-relaxed">
                       {selectedCard.celtic_meaning_reversed}
                     </p>
                   </div>
                 )}
 
                 {selectedCard.celtic_mythology && (
-                  <div className="bg-emerald-100/50 border-2 border-emerald-700/40 p-4 backdrop-blur-sm shadow-lg">
+                  <div className="bg-emerald-100 border-2 border-emerald-700/50 p-4 shadow-sm">
                     <h4 className="text-lg font-bold text-emerald-900 mb-2" style={{ fontFamily: 'Cinzel, serif' }}>Celtic Mythology</h4>
-                    <p className="text-emerald-950/90 leading-relaxed">
+                    <p className="text-emerald-950 leading-relaxed">
                       {selectedCard.celtic_mythology}
                     </p>
                   </div>
