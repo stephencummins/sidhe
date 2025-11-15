@@ -15,7 +15,7 @@ ADD COLUMN IF NOT EXISTS tags TEXT[] DEFAULT '{}';
 CREATE INDEX IF NOT EXISTS idx_saved_readings_accuracy ON public.saved_readings(accuracy_rating) WHERE accuracy_rating IS NOT NULL;
 CREATE INDEX IF NOT EXISTS idx_saved_readings_sentiment ON public.saved_readings(sentiment) WHERE sentiment IS NOT NULL;
 CREATE INDEX IF NOT EXISTS idx_saved_readings_power ON public.saved_readings(power_score) WHERE power_score IS NOT NULL;
-CREATE INDEX IF NOT EXISTS idx_saved_readings_created_month ON public.saved_readings(date_trunc('month', created_at));
+CREATE INDEX IF NOT EXISTS idx_saved_readings_created_at ON public.saved_readings(created_at);
 CREATE INDEX IF NOT EXISTS idx_saved_readings_tags ON public.saved_readings USING GIN(tags);
 
 -- Add comment for documentation
