@@ -323,24 +323,42 @@ export default function ViewSavedReading() {
               className={`${reading.spread_type === 'celtic-cross' ? getCelticCrossPosition(index) : ''} flex flex-col items-center`}
             >
               <div
-                className="mb-4 cursor-pointer transition-transform hover:scale-105"
+                className="group mb-4 cursor-pointer transition-all duration-300"
                 onClick={() => setSelectedCardIndex(index)}
               >
-                <TarotCardVisual card={sc.card} revealed={true} size="medium" isReversed={sc.isReversed} />
+                {/* Ornate Celtic Border */}
+                <div className="relative p-4 border-4 border-double transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl group-hover:shadow-amber-500/30"
+                  style={{
+                    borderColor: '#d4af37',
+                    background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(205, 127, 50, 0.1) 100%)',
+                    boxShadow: '0 0 30px rgba(212, 175, 55, 0.2), inset 0 0 20px rgba(212, 175, 55, 0.05)'
+                  }}
+                >
+                  {/* Corner Ornaments */}
+                  <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 -translate-x-1 -translate-y-1" style={{ borderColor: '#cd7f32' }}></div>
+                  <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 translate-x-1 -translate-y-1" style={{ borderColor: '#cd7f32' }}></div>
+                  <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 -translate-x-1 translate-y-1" style={{ borderColor: '#cd7f32' }}></div>
+                  <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 translate-x-1 translate-y-1" style={{ borderColor: '#cd7f32' }}></div>
+
+                  {/* Card */}
+                  <div className="relative">
+                    <TarotCardVisual card={sc.card} revealed={true} size="medium" isReversed={sc.isReversed} />
+                  </div>
+                </div>
               </div>
               <div className="text-center">
-                <p className="text-amber-500 font-semibold text-sm mb-1" style={{ fontFamily: 'Georgia, serif' }}>
+                <p className="font-semibold text-sm mb-1" style={{ fontFamily: 'Cinzel, serif', color: '#d4af37' }}>
                   {sc.position}
                 </p>
-                <p className="text-amber-100 font-medium" style={{ fontFamily: 'Georgia, serif' }}>
+                <p className="font-medium" style={{ fontFamily: 'Cinzel, serif', color: '#f5e6d3' }}>
                   {sc.card.name}
                 </p>
                 {sc.isReversed && (
-                  <p className="text-teal-400 text-xs font-semibold mt-1 italic" style={{ fontFamily: 'Georgia, serif' }}>
+                  <p className="text-xs font-semibold mt-1 italic" style={{ fontFamily: 'Cinzel, serif', color: '#cd7f32' }}>
                     ⟲ Inverted
                   </p>
                 )}
-                <p className="text-amber-400/70 text-xs mt-1" style={{ fontFamily: 'Georgia, serif' }}>
+                <p className="text-xs mt-1" style={{ fontFamily: 'Cinzel, serif', color: '#cd7f32', opacity: 0.7 }}>
                   {sc.card.keywords.slice(0, 2).join(', ')}
                 </p>
               </div>
