@@ -895,17 +895,15 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
           </div>
         )}
 
-        <div className="mb-6 p-4 bg-amber-100/50 rounded-lg border-2 border-amber-700/30">
-          <div className="flex items-center justify-between">
+        <div className="mb-6 p-4 bg-amber-100 rounded-lg border-2 border-amber-700/50 shadow-sm">
+          <div className="flex items-center justify-between mb-3">
             <div>
-              <h3 className="text-lg font-bold mb-1" style={{
-                fontFamily: 'Cinzel, serif',
-                color: '#d4af37',
-                textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+              <h3 className="text-lg font-bold mb-1.5 text-amber-900" style={{
+                fontFamily: 'Cinzel, serif'
               }}>Card Back Image</h3>
-              <p className="text-sm" style={{ color: '#f5e6d3', opacity: 0.9 }}>This image will be shown when users select cards for their reading</p>
+              <p className="text-sm text-amber-900/80 leading-relaxed max-w-md">This image will be shown when users select cards for their reading</p>
             </div>
-            <label className="flex items-center gap-2 px-4 py-2 bg-amber-700 text-amber-50 rounded-lg hover:bg-amber-600 transition-colors cursor-pointer font-medium">
+            <label className="flex items-center gap-2 px-4 py-2 bg-amber-700 text-amber-50 rounded-lg hover:bg-amber-600 transition-colors cursor-pointer font-medium shadow-sm">
               <Upload className="w-4 h-4" />
               {deck.card_back_url ? 'Change' : 'Upload'}
               <input
@@ -918,15 +916,15 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
             </label>
           </div>
           {deck.card_back_url && (
-            <div className="mt-4 flex items-center gap-4">
-              <div className="w-24 aspect-[2/3] rounded-lg overflow-hidden border-2 border-amber-700/40">
+            <div className="mt-4 flex items-center gap-4 p-3 bg-white/60 rounded-lg border border-amber-700/30">
+              <div className="w-24 aspect-[2/3] rounded-lg overflow-hidden border-2 border-amber-700/40 shadow-sm">
                 <img src={deck.card_back_url} alt="Card back" className="w-full h-full object-cover" />
               </div>
-              <p className="text-sm text-amber-700">Current card back image</p>
+              <p className="text-sm text-amber-900 font-medium">Current card back image</p>
             </div>
           )}
           {uploadingCardBack && (
-            <div className="mt-4 p-3 bg-amber-600/20 text-amber-900 rounded-lg text-center border border-amber-700/40">
+            <div className="mt-4 p-3 bg-amber-600/20 text-amber-900 rounded-lg text-center border border-amber-700/40 font-medium">
               Uploading card back image...
             </div>
           )}
