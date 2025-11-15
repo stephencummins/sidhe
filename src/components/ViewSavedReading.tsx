@@ -156,11 +156,11 @@ export default function ViewSavedReading() {
       case 'single':
         return 'grid place-items-center';
       case 'three-card':
-        return 'grid grid-cols-3 gap-16';
+        return 'grid grid-cols-3 gap-24';
       case 'celtic-cross':
-        return 'grid grid-cols-4 gap-12';
+        return 'grid grid-cols-4 gap-20';
       default:
-        return 'grid grid-cols-3 gap-16';
+        return 'grid grid-cols-3 gap-24';
     }
   };
 
