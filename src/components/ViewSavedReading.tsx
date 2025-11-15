@@ -328,7 +328,7 @@ export default function ViewSavedReading() {
               >
                 <CelticBorder>
                   <div className="p-4">
-                    <TarotCardVisual card={sc.card} revealed={true} size="medium" isReversed={sc.isReversed} />
+                    <TarotCardVisual card={sc.card} revealed={true} size="large" isReversed={sc.isReversed} />
                   </div>
                 </CelticBorder>
               </div>
