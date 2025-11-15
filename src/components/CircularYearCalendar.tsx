@@ -12,6 +12,7 @@ interface CircularYearCalendarProps {
 
 export default function CircularYearCalendar({ readings, year, colorBy }: CircularYearCalendarProps) {
   const svgRef = useRef<SVGSVGElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,12 +21,15 @@ export default function CircularYearCalendar({ readings, year, colorBy }: Circul
     // Clear previous content
     d3.select(svgRef.current).selectAll('*').remove();
 
-    const width = 800;
-    const height = 800;
+    // Responsive sizing based on container width
+    const containerWidth = containerRef.current?.clientWidth || 800;
+    const isMobile = containerWidth < 640;
+    const width = Math.min(containerWidth, 800);
+    const height = width;
     const centerX = width / 2;
     const centerY = height / 2;
-    const outerRadius = Math.min(width, height) / 2 - 60;
-    const innerRadius = outerRadius - 100;
+    const outerRadius = Math.min(width, height) / 2 - (isMobile ? 40 : 60);
+    const innerRadius = outerRadius - (isMobile ? 60 : 100);
 
     const svg = d3.select(svgRef.current)
       .attr('width', width)
@@ -66,10 +70,13 @@ export default function CircularYearCalendar({ readings, year, colorBy }: Circul
 
     // Draw month labels
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const monthFontSize = isMobile ? '10px' : '14px';
+    const monthLabelOffset = isMobile ? 20 : 30;
+
     months.forEach((month, i) => {
       const angle = (i * 30) - 90; // 30 degrees per month, starting at top
       const rad = (angle * Math.PI) / 180;
-      const labelRadius = outerRadius + 30;
+      const labelRadius = outerRadius + monthLabelOffset;
       const x = Math.cos(rad) * labelRadius;
       const y = Math.sin(rad) * labelRadius;
 
@@ -80,13 +87,17 @@ export default function CircularYearCalendar({ readings, year, colorBy }: Circul
         .attr('dominant-baseline', 'middle')
         .style('fill', '#d4af37')
         .style('font-family', 'Cinzel, serif')
-        .style('font-size', '14px')
+        .style('font-size', monthFontSize)
         .style('font-weight', 'bold')
         .text(month);
     });
 
     // Draw Celtic festivals
     const festivals = getCelticFestivals(year);
+    const festivalMarkerSize = isMobile ? 6 : 8;
+    const festivalFontSize = isMobile ? '8px' : '10px';
+    const festivalLabelOffset = isMobile ? 15 : 20;
+
     festivals.forEach(festival => {
       const angle = getCircularPosition(festival.date) - 90;
       const rad = (angle * Math.PI) / 180;
@@ -98,16 +109,16 @@ export default function CircularYearCalendar({ readings, year, colorBy }: Circul
       g.append('circle')
         .attr('cx', x)
         .attr('cy', y)
-        .attr('r', 8)
+        .attr('r', festivalMarkerSize)
         .attr('fill', '#d4af37')
         .attr('stroke', '#cd7f32')
-        .attr('stroke-width', 2)
+        .attr('stroke-width', isMobile ? 1.5 : 2)
         .style('cursor', 'pointer')
         .append('title')
         .text(festival.name);
 
       // Festival label (abbreviated)
-      const labelRadius = innerRadius - 20;
+      const labelRadius = innerRadius - festivalLabelOffset;
       const labelX = Math.cos(rad) * labelRadius;
       const labelY = Math.sin(rad) * labelRadius;
 
@@ -118,7 +129,7 @@ export default function CircularYearCalendar({ readings, year, colorBy }: Circul
         .attr('dominant-baseline', 'middle')
         .style('fill', '#cd7f32')
         .style('font-family', 'Cinzel, serif')
-        .style('font-size', '10px')
+        .style('font-size', festivalFontSize)
         .style('pointer-events', 'none')
         .text(festival.name.split(' ')[0]);
     });
@@ -144,10 +155,12 @@ export default function CircularYearCalendar({ readings, year, colorBy }: Circul
     };
 
     const getSize = (reading: SavedReading): number => {
+      const baseSize = isMobile ? 3 : 4;
+      const maxSize = isMobile ? 8 : 12;
       if (colorBy === 'power' && reading.power_score) {
-        return 4 + (reading.power_score / 100) * 8; // 4-12px
+        return baseSize + (reading.power_score / 100) * (maxSize - baseSize);
       }
-      return 6;
+      return isMobile ? 4 : 6;
     };
 
     readings.forEach(reading => {
@@ -188,6 +201,7 @@ export default function CircularYearCalendar({ readings, year, colorBy }: Circul
     });
 
     // Center label
+    const centerFontSize = isMobile ? '24px' : '36px';
     g.append('text')
       .attr('x', 0)
       .attr('y', 0)
@@ -195,14 +209,14 @@ export default function CircularYearCalendar({ readings, year, colorBy }: Circul
       .attr('dominant-baseline', 'middle')
       .style('fill', '#d4af37')
       .style('font-family', 'Cinzel, serif')
-      .style('font-size', '36px')
+      .style('font-size', centerFontSize)
       .style('font-weight', 'bold')
       .text(year);
 
   }, [readings, year, colorBy, navigate]);
 
   return (
-    <div className="flex justify-center">
+    <div ref={containerRef} className="flex justify-center w-full">
       <svg ref={svgRef} />
     </div>
   );

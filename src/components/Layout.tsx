@@ -27,7 +27,7 @@ export default function Layout({ children }: LayoutProps) {
             </Link>
             <h1 className="text-xl font-serif calan-text-gold">Sídhe Tarot</h1>
           </div>
-          <nav className="flex items-center gap-6">
+          <nav className="flex items-center gap-3 sm:gap-6">
             <Link
               to="/daily"
               className="flex items-center gap-2 text-amber-300/80 hover:text-amber-200 transition-colors text-sm"
@@ -77,24 +77,24 @@ export default function Layout({ children }: LayoutProps) {
         background: 'rgba(26, 11, 46, 0.8)'
       }}>
         <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-center gap-8">
-            <Link to="/" className="transition-opacity hover:opacity-100">
+          <div className="flex items-center justify-center gap-4 md:gap-8">
+            <Link to="/" className="transition-opacity hover:opacity-100 hidden sm:block">
               <img
                 src="/The Fool.png"
                 alt="The Fool - Return to Home"
-                className="h-16 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity cursor-pointer"
+                className="h-12 md:h-16 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity cursor-pointer"
               />
             </Link>
             <div className="text-center">
-              <p className="calan-text-cream text-sm" style={{ opacity: 0.7 }}>
+              <p className="calan-text-cream text-xs sm:text-sm" style={{ opacity: 0.7 }}>
                 Journey with the wisdom of the seasons
               </p>
             </div>
-            <Link to="/" className="transition-opacity hover:opacity-100">
+            <Link to="/" className="transition-opacity hover:opacity-100 hidden sm:block">
               <img
                 src="/The Fool.png"
                 alt="The Fool - Return to Home"
-                className="h-16 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity cursor-pointer transform scale-x-[-1]"
+                className="h-12 md:h-16 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity cursor-pointer transform scale-x-[-1]"
               />
             </Link>
           </div>
