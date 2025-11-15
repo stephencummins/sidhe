@@ -48,22 +48,26 @@ function AppContent() {
       <Route path="/daily" element={<Layout><DailyThreeCardReading /></Layout>} />
 
       {/* Shared reading route */}
-      <Route path="/r/:id" element={<SharedReading />} />
-      <Route path="/reading/:id" element={<SharedReading />} />
+      <Route path="/r/:id" element={<Layout><SharedReading /></Layout>} />
+      <Route path="/reading/:id" element={<Layout><SharedReading /></Layout>} />
 
       {/* Saved readings routes */}
       <Route path="/saved-readings" element={
-        <ProtectedRoute>
-          <SavedReadingsPage />
-        </ProtectedRoute>
+        <Layout>
+          <ProtectedRoute>
+            <SavedReadingsPage />
+          </ProtectedRoute>
+        </Layout>
       } />
-      <Route path="/saved/:id" element={<ViewSavedReading />} />
+      <Route path="/saved/:id" element={<Layout><ViewSavedReading /></Layout>} />
 
       {/* Analytics route */}
       <Route path="/analytics" element={
-        <ProtectedRoute>
-          <ReadingAnalytics />
-        </ProtectedRoute>
+        <Layout>
+          <ProtectedRoute>
+            <ReadingAnalytics />
+          </ProtectedRoute>
+        </Layout>
       } />
 
       {/* Catch-all redirect */}
