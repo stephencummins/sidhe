@@ -44,7 +44,7 @@ function AppContent() {
       <Route path="/reading/*" element={<Layout><TarotFlow /></Layout>} />
 
       {/* Daily reading route */}
-      <Route path="/daily" element={<DailyThreeCardReading />} />
+      <Route path="/daily" element={<Layout><DailyThreeCardReading /></Layout>} />
 
       {/* Shared reading route */}
       <Route path="/r/:id" element={<SharedReading />} />
