@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { BookOpen, Calendar, User } from 'lucide-react';
+import { BookOpen, Calendar, User, BarChart3 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 interface LayoutProps {
@@ -37,14 +37,24 @@ export default function Layout({ children }: LayoutProps) {
               <span className="hidden sm:inline">Daily Reading</span>
             </Link>
             {user && (
-              <Link
-                to="/saved-readings"
-                className="flex items-center gap-2 text-amber-300/80 hover:text-amber-200 transition-colors text-sm"
-                style={{ fontFamily: 'Georgia, serif' }}
-              >
-                <BookOpen className="w-4 h-4" />
-                <span className="hidden sm:inline">My Readings</span>
-              </Link>
+              <>
+                <Link
+                  to="/saved-readings"
+                  className="flex items-center gap-2 text-amber-300/80 hover:text-amber-200 transition-colors text-sm"
+                  style={{ fontFamily: 'Georgia, serif' }}
+                >
+                  <BookOpen className="w-4 h-4" />
+                  <span className="hidden sm:inline">My Readings</span>
+                </Link>
+                <Link
+                  to="/analytics"
+                  className="flex items-center gap-2 text-amber-300/80 hover:text-amber-200 transition-colors text-sm"
+                  style={{ fontFamily: 'Georgia, serif' }}
+                >
+                  <BarChart3 className="w-4 h-4" />
+                  <span className="hidden sm:inline">Analytics</span>
+                </Link>
+              </>
             )}
             <Link
               to={user ? "/admin" : "/admin/login"}

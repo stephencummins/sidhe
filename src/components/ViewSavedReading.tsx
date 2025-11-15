@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Loader2, X, ChevronLeft, ChevronRight, Lock, Globe, Calendar, StickyNote } from 'lucide-react';
+import { Loader2, X, ChevronLeft, ChevronRight, Lock, Globe, Calendar, StickyNote, Star, Moon, Zap } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
-import { getSavedReading, updateSavedReading } from '../services/savedReadings';
-import type { SavedReading } from '../types';
+import { getSavedReading, updateSavedReading, recalculateReadingMetrics } from '../services/savedReadings';
+import type { SavedReading, Sentiment } from '../types';
 import TarotCardVisual from './TarotCardVisual';
 import RunicSymbol from './RunicSymbol';
 import CelticBorder from './CelticBorder';
+import ReadingRatingModal from './ReadingRatingModal';
 import { supabase } from '../lib/supabase';
+import { getNearestCelticFestival } from '../lib/celticCalendar';
+import { getPowerLevelDescription } from '../lib/powerScoreCalculator';
 
 export default function ViewSavedReading() {
   const { id } = useParams<{ id: string }>();
@@ -18,6 +21,7 @@ export default function ViewSavedReading() {
   const [selectedCardIndex, setSelectedCardIndex] = useState<number | null>(null);
   const [interpretation, setInterpretation] = useState<string>('');
   const [generatingInterpretation, setGeneratingInterpretation] = useState(false);
+  const [showRatingModal, setShowRatingModal] = useState(false);
 
   useEffect(() => {
     if (!id) {
@@ -325,7 +329,41 @@ export default function ViewSavedReading() {
                     {reading.reading_source === 'daily' ? '🌅 Daily Reading' : '🔮 Personal Reading'}
                   </div>
                 )}
+                {reading.power_score !== undefined && reading.power_score !== null && (
+                  <div className="flex items-center gap-2" style={{ color: '#d4af37' }}>
+                    <Zap className="w-4 h-4" />
+                    <span style={{ fontFamily: 'Cinzel, serif', fontWeight: 'bold' }}>
+                      Power: {reading.power_score} ({getPowerLevelDescription(reading.power_score)})
+                    </span>
+                  </div>
+                )}
               </div>
+
+              {/* Rating Display */}
+              {(reading.accuracy_rating || reading.sentiment) && (
+                <div className="mt-4 flex flex-wrap justify-center gap-4">
+                  {reading.accuracy_rating && (
+                    <div className="flex items-center gap-2">
+                      {[...Array(reading.accuracy_rating)].map((_, i) => (
+                        <Moon key={i} className="w-4 h-4" fill="#d4af37" style={{ color: '#d4af37' }} />
+                      ))}
+                    </div>
+                  )}
+                  {reading.sentiment && (
+                    <span className={`px-3 py-1 text-xs border ${
+                      reading.sentiment === 'positive' ? 'border-green-400 bg-green-900/20' :
+                      reading.sentiment === 'negative' ? 'border-red-400 bg-red-900/20' :
+                      'border-amber-400 bg-amber-900/20'
+                    }`} style={{
+                      color: reading.sentiment === 'positive' ? '#5DD9C1' :
+                             reading.sentiment === 'negative' ? '#ff6b6b' : '#d4af37',
+                      fontFamily: 'Cinzel, serif'
+                    }}>
+                      {reading.sentiment}
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
           </CelticBorder>
         </div>
@@ -442,8 +480,22 @@ export default function ViewSavedReading() {
           </div>
         )}
 
-        {/* Back Button */}
+        {/* Rate Reading Button */}
         <div className="mt-8 text-center">
+          <button
+            onClick={() => setShowRatingModal(true)}
+            className="group relative px-10 py-4 text-lg font-bold transition-all duration-500 transform hover:scale-105 overflow-hidden bg-gradient-to-br from-amber-600 via-amber-700 to-amber-800 border-2 border-amber-500 shadow-xl hover:shadow-2xl mb-4"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
+            <span className="relative z-10 tracking-wide text-amber-100 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]" style={{ fontFamily: 'Cinzel, serif' }}>
+              <Star className="inline w-5 h-5 mr-2" />
+              Rate This Reading
+            </span>
+          </button>
+        </div>
+
+        {/* Back Button */}
+        <div className="mt-4 text-center">
           <button
             onClick={() => navigate('/saved-readings')}
             className="group relative px-10 py-4 text-lg font-bold transition-all duration-500 transform hover:scale-105 overflow-hidden bg-gradient-to-br from-amber-200 via-amber-300 to-amber-400 border-2 border-amber-500 shadow-xl hover:shadow-2xl"
@@ -547,6 +599,21 @@ export default function ViewSavedReading() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Rating Modal */}
+      {showRatingModal && reading && (
+        <ReadingRatingModal
+          readingId={reading.id}
+          currentRating={reading.accuracy_rating}
+          currentSentiment={reading.sentiment}
+          currentOutcomeNotes={reading.outcome_notes}
+          currentTags={reading.tags}
+          onClose={() => setShowRatingModal(false)}
+          onSaved={(updatedRating) => {
+            setReading({ ...reading, ...updatedRating });
+          }}
+        />
       )}
     </div>
   );

@@ -9,6 +9,7 @@ import SharedReading from './components/SharedReading';
 import DailyThreeCardReading from './components/DailyThreeCardReading';
 import SavedReadingsPage from './components/SavedReadingsPage';
 import ViewSavedReading from './components/ViewSavedReading';
+import ReadingAnalytics from './components/ReadingAnalytics';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -57,6 +58,13 @@ function AppContent() {
         </ProtectedRoute>
       } />
       <Route path="/saved/:id" element={<ViewSavedReading />} />
+
+      {/* Analytics route */}
+      <Route path="/analytics" element={
+        <ProtectedRoute>
+          <ReadingAnalytics />
+        </ProtectedRoute>
+      } />
 
       {/* Catch-all redirect */}
       <Route path="*" element={<Navigate to="/" replace />} />
