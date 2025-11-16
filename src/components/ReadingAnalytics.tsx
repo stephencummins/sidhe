@@ -145,7 +145,7 @@ export default function ReadingAnalytics() {
           <>
             {/* Overview Stats */}
             {analytics && (
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-10 mb-12">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-12 lg:gap-16 mb-12">
                 <CelticBorder>
                   <div className="p-6 text-center">
                     <TrendingUp className="w-8 h-8 mx-auto mb-2" style={{ color: '#d4af37' }} />
