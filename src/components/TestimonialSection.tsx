@@ -33,7 +33,7 @@ export default function TestimonialSection() {
         <div className="w-32 h-1 mx-auto bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
         {testimonials.map((testimonial, index) => (
           <CelticBorder key={index}>
             <div className="p-6 h-full flex flex-col">
