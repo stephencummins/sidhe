@@ -245,7 +245,7 @@ export default function ReadingAnalytics() {
 
             {/* Charts */}
             {analytics && (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
                 {/* Readings by Month */}
                 <CelticBorder>
                   <div className="p-6">
