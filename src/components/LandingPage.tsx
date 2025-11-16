@@ -186,41 +186,9 @@ export default function LandingPage() {
           <TestimonialSection />
         </div>
 
-        {/* Experience the Magic Section */}
-        <div className="max-w-6xl mx-auto">
-          <CelticBorder>
-            <div className="px-6 py-8">
-              <h3 className="text-3xl md:text-4xl font-bold mb-8 text-center" style={{
-                fontFamily: 'Cinzel, serif',
-                color: '#d4af37',
-                textShadow: '0 0 20px rgba(212, 175, 55, 0.6)'
-              }}>
-                Experience the Magic
-              </h3>
-              <div className="w-48 h-1 mx-auto mb-12 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" />
-
-              {/* Video Demo Placeholder - You can add your video here */}
-              <div className="mb-12">
-                <div className="relative rounded-lg overflow-hidden shadow-2xl border-4 border-amber-600/40 bg-stone-900/50 aspect-video flex items-center justify-center">
-                  <p className="text-xl italic" style={{ color: '#d4af37', fontFamily: 'Cinzel, serif' }}>
-                    Video Demo Coming Soon
-                  </p>
-                </div>
-                <p className="mt-6 text-center leading-relaxed max-w-3xl mx-auto" style={{
-                  color: '#f5e6d3',
-                  textShadow: '0 1px 2px rgba(0,0,0,0.7)'
-                }}>
-                  Each card is a masterwork inspired by the intricate beauty of Celtic tradition,
-                  blending ancient artistry with the turning of the seasons.
-                </p>
-              </div>
-
-              {/* Subscription Section */}
-              <div className="max-w-2xl mx-auto">
-                <DailyReadingSubscription />
-              </div>
-            </div>
-          </CelticBorder>
+        {/* Personal Reading Subscription */}
+        <div className="mt-16 max-w-2xl mx-auto">
+          <DailyReadingSubscription />
         </div>
 
         <div className="mt-16 flex flex-col items-center gap-6">
