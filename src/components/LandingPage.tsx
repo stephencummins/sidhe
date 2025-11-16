@@ -105,11 +105,6 @@ export default function LandingPage() {
           </button>
         </div>
 
-        {/* Personal Reading Subscription */}
-        <div className="mb-16 max-w-2xl mx-auto">
-          <DailyReadingSubscription />
-        </div>
-
         <div className="grid grid-cols-1 md:grid-cols-3 gap-14 mb-16">
           <button onClick={handleStartReading} className="text-left transform hover:scale-105 transition-transform duration-300 cursor-pointer">
             <CelticBorder>
@@ -224,6 +219,11 @@ export default function LandingPage() {
               </p>
             </div>
           </CelticBorder>
+        </div>
+
+        {/* Personal Reading Subscription */}
+        <div className="mt-16 max-w-2xl mx-auto">
+          <DailyReadingSubscription />
         </div>
 
         <div className="mt-16 flex flex-col items-center gap-6">
