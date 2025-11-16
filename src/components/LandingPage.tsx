@@ -186,45 +186,6 @@ export default function LandingPage() {
           <TestimonialSection />
         </div>
 
-        <div className="max-w-4xl mx-auto">
-          <CelticBorder>
-            <div className="px-6 py-8">
-              <h3 className="text-2xl font-bold mb-6 text-center" style={{
-                fontFamily: 'Cinzel, serif',
-                color: '#d4af37',
-                textShadow: '0 1px 2px rgba(0,0,0,0.8)'
-              }}>
-                Experience the Magic
-              </h3>
-              <div className="relative rounded-lg overflow-hidden shadow-2xl border-4 border-amber-600/40">
-                <video
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  className="w-full h-auto"
-                >
-                  <source src="/tarot-reading.mp4" type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              </div>
-              <p className="mt-6 text-center leading-relaxed" style={{
-                color: '#f5e6d3',
-                textShadow: '0 1px 2px rgba(0,0,0,0.7)'
-              }}>
-                Each card is a masterwork inspired by the intricate beauty of Celtic tradition,
-                blending ancient artistry with the turning of the seasons.
-              </p>
-              <p className="mt-3 text-center italic text-sm" style={{
-                color: '#cd7f32',
-                textShadow: '0 1px 2px rgba(0,0,0,0.8)'
-              }}>
-                "In every season, a story. In every turn, wisdom eternal."
-              </p>
-            </div>
-          </CelticBorder>
-        </div>
-
         {/* Personal Reading Subscription */}
         <div className="mt-16 max-w-2xl mx-auto">
           <DailyReadingSubscription />
