@@ -106,9 +106,9 @@ export default function LandingPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-14 mb-16">
-          <button onClick={handleStartReading} className="text-left transform hover:scale-105 transition-transform duration-300 cursor-pointer">
-            <CelticBorder>
-              <div className="p-10 text-center">
+          <button onClick={handleStartReading} className="h-full text-left transform hover:scale-105 transition-transform duration-300 cursor-pointer">
+            <CelticBorder className="h-full">
+              <div className="p-10 text-center h-full flex flex-col justify-center">
                 <div className="mb-4 flex justify-center">
                   <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center shadow-lg border-2 border-amber-300">
                     <span className="text-3xl font-bold text-amber-950">I</span>
@@ -131,9 +131,9 @@ export default function LandingPage() {
             </CelticBorder>
           </button>
 
-          <button onClick={handleStartReading} className="text-left transform hover:scale-105 transition-transform duration-300 cursor-pointer">
-            <CelticBorder>
-              <div className="p-10 text-center">
+          <button onClick={handleStartReading} className="h-full text-left transform hover:scale-105 transition-transform duration-300 cursor-pointer">
+            <CelticBorder className="h-full">
+              <div className="p-10 text-center h-full flex flex-col justify-center">
                 <div className="mb-4 flex justify-center">
                   <div className="w-16 h-16 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center shadow-lg border-2 border-amber-300">
                     <span className="text-3xl font-bold text-amber-50">II</span>
@@ -156,9 +156,9 @@ export default function LandingPage() {
             </CelticBorder>
           </button>
 
-          <button onClick={handleStartReading} className="text-left transform hover:scale-105 transition-transform duration-300 cursor-pointer">
-            <CelticBorder>
-              <div className="p-10 text-center">
+          <button onClick={handleStartReading} className="h-full text-left transform hover:scale-105 transition-transform duration-300 cursor-pointer">
+            <CelticBorder className="h-full">
+              <div className="p-10 text-center h-full flex flex-col justify-center">
                 <div className="mb-4 flex justify-center">
                   <div className="w-16 h-16 rounded-full bg-gradient-to-br from-red-500 to-amber-600 flex items-center justify-center shadow-lg border-2 border-amber-300">
                     <span className="text-3xl font-bold text-amber-50">III</span>
