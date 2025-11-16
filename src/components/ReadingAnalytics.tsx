@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader2, TrendingUp, Moon, Zap, Heart } from 'lucide-react';
+import { Loader2, TrendingUp, Moon, Zap, Heart, Info } from 'lucide-react';
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { getUserReadings, getReadingAnalytics } from '../services/readingAnalytics';
+import { useAuth } from '../contexts/AuthContext';
+import { demoReadings } from '../data/demoReadings';
 import type { SavedReading } from '../types';
 import CelticBorder from './CelticBorder';
 import CircularYearCalendar from './CircularYearCalendar';
@@ -10,31 +12,42 @@ import RunicSymbol from './RunicSymbol';
 
 export default function ReadingAnalytics() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [readings, setReadings] = useState<SavedReading[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [year, setYear] = useState(new Date().getFullYear());
   const [colorBy, setColorBy] = useState<'sentiment' | 'accuracy' | 'power'>('power');
   const [analytics, setAnalytics] = useState<any>(null);
+  const [isDemo, setIsDemo] = useState(false);
 
   useEffect(() => {
     loadData();
-  }, [year]);
+  }, [year, user]);
 
   const loadData = async () => {
     setLoading(true);
     setError('');
 
-    const { data: readingsData, error: readingsError } = await getUserReadings();
-    if (readingsError) {
-      setError(readingsError.message);
-      setLoading(false);
-      return;
+    // If user is logged in, try to load their readings
+    if (user) {
+      const { data: readingsData, error: readingsError } = await getUserReadings();
+
+      // If they have readings, use them
+      if (!readingsError && readingsData && readingsData.length > 0) {
+        setReadings(readingsData);
+        setIsDemo(false);
+        const analyticsData = await getReadingAnalytics(year);
+        setAnalytics(analyticsData);
+        setLoading(false);
+        return;
+      }
     }
 
-    setReadings(readingsData || []);
-
-    const analyticsData = await getReadingAnalytics(year);
+    // Otherwise, use demo data
+    setReadings(demoReadings);
+    setIsDemo(true);
+    const analyticsData = await getReadingAnalytics(year, demoReadings);
     setAnalytics(analyticsData);
     setLoading(false);
   };
@@ -102,6 +115,34 @@ export default function ReadingAnalytics() {
             </div>
           </CelticBorder>
         </div>
+
+        {/* Demo Mode Banner */}
+        {isDemo && (
+          <div className="mb-8 max-w-3xl mx-auto">
+            <CelticBorder>
+              <div className="p-6 bg-purple-900/30 border-2 border-purple-500/50">
+                <div className="flex items-start gap-3">
+                  <Info className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: '#d4af37' }} />
+                  <div className="flex-1">
+                    <h3 className="text-lg font-bold mb-2" style={{ fontFamily: 'Cinzel, serif', color: '#d4af37' }}>
+                      Viewing Demo Analytics
+                    </h3>
+                    <p className="text-sm mb-3 leading-relaxed" style={{ color: '#f5e6d3' }}>
+                      You're exploring sample readings to see how analytics work. Sign in to track your own readings and unlock personalized insights.
+                    </p>
+                    <button
+                      onClick={() => navigate('/')}
+                      className="px-6 py-2 bg-gradient-to-br from-amber-200 via-amber-300 to-amber-400 border-2 border-amber-500 hover:scale-105 transition-transform"
+                      style={{ color: '#7c2d12', fontFamily: 'Cinzel, serif', fontWeight: 'bold' }}
+                    >
+                      Get Started
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </CelticBorder>
+          </div>
+        )}
 
         {/* Year Selector */}
         <div className="flex justify-center gap-4 mb-8">

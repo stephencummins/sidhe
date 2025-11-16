@@ -64,9 +64,7 @@ function AppContent() {
       {/* Analytics route */}
       <Route path="/analytics" element={
         <Layout>
-          <ProtectedRoute>
-            <ReadingAnalytics />
-          </ProtectedRoute>
+          <ReadingAnalytics />
         </Layout>
       } />
 

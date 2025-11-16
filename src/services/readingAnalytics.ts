@@ -16,26 +16,37 @@ export async function getUserReadings() {
 }
 
 /**
- * Get analytics data for the current user
+ * Get analytics data for the current user or demo data
  */
-export async function getReadingAnalytics(year?: number): Promise<ReadingAnalyticsData | null> {
+export async function getReadingAnalytics(year?: number, demoData?: SavedReading[]): Promise<ReadingAnalyticsData | null> {
   const currentYear = year || new Date().getFullYear();
   const yearStart = startOfYear(new Date(currentYear, 0, 1));
   const yearEnd = endOfYear(new Date(currentYear, 11, 31));
 
-  const { data: readings, error } = await supabase
-    .from('saved_readings')
-    .select('*')
-    .gte('created_at', yearStart.toISOString())
-    .lte('created_at', yearEnd.toISOString())
-    .order('created_at', { ascending: true });
+  let readingsData: SavedReading[];
 
-  if (error || !readings) {
-    console.error('Error fetching readings for analytics:', error);
-    return null;
+  // Use demo data if provided, otherwise fetch from Supabase
+  if (demoData) {
+    // Filter demo data by year
+    readingsData = demoData.filter(r => {
+      const date = new Date(r.created_at);
+      return date >= yearStart && date <= yearEnd;
+    });
+  } else {
+    const { data: readings, error } = await supabase
+      .from('saved_readings')
+      .select('*')
+      .gte('created_at', yearStart.toISOString())
+      .lte('created_at', yearEnd.toISOString())
+      .order('created_at', { ascending: true });
+
+    if (error || !readings) {
+      console.error('Error fetching readings for analytics:', error);
+      return null;
+    }
+
+    readingsData = readings as SavedReading[];
   }
-
-  const readingsData = readings as SavedReading[];
 
   // Calculate total readings
   const totalReadings = readingsData.length;
