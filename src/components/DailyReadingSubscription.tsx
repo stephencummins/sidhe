@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Sparkles, Moon, TrendingUp, Calendar } from 'lucide-react';
 import CelticBorder from './CelticBorder';
 import { supabase } from '../lib/supabase';
 
@@ -66,6 +67,57 @@ export default function DailyReadingSubscription() {
           }}>
             Receive your personalized three-card reading delivered daily to your inbox
           </p>
+        </div>
+
+        {/* Benefits Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+          <div className="flex items-start gap-3">
+            <Sparkles className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: '#d4af37' }} />
+            <div>
+              <p className="text-sm font-semibold mb-1" style={{ color: '#d4af37', fontFamily: 'Cinzel, serif' }}>
+                Daily 3-Card Spread
+              </p>
+              <p className="text-xs" style={{ color: '#f5e6d3', opacity: 0.8 }}>
+                Fresh insights every morning
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3">
+            <Moon className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: '#d4af37' }} />
+            <div>
+              <p className="text-sm font-semibold mb-1" style={{ color: '#d4af37', fontFamily: 'Cinzel, serif' }}>
+                Track Accuracy
+              </p>
+              <p className="text-xs" style={{ color: '#f5e6d3', opacity: 0.8 }}>
+                Rate readings with moon phases
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3">
+            <TrendingUp className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: '#d4af37' }} />
+            <div>
+              <p className="text-sm font-semibold mb-1" style={{ color: '#d4af37', fontFamily: 'Cinzel, serif' }}>
+                Discover Patterns
+              </p>
+              <p className="text-xs" style={{ color: '#f5e6d3', opacity: 0.8 }}>
+                Analytics across Celtic festivals
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3">
+            <Calendar className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: '#d4af37' }} />
+            <div>
+              <p className="text-sm font-semibold mb-1" style={{ color: '#d4af37', fontFamily: 'Cinzel, serif' }}>
+                Seasonal Wisdom
+              </p>
+              <p className="text-xs" style={{ color: '#f5e6d3', opacity: 0.8 }}>
+                Aligned with the Celtic wheel
+              </p>
+            </div>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">

@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import CelticBorder from './CelticBorder';
 import { useAuth } from '../contexts/AuthContext';
 import DailyReadingSubscription from './DailyReadingSubscription';
+import TestimonialSection from './TestimonialSection';
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -77,31 +78,29 @@ export default function LandingPage() {
           </CelticBorder>
         </div>
 
-        {/* Daily Reading Button */}
-        <div className="flex justify-center mb-8">
-          <button
-            onClick={() => navigate('/daily')}
-            className="group relative px-12 py-4 text-lg font-bold transition-all duration-500 transform hover:scale-105 overflow-hidden bg-gradient-to-br from-purple-200 via-purple-300 to-purple-400 border-2 border-purple-500 shadow-xl hover:shadow-2xl rounded-lg"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
-            <span className="relative z-10 tracking-wide text-purple-900 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]" style={{ fontFamily: 'Cinzel, serif' }}>
-              ✨ Today's Daily Reading
-            </span>
-          </button>
-        </div>
-
-        <div className="flex justify-center mb-16">
+        {/* Primary CTA - Get Your Reading */}
+        <div className="flex flex-col items-center gap-4 mb-16">
           <button
             onClick={handleStartReading}
-            className="calan-btn calan-btn-primary group relative px-16 py-5 text-xl font-bold transition-all duration-500 transform hover:scale-105 overflow-hidden bg-gradient-to-br from-amber-200 via-amber-300 to-amber-400 border-2 border-amber-500 shadow-xl hover:shadow-2xl"
+            className="calan-btn calan-btn-primary group relative px-20 py-6 text-2xl font-bold transition-all duration-500 transform hover:scale-105 overflow-hidden bg-gradient-to-br from-amber-200 via-amber-300 to-amber-400 border-2 border-amber-500 shadow-xl hover:shadow-2xl"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
-            <span className="relative z-10 tracking-wide text-amber-900 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]" style={{ fontFamily: 'Cinzel, serif' }}>Begin Your Journey</span>
+            <span className="relative z-10 tracking-wide text-amber-900 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]" style={{ fontFamily: 'Cinzel, serif' }}>Get Your Free Reading</span>
 
             <div className="absolute -top-1 -left-1 w-6 h-6 border-t-4 border-l-4 border-amber-600" />
             <div className="absolute -top-1 -right-1 w-6 h-6 border-t-4 border-r-4 border-amber-600" />
             <div className="absolute -bottom-1 -left-1 w-6 h-6 border-b-4 border-l-4 border-amber-600" />
             <div className="absolute -bottom-1 -right-1 w-6 h-6 border-b-4 border-r-4 border-amber-600" />
+          </button>
+
+          {/* Secondary CTA - Daily Reading */}
+          <button
+            onClick={() => navigate('/daily')}
+            className="group relative px-8 py-2 text-sm font-medium transition-all duration-300 hover:scale-105 bg-purple-900/30 border border-purple-500/50 hover:bg-purple-800/40 hover:border-purple-400/70 shadow-lg hover:shadow-xl rounded"
+          >
+            <span className="relative z-10 tracking-wide text-purple-200" style={{ fontFamily: 'Cinzel, serif' }}>
+              ✨ Or Try Today's Daily Reading
+            </span>
           </button>
         </div>
 
@@ -180,6 +179,11 @@ export default function LandingPage() {
               </div>
             </CelticBorder>
           </button>
+        </div>
+
+        {/* Testimonials */}
+        <div className="mb-16">
+          <TestimonialSection />
         </div>
 
         <div className="max-w-4xl mx-auto">
