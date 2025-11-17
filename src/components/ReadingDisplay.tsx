@@ -333,7 +333,7 @@ export default function ReadingDisplay({ reading, onNewReading }: ReadingDisplay
           </button>
 
           <div
-            className="relative bg-gradient-to-br from-stone-900 via-amber-950 to-stone-950 border-2 sm:border-4 border-amber-700/60 shadow-2xl shadow-amber-900/40 p-4 sm:p-8 lg:p-12 max-w-6xl w-full max-h-[95vh] overflow-y-auto"
+            className="relative bg-gradient-to-br from-stone-900 via-amber-950 to-stone-950 border-2 sm:border-4 border-amber-700/60 shadow-2xl shadow-amber-900/40 p-4 sm:p-6 lg:p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="absolute top-3 left-3 sm:top-6 sm:left-6 w-8 h-8 sm:w-12 sm:h-12 border-t-2 border-l-2 sm:border-t-4 sm:border-l-4 border-amber-600/50"></div>
@@ -355,44 +355,39 @@ export default function ReadingDisplay({ reading, onNewReading }: ReadingDisplay
               </p>
             </div>
 
-            <div className="flex flex-col lg:flex-row gap-6 sm:gap-8 lg:gap-12 items-center lg:items-start mt-8 sm:mt-0">
+            <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8 items-center lg:items-start mt-8 sm:mt-0">
               <div className="flex-shrink-0 flex items-center justify-center">
                 <TarotCardVisual
                   card={reading.cards[selectedCardIndex].card}
                   revealed={true}
-                  size="xlarge"
+                  size="large"
                   isReversed={reading.cards[selectedCardIndex].isReversed}
                 />
               </div>
 
-              <div className="flex-1 w-full max-w-2xl">
-                <div className="mb-6 sm:mb-8">
-                  <p className="text-amber-500 font-semibold text-sm sm:text-base mb-2 sm:mb-3 uppercase tracking-wide" style={{ fontFamily: 'Georgia, serif' }}>
+              <div className="flex-1 w-full">
+                <div className="mb-4 sm:mb-6">
+                  <p className="text-amber-500 font-semibold text-sm sm:text-base mb-2 uppercase tracking-wide" style={{ fontFamily: 'Georgia, serif' }}>
                     {reading.cards[selectedCardIndex].position}
                   </p>
-                  <h3 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-amber-100 mb-4 sm:mb-6" style={{ fontFamily: 'Georgia, serif' }}>
+                  <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-amber-100 mb-3 sm:mb-4" style={{ fontFamily: 'Georgia, serif' }}>
                     {reading.cards[selectedCardIndex].card.name}
                   </h3>
-                  <div className="flex flex-wrap gap-2 sm:gap-3 mb-4 sm:mb-6">
-                    {reading.cards[selectedCardIndex].card.keywords.map((keyword, idx) => (
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {reading.cards[selectedCardIndex].card.keywords.slice(0, 3).map((keyword, idx) => (
                       <span
                         key={idx}
-                        className="px-3 py-1.5 sm:px-4 sm:py-2 bg-amber-900/50 border border-amber-700/50 sm:border-2 text-amber-200 text-sm sm:text-base font-medium"
+                        className="px-2 py-1 sm:px-3 sm:py-1.5 bg-amber-900/50 border border-amber-700/50 text-amber-200 text-xs sm:text-sm font-medium"
                         style={{ fontFamily: 'Georgia, serif' }}
                       >
                         {keyword}
                       </span>
                     ))}
                   </div>
-                </div>
 
-                <div className="space-y-4 sm:space-y-6 lg:space-y-8">
-                  <div className="bg-stone-900/50 border-2 border-amber-800/40 p-4 sm:p-6">
-                    <h4 className="text-amber-300 font-bold text-lg sm:text-xl mb-3 sm:mb-4 flex items-center gap-2 sm:gap-3" style={{ fontFamily: 'Georgia, serif' }}>
-                      <RunicSymbol variant="ansuz" className="w-6 h-8 sm:w-8 sm:h-10 text-amber-600" />
-                      {reading.cards[selectedCardIndex].isReversed ? 'Current Orientation: Inverted' : 'Current Orientation: Upright'}
-                    </h4>
-                    <p className="text-amber-200/95 text-base sm:text-lg leading-relaxed mb-4" style={{ fontFamily: 'Georgia, serif' }}>
+                  {/* Quick Summary */}
+                  <div className="bg-amber-900/30 border-l-4 border-amber-600 p-3 sm:p-4">
+                    <p className="text-amber-100/95 text-sm sm:text-base leading-relaxed italic" style={{ fontFamily: 'Georgia, serif' }}>
                       {reading.cards[selectedCardIndex].isReversed
                         ? (meaningType === 'celtic' && reading.cards[selectedCardIndex].card.celtic_reversed
                           ? reading.cards[selectedCardIndex].card.celtic_reversed
@@ -401,81 +396,46 @@ export default function ReadingDisplay({ reading, onNewReading }: ReadingDisplay
                           ? reading.cards[selectedCardIndex].card.celtic_upright
                           : reading.cards[selectedCardIndex].card.upright_meaning)}
                     </p>
-                    <div className="my-4 pt-4 border-t border-amber-700/30">
-                      <p className="text-amber-400/80 text-sm mb-2 font-semibold" style={{ fontFamily: 'Georgia, serif' }}>General Interpretation:</p>
-                      <p className="text-amber-200/80 text-sm leading-relaxed" style={{ fontFamily: 'Georgia, serif' }}>
-                        {reading.cards[selectedCardIndex].isReversed
-                          ? `When inverted, this card suggests blocked energy or the shadow aspects of its upright meaning. Consider what obstacles or internal resistance might be present. Inverted cards often indicate delays, internalization, or the need to address underlying issues before moving forward.`
-                          : `In its upright position, this card brings its full, positive energy to your reading. It represents an active manifestation of its core qualities in your current situation. Pay attention to how its themes are already present or emerging in your life.`}
-                      </p>
-                    </div>
                   </div>
+                </div>
 
-                  <div className="bg-stone-900/50 border-2 border-amber-800/40 p-4 sm:p-6">
-                    <h4 className="text-amber-300 font-bold text-lg sm:text-xl mb-3 sm:mb-4 flex items-center gap-2 sm:gap-3" style={{ fontFamily: 'Georgia, serif' }}>
-                      <RunicSymbol variant="kenaz" className="w-6 h-8 sm:w-8 sm:h-10 text-amber-600" />
-                      Detailed Meanings
+                <div className="space-y-3 sm:space-y-4">
+                  <div className="bg-stone-900/50 border border-amber-800/40 p-3 sm:p-4">
+                    <h4 className="text-amber-300 font-bold text-base sm:text-lg mb-2 sm:mb-3 flex items-center gap-2" style={{ fontFamily: 'Georgia, serif' }}>
+                      <RunicSymbol variant="kenaz" className="w-5 h-7 sm:w-6 sm:h-8 text-amber-600" />
+                      Other Meanings
                     </h4>
-                    <div className="space-y-4">
-                      <div>
-                        <p className="text-amber-400 text-sm font-semibold mb-2" style={{ fontFamily: 'Georgia, serif' }}>Upright:</p>
-                        <p className="text-amber-200/90 text-sm sm:text-base leading-relaxed" style={{ fontFamily: 'Georgia, serif' }}>
-                          {meaningType === 'celtic' && reading.cards[selectedCardIndex].card.celtic_upright
-                            ? reading.cards[selectedCardIndex].card.celtic_upright
-                            : reading.cards[selectedCardIndex].card.upright_meaning}
-                        </p>
-                      </div>
-                      <div className="my-3 pt-3 border-t border-amber-700/20">
-                        <p className="text-amber-400 text-sm font-semibold mb-2" style={{ fontFamily: 'Georgia, serif' }}>Inverted:</p>
-                        <p className="text-amber-200/90 text-sm sm:text-base leading-relaxed" style={{ fontFamily: 'Georgia, serif' }}>
-                          {meaningType === 'celtic' && reading.cards[selectedCardIndex].card.celtic_reversed
-                            ? reading.cards[selectedCardIndex].card.celtic_reversed
-                            : reading.cards[selectedCardIndex].card.reversed_meaning}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-stone-900/50 border-2 border-amber-800/40 p-4 sm:p-6">
-                    <h4 className="text-amber-300 font-bold text-lg sm:text-xl mb-3 sm:mb-4 flex items-center gap-2 sm:gap-3" style={{ fontFamily: 'Georgia, serif' }}>
-                      <RunicSymbol variant="fehu" className="w-6 h-8 sm:w-8 sm:h-10 text-amber-600" />
-                      Contextual Guidance
-                    </h4>
-                    <div className="space-y-3">
-                      <div>
-                        <p className="text-amber-400 text-sm font-semibold mb-1.5" style={{ fontFamily: 'Georgia, serif' }}>In Relationships:</p>
-                        <p className="text-amber-200/80 text-sm leading-relaxed" style={{ fontFamily: 'Georgia, serif' }}>
-                          {reading.cards[selectedCardIndex].isReversed
-                            ? `Consider communication blocks, unmet needs, or patterns that need addressing. This card reversed suggests looking inward at what you bring to relationships.`
-                            : `This energy supports authentic connection and growth in relationships. It encourages openness, trust, and alignment with your true feelings.`}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-amber-400 text-sm font-semibold mb-1.5" style={{ fontFamily: 'Georgia, serif' }}>In Career & Goals:</p>
-                        <p className="text-amber-200/80 text-sm leading-relaxed" style={{ fontFamily: 'Georgia, serif' }}>
-                          {reading.cards[selectedCardIndex].isReversed
-                            ? `Delays or obstacles may be present. Use this time to refine your approach, build skills, or address internal doubts before pushing forward.`
-                            : `Forward momentum is available. Trust your abilities and take concrete steps toward your ambitions. The path ahead is open.`}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-amber-400 text-sm font-semibold mb-1.5" style={{ fontFamily: 'Georgia, serif' }}>For Spiritual Growth:</p>
-                        <p className="text-amber-200/80 text-sm leading-relaxed" style={{ fontFamily: 'Georgia, serif' }}>
-                          {reading.cards[selectedCardIndex].isReversed
-                            ? `Inner work is called for. Shadow aspects need integration. This is a time for deep self-reflection and healing old wounds.`
-                            : `Your spiritual path is illuminated. Trust your intuition and remain open to guidance. Synchronicities and insights will flow naturally.`}
-                        </p>
-                      </div>
+                    <div className="space-y-2">
+                      {!reading.cards[selectedCardIndex].isReversed && (
+                        <div>
+                          <p className="text-amber-400 text-xs font-semibold mb-1" style={{ fontFamily: 'Georgia, serif' }}>When Inverted:</p>
+                          <p className="text-amber-200/80 text-xs sm:text-sm leading-relaxed" style={{ fontFamily: 'Georgia, serif' }}>
+                            {meaningType === 'celtic' && reading.cards[selectedCardIndex].card.celtic_reversed
+                              ? reading.cards[selectedCardIndex].card.celtic_reversed
+                              : reading.cards[selectedCardIndex].card.reversed_meaning}
+                          </p>
+                        </div>
+                      )}
+                      {reading.cards[selectedCardIndex].isReversed && (
+                        <div>
+                          <p className="text-amber-400 text-xs font-semibold mb-1" style={{ fontFamily: 'Georgia, serif' }}>When Upright:</p>
+                          <p className="text-amber-200/80 text-xs sm:text-sm leading-relaxed" style={{ fontFamily: 'Georgia, serif' }}>
+                            {meaningType === 'celtic' && reading.cards[selectedCardIndex].card.celtic_upright
+                              ? reading.cards[selectedCardIndex].card.celtic_upright
+                              : reading.cards[selectedCardIndex].card.upright_meaning}
+                          </p>
+                        </div>
+                      )}
                     </div>
                   </div>
 
                   {meaningType === 'celtic' && reading.cards[selectedCardIndex].card.celtic_mythology && (
-                    <div className="bg-emerald-900/30 border-2 border-emerald-700/40 p-4 sm:p-6">
-                      <h4 className="text-emerald-300 font-bold text-lg sm:text-xl mb-3 sm:mb-4 flex items-center gap-2 sm:gap-3" style={{ fontFamily: 'Georgia, serif' }}>
-                        <RunicSymbol variant="algiz" className="w-6 h-8 sm:w-8 sm:h-10 text-emerald-600" />
-                        Celtic Mythology & Symbolism
+                    <div className="bg-emerald-900/30 border border-emerald-700/40 p-3 sm:p-4">
+                      <h4 className="text-emerald-300 font-bold text-base sm:text-lg mb-2 sm:mb-3 flex items-center gap-2" style={{ fontFamily: 'Georgia, serif' }}>
+                        <RunicSymbol variant="algiz" className="w-5 h-7 sm:w-6 sm:h-8 text-emerald-600" />
+                        Celtic Mythology
                       </h4>
-                      <p className="text-emerald-200/95 text-base sm:text-lg leading-relaxed" style={{ fontFamily: 'Georgia, serif' }}>
+                      <p className="text-emerald-200/90 text-xs sm:text-sm leading-relaxed" style={{ fontFamily: 'Georgia, serif' }}>
                         {reading.cards[selectedCardIndex].card.celtic_mythology}
                       </p>
                     </div>
