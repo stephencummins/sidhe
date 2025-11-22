@@ -140,7 +140,7 @@ export default function CardSelection({ spreadType, onCardsSelected }: CardSelec
                     animationDelay: `${index * 30}ms`
                   }}
                 >
-                  <TarotCardVisual card={card} revealed={false} size="small" cardBackUrl={cardBackUrl} />
+                  <TarotCardVisual card={card} revealed={false} size="medium" cardBackUrl={cardBackUrl} />
 
                   {/* Selection Number Badge */}
                   {selected && selectionOrder >= 0 && (

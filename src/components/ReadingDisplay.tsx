@@ -181,13 +181,15 @@ export default function ReadingDisplay({ reading, onNewReading }: ReadingDisplay
           {reading.cards.map((sc, index) => (
             <div
               key={index}
-              className={`${reading.spread === 'celtic-cross' ? getCelticCrossPosition(index) : ''} flex flex-col items-center`}
+              className={`${reading.spread === 'celtic-cross' ? getCelticCrossPosition(index) : ''} flex flex-col items-center ${
+                reading.spread === 'celtic-cross' && index === 1 ? '-translate-y-[52px] -translate-x-[52px]' : ''
+              }`}
             >
               <div
                 className="mb-4 cursor-pointer transition-transform hover:scale-105"
                 onClick={() => setSelectedCardIndex(index)}
               >
-                <TarotCardVisual card={sc.card} revealed={true} size="medium" isReversed={sc.isReversed} />
+                <TarotCardVisual card={sc.card} revealed={true} size="large" isReversed={sc.isReversed} />
               </div>
               <div className="text-center">
                 <p className="text-amber-500 font-semibold text-sm mb-1" style={{ fontFamily: 'Georgia, serif' }}>{sc.position}</p>
@@ -360,7 +362,7 @@ export default function ReadingDisplay({ reading, onNewReading }: ReadingDisplay
                 <TarotCardVisual
                   card={reading.cards[selectedCardIndex].card}
                   revealed={true}
-                  size="large"
+                  size="xlarge"
                   isReversed={reading.cards[selectedCardIndex].isReversed}
                 />
               </div>
