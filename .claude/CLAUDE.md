@@ -45,7 +45,7 @@ npx supabase link --project-ref ktjbtkkltvkmdwzkcwij
 sidhe/
 ├── src/
 │   ├── components/        # React components
-│   ├── contexts/          # React contexts (AuthContext)
+│   ├── contexts/          # React contexts (AuthContext, SubscriptionContext)
 │   ├── data/              # Static data (spreads, tarot deck)
 │   ├── hooks/             # Custom hooks (useTarotDeck)
 │   ├── lib/               # Utilities (supabase, celticCalendar, powerScoreCalculator)
@@ -238,6 +238,350 @@ updated_at        TIMESTAMPTZ
 
 ---
 
+## Stripe Payment Integration
+
+### Overview
+Sidhe uses Stripe for monetization with three product tiers:
+- **Free**: Yes/No single-card readings
+- **Subscriber** (£4.99/month): Daily 3-card email readings
+- **VIP** (£9.99/month): Full access (save readings, analytics, Winds of Change, unlimited Celtic Cross)
+- **Celtic Cross One-off** (£4.99): Single Celtic Cross reading credit
+
+### Configuration (✅ Completed Nov 22, 2024)
+
+**Status**: ✅ Fully integrated, tested, and working
+
+**Stripe Test Mode Products**:
+- Subscriber: `price_1SWHGWP3mUc1W0ak5mpc0tyE` (£4.99/month)
+- VIP: `price_1SWHGuP3mUc1W0akxlVOJT0K` (£9.99/month)
+- Celtic Cross: `price_1SWHHKP3mUc1W0akqEpFR0TH` (£4.99 one-off)
+
+**Stripe Live Mode Products** (for production):
+- Subscriber: `price_1SUuMTP3mUc1W0akNGmyGGzz`
+- VIP: `price_1SUuNPP3mUc1W0akW081YmCD`
+- Celtic Cross: `price_1SW39sP3mUc1W0akxtIx9aPy`
+
+**Webhook Endpoint**: `https://ktjbtkkltvkmdwzkcwij.supabase.co/functions/v1/stripe-webhook`
+- ✅ Configured in Stripe Dashboard (test mode)
+- ✅ Events: `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.payment_failed`
+- ✅ Webhook secret: `whsec_r1CQyDfhJmJgGSVyzhUNtST4ri2fLQgd` (test mode)
+
+**Supabase Secrets** (✅ Set):
+- `STRIPE_SECRET_KEY` - Stripe test API key
+- `STRIPE_WEBHOOK_SECRET` - Webhook signing secret
+
+**Critical Configuration** (`supabase/config.toml`):
+```toml
+[functions.stripe-webhook]
+verify_jwt = false  # REQUIRED - webhooks don't use JWT auth
+```
+
+**Database Migration**: ✅ Applied
+- File: `supabase/migrations/20251118000001_stripe_tables_idempotent.sql`
+- Tables: `user_subscriptions`, `celtic_cross_credits`, `stripe_purchases`
+
+**Edge Functions**: ✅ All deployed and tested
+- `create-checkout` - Creates Stripe checkout sessions
+- `stripe-webhook` - Processes webhook events (uses `constructEventAsync` for Deno compatibility)
+- `customer-portal` - Stripe customer portal access
+- `check-access` - Checks user subscription tier and features
+- `use-celtic-credit` - Consumes Celtic Cross reading credits
+
+**Frontend Components**: ✅ Implemented
+- `PricingPage.tsx` - Pricing page (fixed: `gap-16` for Celtic border spacing, z-20 for "MOST POPULAR" badge)
+- `SuccessPage.tsx` - Post-checkout success page (navigates to `/reading` for Celtic Cross purchases)
+- `SubscriptionContext.tsx` - Global subscription state management
+
+### Important Implementation Notes
+
+**Stripe Library Version**:
+- Use `npm:stripe@^13.0.0` (NOT esm.sh versions)
+- Deno Edge Functions require async webhook verification: `await stripe.webhooks.constructEventAsync()`
+
+**Common Issues & Solutions**:
+1. **401 Unauthorized on webhook**: Add `verify_jwt = false` to `supabase/config.toml`
+2. **Invalid signature**: Use `constructEventAsync` instead of `constructEvent` in Deno
+3. **Price not found**: Ensure using test mode price IDs with test mode secret key
+4. **Deno.core.runMicrotasks error**: Update to `npm:stripe@^13.0.0` import
+
+### Database Tables
+
+#### `user_subscriptions`
+```sql
+id                      UUID PRIMARY KEY
+user_id                 UUID REFERENCES auth.users(id) UNIQUE
+email                   TEXT NOT NULL
+stripe_customer_id      TEXT UNIQUE
+stripe_subscription_id  TEXT UNIQUE
+tier                    TEXT ('free' | 'subscriber' | 'vip')
+status                  TEXT ('active' | 'cancelled' | 'past_due' | 'trialing')
+current_period_start    TIMESTAMPTZ
+current_period_end      TIMESTAMPTZ
+cancel_at_period_end    BOOLEAN
+created_at              TIMESTAMPTZ
+updated_at              TIMESTAMPTZ
+```
+
+#### `celtic_cross_credits`
+```sql
+id                 UUID PRIMARY KEY
+user_id            UUID REFERENCES auth.users(id)
+email              TEXT NOT NULL
+credits_remaining  INTEGER (>= 0)
+total_purchased    INTEGER (>= 0)
+total_used         INTEGER (>= 0)
+created_at         TIMESTAMPTZ
+updated_at         TIMESTAMPTZ
+```
+
+#### `stripe_purchases`
+```sql
+id                        UUID PRIMARY KEY
+user_id                   UUID REFERENCES auth.users(id)
+email                     TEXT NOT NULL
+stripe_session_id         TEXT UNIQUE NOT NULL
+stripe_customer_id        TEXT
+stripe_payment_intent_id  TEXT
+product_type              TEXT ('subscription' | 'celtic_cross')
+product_name              TEXT NOT NULL
+amount_pence              INTEGER
+currency                  TEXT DEFAULT 'gbp'
+status                    TEXT ('pending' | 'completed' | 'failed' | 'refunded')
+created_at                TIMESTAMPTZ
+```
+
+### Stripe Edge Functions (Deployed)
+
+#### `create-checkout`
+- **Purpose**: Create Stripe checkout session for subscriptions or one-off purchases
+- **Auth**: Requires authenticated user (JWT)
+- **Input**:
+  ```typescript
+  {
+    priceId: string,
+    productType: 'subscription' | 'celtic_cross',
+    successUrl: string,
+    cancelUrl: string
+  }
+  ```
+- **Output**: `{ sessionId, url }` - Redirect user to session.url
+- **Behavior**:
+  - Creates or retrieves Stripe customer
+  - Logs purchase attempt to `stripe_purchases`
+  - Returns checkout session URL
+
+#### `stripe-webhook`
+- **Purpose**: Handle Stripe webhook events
+- **Auth**: Stripe signature verification
+- **Events Handled**:
+  - **checkout.session.completed**:
+    - Subscription: Creates/updates `user_subscriptions` record, determines tier from price (£9.99 = VIP, £4.99 = Subscriber)
+    - Celtic Cross: Adds 1 credit to `celtic_cross_credits`
+    - Updates purchase status to 'completed'
+  - **customer.subscription.updated**: Updates subscription status and period dates
+  - **customer.subscription.deleted**: Sets tier to 'free', status to 'cancelled'
+  - **invoice.payment_failed**: Sets status to 'past_due'
+
+#### `customer-portal`
+- **Purpose**: Create Stripe customer portal session
+- **Auth**: Requires authenticated user
+- **Input**: `{ returnUrl: string }`
+- **Output**: `{ url }` - Redirect to portal
+- **Features**: Cancel subscription, update payment method, view invoices
+
+#### `check-access`
+- **Purpose**: Check user's current subscription tier and feature access
+- **Auth**: Requires authenticated user
+- **Output**:
+  ```typescript
+  {
+    tier: 'free' | 'subscriber' | 'vip',
+    hasAccess: {
+      dailyEmail: boolean,
+      celticCross: boolean,
+      saveReadings: boolean,
+      analytics: boolean,
+      windsOfChange: boolean
+    },
+    celticCredits: number
+  }
+  ```
+
+#### `use-celtic-credit`
+- **Purpose**: Consume a Celtic Cross reading credit
+- **Auth**: Requires authenticated user
+- **Output**: `{ success: boolean, creditsRemaining: number }`
+- **Behavior**: Decrements `credits_remaining`, increments `total_used`
+
+### Frontend Integration Pattern
+
+#### Check User Access
+```typescript
+const { data } = await fetch(
+  `${SUPABASE_URL}/functions/v1/check-access`,
+  { headers: { Authorization: `Bearer ${token}` } }
+).then(r => r.json());
+
+if (data.hasAccess.celticCross) {
+  // Show Celtic Cross reading
+}
+```
+
+#### Create Checkout Session
+```typescript
+async function subscribe(tier: 'subscriber' | 'vip') {
+  const priceId = tier === 'vip'
+    ? import.meta.env.VITE_STRIPE_VIP_PRICE_ID
+    : import.meta.env.VITE_STRIPE_SUBSCRIBER_PRICE_ID;
+
+  const response = await fetch(
+    `${SUPABASE_URL}/functions/v1/create-checkout`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${session.access_token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        priceId,
+        productType: 'subscription',
+        successUrl: `${window.location.origin}/success`,
+        cancelUrl: `${window.location.origin}/pricing`
+      })
+    }
+  );
+
+  const { url } = await response.json();
+  window.location.href = url; // Redirect to Stripe Checkout
+}
+```
+
+#### Buy Celtic Cross Credit
+```typescript
+async function buyCelticCross() {
+  const response = await fetch(
+    `${SUPABASE_URL}/functions/v1/create-checkout`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${session.access_token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        priceId: import.meta.env.VITE_STRIPE_CELTIC_CROSS_PRICE_ID,
+        productType: 'celtic_cross',
+        successUrl: `${window.location.origin}/reading?type=celtic-cross`,
+        cancelUrl: `${window.location.origin}/pricing`
+      })
+    }
+  );
+
+  const { url } = await response.json();
+  window.location.href = url;
+}
+```
+
+#### Manage Subscription (Customer Portal)
+```typescript
+async function openBillingPortal() {
+  const response = await fetch(
+    `${SUPABASE_URL}/functions/v1/customer-portal`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${session.access_token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        returnUrl: window.location.origin
+      })
+    }
+  );
+
+  const { url } = await response.json();
+  window.location.href = url;
+}
+```
+
+#### Use Celtic Cross Credit
+```typescript
+async function useCelticCredit() {
+  const response = await fetch(
+    `${SUPABASE_URL}/functions/v1/use-celtic-credit`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${session.access_token}`,
+        'Content-Type': 'application/json'
+      }
+    }
+  );
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.error);
+  }
+
+  return result; // { success: true, creditsRemaining: number }
+}
+```
+
+### Feature Access Matrix
+
+| Feature | Free | Subscriber (£4.99/mo) | VIP (£9.99/mo) | Celtic Cross One-off (£4.99) |
+|---------|------|----------------------|----------------|------------------------------|
+| Yes/No single-card | ✓ | ✓ | ✓ | - |
+| Daily 3-card email | - | ✓ | ✓ | - |
+| Celtic Cross reading | - | - | ✓ (unlimited) | ✓ (1 credit) |
+| Save readings | - | - | ✓ | - |
+| Analytics dashboard | - | - | ✓ | - |
+| Winds of Change | - | - | ✓ | - |
+
+### Testing
+
+#### Test Cards (Stripe Test Mode)
+- **Success**: 4242 4242 4242 4242
+- **Decline**: 4000 0000 0000 0002
+- **3D Secure**: 4000 0025 0000 3155
+
+#### Local Webhook Testing
+```bash
+stripe listen --forward-to localhost:54321/functions/v1/stripe-webhook
+# Use the webhook signing secret from CLI output in .env
+```
+
+### Monitoring Queries
+
+```sql
+-- Active subscribers by tier
+SELECT tier, COUNT(*)
+FROM user_subscriptions
+WHERE status = 'active'
+GROUP BY tier;
+
+-- Recent purchases
+SELECT * FROM stripe_purchases
+ORDER BY created_at DESC
+LIMIT 20;
+
+-- Celtic Cross credits usage
+SELECT
+  SUM(total_purchased) as total_sold,
+  SUM(total_used) as total_used,
+  SUM(credits_remaining) as credits_outstanding
+FROM celtic_cross_credits;
+```
+
+### Stripe Dashboard Links
+- [Payments](https://dashboard.stripe.com/payments)
+- [Customers](https://dashboard.stripe.com/customers)
+- [Subscriptions](https://dashboard.stripe.com/subscriptions)
+- [Webhooks](https://dashboard.stripe.com/webhooks)
+- [Customer Portal Settings](https://dashboard.stripe.com/settings/billing/portal)
+
+---
+
 ## Key Patterns & Conventions
 
 ### 1. Celtic Theme & Styling
@@ -261,9 +605,18 @@ updated_at        TIMESTAMPTZ
 
 **Visual Elements**:
 - `CelticBorder.tsx` - Reusable Celtic knot border component
+  - Features decorative Celtic knot medallions positioned at edges (top, bottom, left, right)
+  - Medallions extend beyond card boundaries (translate-x/y-1/2)
+  - ⚠️ **Important**: When using CelticBorder in grid layouts, use minimum `gap-16` to prevent medallion overlap
+  - Example: PricingPage.tsx uses `gap-16` for 3-column grid
 - `RunicSymbol.tsx` - Decorative runic symbols
 - Custom patterns using SVG for backgrounds
 - Gradient overlays for depth
+
+**Z-Index Management**:
+- Celtic knot medallions: `z-10`
+- Important badges/labels that should appear above medallions: `z-20` or higher
+- Example: "MOST POPULAR" badge on PricingPage uses `z-20`
 
 ### 2. Data Loading Pattern
 **Custom Hook**: `useTarotDeck()`
@@ -272,12 +625,24 @@ updated_at        TIMESTAMPTZ
 - Returns: `{ deck, loading, cardBackUrl }`
 - Used throughout app for consistent deck data
 
-### 3. Authentication Pattern
-**Context**: `AuthContext`
+### 3. Authentication & Subscription Pattern
+**AuthContext**:
 - Provides: `{ user, loading, signInWithGoogle, signOut }`
 - Google OAuth integration
 - `ProtectedRoute` wrapper component for admin pages
 - Session persistence via Supabase Auth
+
+**SubscriptionContext**:
+- Provides: `{ tier, status, celticCrossCredits, features, loading, refreshSubscription, subscribe, buyCelticCross, useCelticCredit, openBillingPortal }`
+- Manages Stripe subscription state globally
+- Automatically refreshes on user auth state change
+- Feature flags based on subscription tier:
+  - `yesNoReading`: Always true (free feature)
+  - `dailyReading`: Subscriber + VIP
+  - `saveReadings`: VIP only
+  - `analysisTool`: VIP only
+  - `windsOfChange`: VIP only
+  - `celticCross`: VIP unlimited, or users with credits > 0
 
 ### 4. Service Layer
 **Services** (in `src/services/`):
@@ -518,6 +883,12 @@ SUPABASE_SERVICE_ROLE_KEY=[auto-provided]
 - `src/components/LandingPage.tsx` - Homepage
 - `src/components/TarotFlow.tsx` - Main reading wizard
 - `src/components/AdminPanel.tsx` - Admin dashboard
+- `src/components/PricingPage.tsx` - Stripe subscription pricing page
+- `src/components/SuccessPage.tsx` - Post-checkout success page
+
+### Contexts
+- `src/contexts/AuthContext.tsx` - Authentication state management
+- `src/contexts/SubscriptionContext.tsx` - Stripe subscription state management
 
 ### Utilities
 - `src/lib/supabase.ts` - Supabase client initialization
