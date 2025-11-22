@@ -5,6 +5,122 @@ Sidhe is a Celtic-themed tarot reading web application that combines traditional
 
 ---
 
+## 🚀 Current Status (Updated: Nov 22, 2024)
+
+### Production Environment
+- **Live URL**: https://sidhe.netlify.app
+- **Supabase Project**: ktjbtkkltvkmdwzkcwij
+- **Stripe Mode**: TEST MODE (ready for test transactions)
+- **Status**: ✅ Fully deployed and operational
+
+### Recent Updates (Nov 22, 2024)
+
+#### 1. Celtic Cross Layout Improvements
+- **Challenge Card Positioning**: Now properly positioned to form a cross
+  - Offset: `-translate-y-[52px] -translate-x-[52px]` in `ReadingDisplay.tsx:185`
+  - Forms perfect cross over Present Situation card
+  - Maintains clickability with z-index layering (z-10 for crossing card)
+
+#### 2. Card Sizing Enhancements
+- **Main Display Cards**: Upgraded from medium → large (w-48 / 192px)
+  - File: `src/components/ReadingDisplay.tsx:192`
+- **Modal Cards**: Upgraded from large → xlarge (responsive: 192px → 256px → 320px)
+  - File: `src/components/ReadingDisplay.tsx:365`
+- **Card Selection Grid**: Upgraded from small → medium (w-32 / 128px)
+  - File: `src/components/CardSelection.tsx:143`
+
+#### 3. Routing Fix
+- Removed conflicting `/reading/:id` route from `App.tsx`
+- Kept `/r/:id` for shared daily readings
+- Fixed navigation conflicts between reading wizard and shared readings
+
+#### 4. Stripe Payment Integration (COMPLETE)
+- ✅ **3 Subscription Tiers**: Free, Subscriber (£4.99/mo), VIP (£9.99/mo)
+- ✅ **One-off Purchase**: Celtic Cross reading (£4.99)
+- ✅ **5 Edge Functions**: Deployed to Supabase
+- ✅ **Database Tables**: Migrated and ready
+- ✅ **Frontend UI**: PricingPage, SuccessPage, SubscriptionContext
+- ✅ **Feature Gating**: Celtic Cross locked for non-subscribers
+- **Mode**: Currently in TEST MODE (see Stripe section for details)
+
+### Quick Start (Resume Development)
+
+```bash
+# Clone and setup
+cd /Users/stephen/Projects/sidhe
+npm install
+
+# Start dev server
+npm run dev  # → http://localhost:5173 or 5174
+
+# View logs
+tail -f supabase/.temp/cli-latest
+
+# Deploy changes
+git add . && git commit -m "Your message" && git push origin main
+npx supabase functions deploy <function-name>  # If edge functions changed
+npx supabase db push  # If migrations changed
+```
+
+### Environment Variables
+
+**Local (.env) - Test Mode:**
+```
+VITE_SUPABASE_URL=https://ktjbtkkltvkmdwzkcwij.supabase.co
+VITE_SUPABASE_ANON_KEY=[in .env file]
+VITE_ANTHROPIC_API_KEY=[in .env file]
+VITE_STRIPE_SUBSCRIBER_PRICE_ID=price_1SWHGWP3mUc1W0ak5mpc0tyE (TEST)
+VITE_STRIPE_VIP_PRICE_ID=price_1SWHGuP3mUc1W0akxlVOJT0K (TEST)
+VITE_STRIPE_CELTIC_CROSS_PRICE_ID=price_1SWHHKP3mUc1W0akqEpFR0TH (TEST)
+```
+
+**Supabase Secrets (check with: `npx supabase secrets list`):**
+```
+STRIPE_SECRET_KEY=sk_test_... (TEST MODE)
+STRIPE_WEBHOOK_SECRET=whsec_r1CQyDfhJmJgGSVyzhUNtST4ri2fLQgd (TEST)
+ANTHROPIC_API_KEY=[configured]
+```
+
+**Netlify Environment Variables:**
+- Check: https://app.netlify.com/sites/sidhe/settings/env
+- Currently using build-time .env values (test mode)
+
+### Testing Stripe Integration
+
+1. **Visit**: https://sidhe.netlify.app/pricing
+2. **Test Card**: 4242 4242 4242 4242 (any future expiry, any CVC)
+3. **Monitor**: https://dashboard.stripe.com/test/payments
+4. **Verify**:
+   - User gets VIP/Subscriber tier
+   - Celtic Cross unlocks (for VIP or credit purchase)
+   - Database tables updated (`user_subscriptions`, `stripe_purchases`)
+
+### Known Issues / TODOs
+- None currently - system is stable and operational
+- Stripe is in TEST MODE - switch to LIVE when ready for production payments
+
+### Switching to Stripe LIVE Mode (When Ready)
+
+**Netlify Environment Variables:**
+```
+VITE_STRIPE_SUBSCRIBER_PRICE_ID=price_1SUuMTP3mUc1W0akNGmyGGzz
+VITE_STRIPE_VIP_PRICE_ID=price_1SUuNPP3mUc1W0akW081YmCD
+VITE_STRIPE_CELTIC_CROSS_PRICE_ID=price_1SW39sP3mUc1W0akxtIx9aPy
+```
+
+**Supabase Secrets:**
+```bash
+npx supabase secrets set STRIPE_SECRET_KEY=sk_live_YOUR_KEY
+npx supabase secrets set STRIPE_WEBHOOK_SECRET=whsec_YOUR_LIVE_SECRET
+# Then redeploy all Stripe functions
+```
+
+**Stripe Dashboard:**
+- Configure live mode webhook: https://dashboard.stripe.com/webhooks
+- Same endpoint URL, different signing secret
+
+---
+
 ## Common Commands
 
 ### Development
