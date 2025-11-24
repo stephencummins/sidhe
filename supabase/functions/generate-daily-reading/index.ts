@@ -160,7 +160,7 @@ Deno.serve(async (req: Request) => {
 
     if (existingReading) {
       console.log(`Returning existing reading for ${today} with ID: ${existingReading.id}`);
-      const shareableUrl = `https://sidhe.netlify.app/reading/share/${existingReading.id}`;
+      const shareableUrl = `https://sidhe.netlify.app/r/${existingReading.id}`;
       return new Response(
         JSON.stringify({
           ...existingReading,
@@ -269,7 +269,7 @@ Deno.serve(async (req: Request) => {
         
         if (raceError) throw raceError;
 
-        const shareableUrl = `https://sidhe.netlify.app/reading/share/${raceReading.id}`;
+        const shareableUrl = `https://sidhe.netlify.app/r/${raceReading.id}`;
         return new Response(
           JSON.stringify({ ...raceReading, shareableUrl }),
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -279,7 +279,7 @@ Deno.serve(async (req: Request) => {
     }
 
     const readingId = savedReading.id;
-    const shareableUrl = `https://sidhe.netlify.app/reading/share/${readingId}`;
+    const shareableUrl = `https://sidhe.netlify.app/r/${readingId}`;
 
     console.log(`New reading saved with ID: ${readingId}`);
     console.log(`Shareable URL: ${shareableUrl}`);

@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import CelticBorder from './CelticBorder';
 import { useAuth } from '../contexts/AuthContext';
+import DailyReadingSubscription from './DailyReadingSubscription';
+import TestimonialSection from './TestimonialSection';
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -76,129 +78,117 @@ export default function LandingPage() {
           </CelticBorder>
         </div>
 
-        <div className="flex justify-center mb-16">
+        {/* Primary CTA - Get Your Reading */}
+        <div className="flex flex-col items-center gap-4 mb-16">
           <button
             onClick={handleStartReading}
-            className="calan-btn calan-btn-primary group relative px-16 py-5 text-xl font-bold transition-all duration-500 transform hover:scale-105 overflow-hidden bg-gradient-to-br from-amber-200 via-amber-300 to-amber-400 border-2 border-amber-500 shadow-xl hover:shadow-2xl"
+            className="calan-btn calan-btn-primary group relative px-20 py-6 text-2xl font-bold transition-all duration-500 transform hover:scale-105 overflow-hidden bg-gradient-to-br from-amber-200 via-amber-300 to-amber-400 border-2 border-amber-500 shadow-xl hover:shadow-2xl"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
-            <span className="relative z-10 tracking-wide text-amber-900 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]" style={{ fontFamily: 'Cinzel, serif' }}>Begin Your Journey</span>
+            <span className="relative z-10 tracking-wide text-amber-900 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]" style={{ fontFamily: 'Cinzel, serif' }}>Get Your Free Reading</span>
 
             <div className="absolute -top-1 -left-1 w-6 h-6 border-t-4 border-l-4 border-amber-600" />
             <div className="absolute -top-1 -right-1 w-6 h-6 border-t-4 border-r-4 border-amber-600" />
             <div className="absolute -bottom-1 -left-1 w-6 h-6 border-b-4 border-l-4 border-amber-600" />
             <div className="absolute -bottom-1 -right-1 w-6 h-6 border-b-4 border-r-4 border-amber-600" />
           </button>
+
+          {/* Secondary CTA - Daily Reading */}
+          <button
+            onClick={() => navigate('/daily')}
+            className="group relative px-8 py-2 text-sm font-medium transition-all duration-300 hover:scale-105 bg-purple-900/30 border border-purple-500/50 hover:bg-purple-800/40 hover:border-purple-400/70 shadow-lg hover:shadow-xl rounded"
+          >
+            <span className="relative z-10 tracking-wide text-purple-200" style={{ fontFamily: 'Cinzel, serif' }}>
+              ✨ Or Try Today's Daily Reading
+            </span>
+          </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-14 mb-16">
-          <CelticBorder className="transform hover:scale-105 transition-transform duration-300">
-            <div className="p-10 text-center">
-              <div className="mb-4 flex justify-center">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center shadow-lg border-2 border-amber-300">
-                  <span className="text-3xl font-bold text-amber-950">I</span>
+          <button onClick={handleStartReading} className="h-full text-left transform hover:scale-105 transition-transform duration-300 cursor-pointer">
+            <CelticBorder className="h-full">
+              <div className="p-10 text-center h-full flex flex-col justify-center">
+                <div className="mb-4 flex justify-center">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center shadow-lg border-2 border-amber-300">
+                    <span className="text-3xl font-bold text-amber-950">I</span>
+                  </div>
                 </div>
+                <h3 className="text-xl font-bold mb-3" style={{
+                  fontFamily: 'Cinzel, serif',
+                  color: '#d4af37',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                }}>
+                  Choose Your Spread
+                </h3>
+                <p className="leading-relaxed" style={{
+                  color: '#f5e6d3',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.7)'
+                }}>
+                  Select from sacred spreading patterns passed down through ages
+                </p>
               </div>
-              <h3 className="text-xl font-bold mb-3" style={{ 
-                fontFamily: 'Cinzel, serif',
-                color: '#d4af37',
-                textShadow: '0 1px 2px rgba(0,0,0,0.8)'
-              }}>
-                Choose Your Spread
-              </h3>
-              <p className="leading-relaxed" style={{
-                color: '#f5e6d3',
-                textShadow: '0 1px 2px rgba(0,0,0,0.7)'
-              }}>
-                Select from sacred spreading patterns passed down through ages
-              </p>
-            </div>
-          </CelticBorder>
+            </CelticBorder>
+          </button>
 
-          <CelticBorder className="transform hover:scale-105 transition-transform duration-300">
-            <div className="p-10 text-center">
-              <div className="mb-4 flex justify-center">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center shadow-lg border-2 border-amber-300">
-                  <span className="text-3xl font-bold text-amber-50">II</span>
+          <button onClick={handleStartReading} className="h-full text-left transform hover:scale-105 transition-transform duration-300 cursor-pointer">
+            <CelticBorder className="h-full">
+              <div className="p-10 text-center h-full flex flex-col justify-center">
+                <div className="mb-4 flex justify-center">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center shadow-lg border-2 border-amber-300">
+                    <span className="text-3xl font-bold text-amber-50">II</span>
+                  </div>
                 </div>
+                <h3 className="text-xl font-bold mb-3" style={{
+                  fontFamily: 'Cinzel, serif',
+                  color: '#d4af37',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                }}>
+                  Draw Your Cards
+                </h3>
+                <p className="leading-relaxed" style={{
+                  color: '#f5e6d3',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.7)'
+                }}>
+                  Channel the ancient energies through mystical cards
+                </p>
               </div>
-              <h3 className="text-xl font-bold mb-3" style={{ 
-                fontFamily: 'Cinzel, serif',
-                color: '#d4af37',
-                textShadow: '0 1px 2px rgba(0,0,0,0.8)'
-              }}>
-                Draw Your Cards
-              </h3>
-              <p className="leading-relaxed" style={{
-                color: '#f5e6d3',
-                textShadow: '0 1px 2px rgba(0,0,0,0.7)'
-              }}>
-                Channel the ancient energies through mystical cards
-              </p>
-            </div>
-          </CelticBorder>
+            </CelticBorder>
+          </button>
 
-          <CelticBorder className="transform hover:scale-105 transition-transform duration-300">
-            <div className="p-10 text-center">
-              <div className="mb-4 flex justify-center">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-red-500 to-amber-600 flex items-center justify-center shadow-lg border-2 border-amber-300">
-                  <span className="text-3xl font-bold text-amber-50">III</span>
+          <button onClick={handleStartReading} className="h-full text-left transform hover:scale-105 transition-transform duration-300 cursor-pointer">
+            <CelticBorder className="h-full">
+              <div className="p-10 text-center h-full flex flex-col justify-center">
+                <div className="mb-4 flex justify-center">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-red-500 to-amber-600 flex items-center justify-center shadow-lg border-2 border-amber-300">
+                    <span className="text-3xl font-bold text-amber-50">III</span>
+                  </div>
                 </div>
+                <h3 className="text-xl font-bold mb-3" style={{
+                  fontFamily: 'Cinzel, serif',
+                  color: '#d4af37',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                }}>
+                  Receive Wisdom
+                </h3>
+                <p className="leading-relaxed" style={{
+                  color: '#f5e6d3',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.7)'
+                }}>
+                  Discover insights illuminated by divine guidance
+                </p>
               </div>
-              <h3 className="text-xl font-bold mb-3" style={{ 
-                fontFamily: 'Cinzel, serif',
-                color: '#d4af37',
-                textShadow: '0 1px 2px rgba(0,0,0,0.8)'
-              }}>
-                Receive Wisdom
-              </h3>
-              <p className="leading-relaxed" style={{
-                color: '#f5e6d3',
-                textShadow: '0 1px 2px rgba(0,0,0,0.7)'
-              }}>
-                Discover insights illuminated by divine guidance
-              </p>
-            </div>
-          </CelticBorder>
+            </CelticBorder>
+          </button>
         </div>
 
-        <div className="max-w-4xl mx-auto">
-          <CelticBorder>
-            <div className="px-6 py-8">
-              <h3 className="text-2xl font-bold mb-6 text-center" style={{
-                fontFamily: 'Cinzel, serif',
-                color: '#d4af37',
-                textShadow: '0 1px 2px rgba(0,0,0,0.8)'
-              }}>
-                Experience the Magic
-              </h3>
-              <div className="relative rounded-lg overflow-hidden shadow-2xl border-4 border-amber-600/40">
-                <video
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  className="w-full h-auto"
-                >
-                  <source src="/tarot-reading.mp4" type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              </div>
-              <p className="mt-6 text-center leading-relaxed" style={{
-                color: '#f5e6d3',
-                textShadow: '0 1px 2px rgba(0,0,0,0.7)'
-              }}>
-                Each card is a masterwork inspired by the intricate beauty of Celtic tradition,
-                blending ancient artistry with the turning of the seasons.
-              </p>
-              <p className="mt-3 text-center italic text-sm" style={{
-                color: '#cd7f32',
-                textShadow: '0 1px 2px rgba(0,0,0,0.8)'
-              }}>
-                "In every season, a story. In every turn, wisdom eternal."
-              </p>
-            </div>
-          </CelticBorder>
+        {/* Testimonials */}
+        <div className="mb-16">
+          <TestimonialSection />
+        </div>
+
+        {/* Personal Reading Subscription */}
+        <div className="mt-16 max-w-2xl mx-auto">
+          <DailyReadingSubscription />
         </div>
 
         <div className="mt-16 flex flex-col items-center gap-6">

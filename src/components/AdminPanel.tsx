@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { LogOut, Plus, Trash2, Upload, Check, X, RefreshCw, BookOpen, Edit2 } from 'lucide-react';
+import { LogOut, Plus, Trash2, Upload, Check, X, RefreshCw, BookOpen, Edit2, Users } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 import { TarotDeck, TarotCardDB } from '../types/database';
@@ -7,9 +7,13 @@ import CelticBorder from './CelticBorder';
 import { tarotDeck } from '../data/tarotDeck';
 import CelticMeaningsImport from './CelticMeaningsImport';
 import { createThumbnail } from '../utils/imageUtils';
+import SubscriberManagement from './SubscriberManagement';
+
+type AdminTab = 'decks' | 'subscribers';
 
 export default function AdminPanel() {
   const { user, signOut } = useAuth();
+  const [activeTab, setActiveTab] = useState<AdminTab>('decks');
   const [decks, setDecks] = useState<TarotDeck[]>([]);
   const [selectedDeck, setSelectedDeck] = useState<string | null>(null);
   const [showNewDeckForm, setShowNewDeckForm] = useState(false);
@@ -255,7 +259,7 @@ export default function AdminPanel() {
             <p className="mt-2" style={{
               color: '#f5e6d3',
               textShadow: '0 1px 2px rgba(0,0,0,0.8)'
-            }}>Manage your tarot decks</p>
+            }}>Manage your tarot decks and subscribers</p>
           </div>
           <button
             onClick={signOut}
@@ -267,6 +271,36 @@ export default function AdminPanel() {
           </button>
         </div>
 
+        {/* Tab Navigation */}
+        <div className="flex gap-2 border-b-2 border-amber-600/40">
+          <button
+            onClick={() => setActiveTab('decks')}
+            className={`flex items-center gap-2 px-6 py-3 font-semibold transition-all duration-300 ${
+              activeTab === 'decks'
+                ? 'border-b-4 border-amber-600 text-amber-400 -mb-0.5'
+                : 'text-stone-400 hover:text-amber-300'
+            }`}
+            style={{ fontFamily: 'Cinzel, serif' }}
+          >
+            <BookOpen className="w-5 h-5" />
+            Deck Management
+          </button>
+          <button
+            onClick={() => setActiveTab('subscribers')}
+            className={`flex items-center gap-2 px-6 py-3 font-semibold transition-all duration-300 ${
+              activeTab === 'subscribers'
+                ? 'border-b-4 border-amber-600 text-amber-400 -mb-0.5'
+                : 'text-stone-400 hover:text-amber-300'
+            }`}
+            style={{ fontFamily: 'Cinzel, serif' }}
+          >
+            <Users className="w-5 h-5" />
+            Subscriber Management
+          </button>
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === 'decks' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-1 space-y-4">
             <CelticBorder>
@@ -440,6 +474,14 @@ export default function AdminPanel() {
             )}
           </div>
         </div>
+        )}
+
+        {/* Subscribers Tab */}
+        {activeTab === 'subscribers' && (
+          <div className="mt-6">
+            <SubscriberManagement />
+          </div>
+        )}
       </div>
     </div>
   );
@@ -853,17 +895,15 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
           </div>
         )}
 
-        <div className="mb-6 p-4 bg-amber-100/50 rounded-lg border-2 border-amber-700/30">
-          <div className="flex items-center justify-between">
+        <div className="mb-6 p-4 bg-amber-100 rounded-lg border-2 border-amber-700/50 shadow-sm">
+          <div className="flex items-center justify-between mb-3">
             <div>
-              <h3 className="text-lg font-bold mb-1" style={{
-                fontFamily: 'Cinzel, serif',
-                color: '#d4af37',
-                textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+              <h3 className="text-lg font-bold mb-1.5 text-amber-900" style={{
+                fontFamily: 'Cinzel, serif'
               }}>Card Back Image</h3>
-              <p className="text-sm" style={{ color: '#f5e6d3', opacity: 0.9 }}>This image will be shown when users select cards for their reading</p>
+              <p className="text-sm text-amber-900/80 leading-relaxed max-w-md">This image will be shown when users select cards for their reading</p>
             </div>
-            <label className="flex items-center gap-2 px-4 py-2 bg-amber-700 text-amber-50 rounded-lg hover:bg-amber-600 transition-colors cursor-pointer font-medium">
+            <label className="flex items-center gap-2 px-4 py-2 bg-amber-700 text-amber-50 rounded-lg hover:bg-amber-600 transition-colors cursor-pointer font-medium shadow-sm">
               <Upload className="w-4 h-4" />
               {deck.card_back_url ? 'Change' : 'Upload'}
               <input
@@ -876,15 +916,15 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
             </label>
           </div>
           {deck.card_back_url && (
-            <div className="mt-4 flex items-center gap-4">
-              <div className="w-24 aspect-[2/3] rounded-lg overflow-hidden border-2 border-amber-700/40">
+            <div className="mt-4 flex items-center gap-4 p-3 bg-white/60 rounded-lg border border-amber-700/30">
+              <div className="w-24 aspect-[2/3] rounded-lg overflow-hidden border-2 border-amber-700/40 shadow-sm">
                 <img src={deck.card_back_url} alt="Card back" className="w-full h-full object-cover" />
               </div>
-              <p className="text-sm text-amber-700">Current card back image</p>
+              <p className="text-sm text-amber-900 font-medium">Current card back image</p>
             </div>
           )}
           {uploadingCardBack && (
-            <div className="mt-4 p-3 bg-amber-600/20 text-amber-900 rounded-lg text-center border border-amber-700/40">
+            <div className="mt-4 p-3 bg-amber-600/20 text-amber-900 rounded-lg text-center border border-amber-700/40 font-medium">
               Uploading card back image...
             </div>
           )}
@@ -1166,27 +1206,27 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
                 </div>
 
                 {selectedCard.celtic_meaning_upright && (
-                  <div className="bg-emerald-100/50 border-2 border-emerald-700/40 p-4">
+                  <div className="bg-emerald-100 border-2 border-emerald-700/50 p-4 shadow-sm">
                     <h4 className="text-lg font-bold text-emerald-900 mb-2" style={{ fontFamily: 'Cinzel, serif' }}>Celtic Upright Meaning</h4>
-                    <p className="text-emerald-950/90 leading-relaxed">
+                    <p className="text-emerald-950 leading-relaxed">
                       {selectedCard.celtic_meaning_upright}
                     </p>
                   </div>
                 )}
 
                 {selectedCard.celtic_meaning_reversed && (
-                  <div className="bg-emerald-100/50 border-2 border-emerald-700/40 p-4">
+                  <div className="bg-emerald-100 border-2 border-emerald-700/50 p-4 shadow-sm">
                     <h4 className="text-lg font-bold text-emerald-900 mb-2" style={{ fontFamily: 'Cinzel, serif' }}>Celtic Reversed Meaning</h4>
-                    <p className="text-emerald-950/90 leading-relaxed">
+                    <p className="text-emerald-950 leading-relaxed">
                       {selectedCard.celtic_meaning_reversed}
                     </p>
                   </div>
                 )}
 
                 {selectedCard.celtic_mythology && (
-                  <div className="bg-emerald-100/50 border-2 border-emerald-700/40 p-4 backdrop-blur-sm shadow-lg">
+                  <div className="bg-emerald-100 border-2 border-emerald-700/50 p-4 shadow-sm">
                     <h4 className="text-lg font-bold text-emerald-900 mb-2" style={{ fontFamily: 'Cinzel, serif' }}>Celtic Mythology</h4>
-                    <p className="text-emerald-950/90 leading-relaxed">
+                    <p className="text-emerald-950 leading-relaxed">
                       {selectedCard.celtic_mythology}
                     </p>
                   </div>

@@ -1,0 +1,10 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Dark background -->
+  <rect width="64" height="64" fill="#1a2332" rx="8"/>
+
+  <!-- SÍ text in turquoise -->
+  <text x="32" y="45" font-family="Georgia, serif" font-size="36" font-weight="bold" fill="#5DD9C1" text-anchor="middle">SÍ</text>
+
+  <!-- Accent mark decoration -->
+  <path d="M 42 16 L 44 12 L 46 16 Z" fill="#5DD9C1"/>
+</svg>
