@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useParams } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { SubscriptionProvider } from './contexts/SubscriptionContext';
 import Layout from './components/Layout';
@@ -13,6 +13,11 @@ import ViewSavedReading from './components/ViewSavedReading';
 import ReadingAnalytics from './components/ReadingAnalytics';
 import PricingPage from './components/PricingPage';
 import SuccessPage from './components/SuccessPage';
+
+function ReadingIdRedirect() {
+  const { id } = useParams<{ id: string }>();
+  return <Navigate to={`/saved/${id}`} replace />;
+}
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -46,6 +51,9 @@ function AppContent() {
 
       {/* Shared reading routes - Must come BEFORE wildcard routes */}
       <Route path="/r/:id" element={<Layout><SharedReading /></Layout>} />
+
+      {/* Redirect old /reading/:id links to /saved/:id */}
+      <Route path="/reading/:id" element={<ReadingIdRedirect />} />
 
       {/* Reading wizard routes */}
       <Route path="/reading/*" element={<Layout><TarotFlow /></Layout>} />
