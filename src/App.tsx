@@ -46,6 +46,7 @@ function AppContent() {
 
       {/* Shared reading routes - Must come BEFORE wildcard routes */}
       <Route path="/r/:id" element={<Layout><SharedReading /></Layout>} />
+      <Route path="/reading/:id" element={<Layout><SharedReading /></Layout>} />
 
       {/* Reading wizard routes */}
       <Route path="/reading/*" element={<Layout><TarotFlow /></Layout>} />
