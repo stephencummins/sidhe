@@ -10,21 +10,23 @@ CREATE TABLE IF NOT EXISTS public.subscribers (
 );
 
 -- Add index on email for faster lookups
-CREATE INDEX idx_subscribers_email ON public.subscribers(email);
+CREATE INDEX IF NOT EXISTS idx_subscribers_email ON public.subscribers(email);
 
 -- Add index on is_active for filtering active subscribers
-CREATE INDEX idx_subscribers_is_active ON public.subscribers(is_active);
+CREATE INDEX IF NOT EXISTS idx_subscribers_is_active ON public.subscribers(is_active);
 
 -- Enable Row Level Security
 ALTER TABLE public.subscribers ENABLE ROW LEVEL SECURITY;
 
 -- Create policy to allow anyone to insert (subscribe)
+DROP POLICY IF EXISTS "Anyone can subscribe" ON public.subscribers;
 CREATE POLICY "Anyone can subscribe"
   ON public.subscribers
   FOR INSERT
   WITH CHECK (true);
 
 -- Create policy to allow users to update their own subscription (unsubscribe)
+DROP POLICY IF EXISTS "Users can update their own subscription" ON public.subscribers;
 CREATE POLICY "Users can update their own subscription"
   ON public.subscribers
   FOR UPDATE
@@ -32,6 +34,7 @@ CREATE POLICY "Users can update their own subscription"
   WITH CHECK (true);
 
 -- Create policy to allow service role to read all subscribers
+DROP POLICY IF EXISTS "Service role can read all subscribers" ON public.subscribers;
 CREATE POLICY "Service role can read all subscribers"
   ON public.subscribers
   FOR SELECT
@@ -49,6 +52,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS update_subscribers_updated_at ON public.subscribers;
 CREATE TRIGGER update_subscribers_updated_at
   BEFORE UPDATE ON public.subscribers
   FOR EACH ROW

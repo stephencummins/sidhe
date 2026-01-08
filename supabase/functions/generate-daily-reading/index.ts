@@ -174,10 +174,25 @@ Deno.serve(async (req: Request) => {
 
     console.log(`No existing reading for ${today}. Generating a new one...`);
 
-    // Fetch all cards from the active deck in database
+    // Fetch the active deck first
+    const { data: activeDeck, error: deckError } = await supabase
+      .from('tarot_decks')
+      .select('id')
+      .eq('is_active', true)
+      .single();
+
+    if (deckError) {
+      console.error('Error fetching active deck:', deckError);
+      throw new Error('No active deck found');
+    }
+
+    console.log(`Using active deck: ${activeDeck.id}`);
+
+    // Fetch all cards from the active deck only
     const { data: dbCards, error: cardsError } = await supabase
       .from('tarot_cards')
       .select('id, name, arcana, suit, meaning_upright, meaning_reversed, image_url, keywords')
+      .eq('deck_id', activeDeck.id)
       .limit(78);
 
     let selectedCards;
