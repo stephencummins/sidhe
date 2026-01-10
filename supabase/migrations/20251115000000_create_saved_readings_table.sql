@@ -15,14 +15,15 @@ CREATE TABLE IF NOT EXISTS public.saved_readings (
 );
 
 -- Add indexes for faster lookups
-CREATE INDEX idx_saved_readings_user_id ON public.saved_readings(user_id);
-CREATE INDEX idx_saved_readings_created_at ON public.saved_readings(created_at DESC);
-CREATE INDEX idx_saved_readings_is_public ON public.saved_readings(is_public) WHERE is_public = true;
+CREATE INDEX IF NOT EXISTS idx_saved_readings_user_id ON public.saved_readings(user_id);
+CREATE INDEX IF NOT EXISTS idx_saved_readings_created_at ON public.saved_readings(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_saved_readings_is_public ON public.saved_readings(is_public) WHERE is_public = true;
 
 -- Enable RLS (Row Level Security)
 ALTER TABLE public.saved_readings ENABLE ROW LEVEL SECURITY;
 
 -- Policy: Users can view their own readings
+DROP POLICY IF EXISTS "Users can view their own readings" ON public.saved_readings;
 CREATE POLICY "Users can view their own readings"
   ON public.saved_readings
   FOR SELECT
@@ -30,6 +31,7 @@ CREATE POLICY "Users can view their own readings"
   USING (auth.uid() = user_id);
 
 -- Policy: Anyone can view public readings
+DROP POLICY IF EXISTS "Anyone can view public readings" ON public.saved_readings;
 CREATE POLICY "Anyone can view public readings"
   ON public.saved_readings
   FOR SELECT
@@ -37,6 +39,7 @@ CREATE POLICY "Anyone can view public readings"
   USING (is_public = true);
 
 -- Policy: Users can insert their own readings
+DROP POLICY IF EXISTS "Users can insert their own readings" ON public.saved_readings;
 CREATE POLICY "Users can insert their own readings"
   ON public.saved_readings
   FOR INSERT
@@ -44,6 +47,7 @@ CREATE POLICY "Users can insert their own readings"
   WITH CHECK (auth.uid() = user_id);
 
 -- Policy: Users can update their own readings
+DROP POLICY IF EXISTS "Users can update their own readings" ON public.saved_readings;
 CREATE POLICY "Users can update their own readings"
   ON public.saved_readings
   FOR UPDATE
@@ -52,6 +56,7 @@ CREATE POLICY "Users can update their own readings"
   WITH CHECK (auth.uid() = user_id);
 
 -- Policy: Users can delete their own readings
+DROP POLICY IF EXISTS "Users can delete their own readings" ON public.saved_readings;
 CREATE POLICY "Users can delete their own readings"
   ON public.saved_readings
   FOR DELETE
@@ -68,6 +73,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Create trigger to call the function on update
+DROP TRIGGER IF EXISTS set_saved_readings_updated_at ON public.saved_readings;
 CREATE TRIGGER set_saved_readings_updated_at
   BEFORE UPDATE ON public.saved_readings
   FOR EACH ROW

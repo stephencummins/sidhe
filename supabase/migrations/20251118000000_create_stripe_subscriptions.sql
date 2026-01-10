@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS public.celtic_cross_credits (
 );
 
 -- Create unique index on user_id for celtic_cross_credits (one record per user)
-CREATE UNIQUE INDEX idx_celtic_cross_credits_user_id ON public.celtic_cross_credits(user_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_celtic_cross_credits_user_id ON public.celtic_cross_credits(user_id);
 
 -- Create stripe_purchases table for tracking all purchases (for audit trail)
 CREATE TABLE IF NOT EXISTS public.stripe_purchases (
@@ -46,12 +46,12 @@ CREATE TABLE IF NOT EXISTS public.stripe_purchases (
 );
 
 -- Add indexes for faster lookups
-CREATE INDEX idx_user_subscriptions_user_id ON public.user_subscriptions(user_id);
-CREATE INDEX idx_user_subscriptions_stripe_customer_id ON public.user_subscriptions(stripe_customer_id);
-CREATE INDEX idx_user_subscriptions_tier ON public.user_subscriptions(tier);
-CREATE INDEX idx_stripe_purchases_user_id ON public.stripe_purchases(user_id);
-CREATE INDEX idx_stripe_purchases_email ON public.stripe_purchases(email);
-CREATE INDEX idx_stripe_purchases_stripe_session_id ON public.stripe_purchases(stripe_session_id);
+CREATE INDEX IF NOT EXISTS idx_user_subscriptions_user_id ON public.user_subscriptions(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_subscriptions_stripe_customer_id ON public.user_subscriptions(stripe_customer_id);
+CREATE INDEX IF NOT EXISTS idx_user_subscriptions_tier ON public.user_subscriptions(tier);
+CREATE INDEX IF NOT EXISTS idx_stripe_purchases_user_id ON public.stripe_purchases(user_id);
+CREATE INDEX IF NOT EXISTS idx_stripe_purchases_email ON public.stripe_purchases(email);
+CREATE INDEX IF NOT EXISTS idx_stripe_purchases_stripe_session_id ON public.stripe_purchases(stripe_session_id);
 
 -- Enable RLS (Row Level Security)
 ALTER TABLE public.user_subscriptions ENABLE ROW LEVEL SECURITY;
@@ -59,6 +59,7 @@ ALTER TABLE public.celtic_cross_credits ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.stripe_purchases ENABLE ROW LEVEL SECURITY;
 
 -- Policy: Users can view their own subscription
+DROP POLICY IF EXISTS "Users can view their own subscription" ON public.user_subscriptions;
 CREATE POLICY "Users can view their own subscription"
   ON public.user_subscriptions
   FOR SELECT
@@ -66,6 +67,7 @@ CREATE POLICY "Users can view their own subscription"
   USING (auth.uid() = user_id);
 
 -- Policy: Service role can manage all subscriptions (for webhooks)
+DROP POLICY IF EXISTS "Service role can manage subscriptions" ON public.user_subscriptions;
 CREATE POLICY "Service role can manage subscriptions"
   ON public.user_subscriptions
   FOR ALL
@@ -74,6 +76,7 @@ CREATE POLICY "Service role can manage subscriptions"
   WITH CHECK (true);
 
 -- Policy: Users can view their own credits
+DROP POLICY IF EXISTS "Users can view their own credits" ON public.celtic_cross_credits;
 CREATE POLICY "Users can view their own credits"
   ON public.celtic_cross_credits
   FOR SELECT
@@ -81,6 +84,7 @@ CREATE POLICY "Users can view their own credits"
   USING (auth.uid() = user_id);
 
 -- Policy: Service role can manage all credits (for webhooks)
+DROP POLICY IF EXISTS "Service role can manage credits" ON public.celtic_cross_credits;
 CREATE POLICY "Service role can manage credits"
   ON public.celtic_cross_credits
   FOR ALL
@@ -89,6 +93,7 @@ CREATE POLICY "Service role can manage credits"
   WITH CHECK (true);
 
 -- Policy: Users can view their own purchases
+DROP POLICY IF EXISTS "Users can view their own purchases" ON public.stripe_purchases;
 CREATE POLICY "Users can view their own purchases"
   ON public.stripe_purchases
   FOR SELECT
@@ -96,6 +101,7 @@ CREATE POLICY "Users can view their own purchases"
   USING (auth.uid() = user_id);
 
 -- Policy: Service role can manage all purchases (for webhooks)
+DROP POLICY IF EXISTS "Service role can manage purchases" ON public.stripe_purchases;
 CREATE POLICY "Service role can manage purchases"
   ON public.stripe_purchases
   FOR ALL
@@ -113,11 +119,13 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Create triggers for updated_at
+DROP TRIGGER IF EXISTS set_user_subscriptions_updated_at ON public.user_subscriptions;
 CREATE TRIGGER set_user_subscriptions_updated_at
   BEFORE UPDATE ON public.user_subscriptions
   FOR EACH ROW
   EXECUTE FUNCTION update_subscription_updated_at();
 
+DROP TRIGGER IF EXISTS set_celtic_cross_credits_updated_at ON public.celtic_cross_credits;
 CREATE TRIGGER set_celtic_cross_credits_updated_at
   BEFORE UPDATE ON public.celtic_cross_credits
   FOR EACH ROW
