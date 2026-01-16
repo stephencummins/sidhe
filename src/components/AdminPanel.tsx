@@ -513,6 +513,32 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
   }, [deckId]);
 
   const sortCards = (cards: TarotCardDB[]): TarotCardDB[] => {
+    // Traditional Major Arcana order (0-21)
+    const majorArcanaOrder: Record<string, number> = {
+      'the fool': 0,
+      'the magician': 1,
+      'the high priestess': 2,
+      'the empress': 3,
+      'the emperor': 4,
+      'the hierophant': 5,
+      'the lovers': 6,
+      'the chariot': 7,
+      'strength': 8,
+      'the hermit': 9,
+      'wheel of fortune': 10,
+      'justice': 11,
+      'the hanged man': 12,
+      'death': 13,
+      'temperance': 14,
+      'the devil': 15,
+      'the tower': 16,
+      'the star': 17,
+      'the moon': 18,
+      'the sun': 19,
+      'judgement': 20,
+      'the world': 21
+    };
+
     const suitOrder: Record<string, number> = {
       'spring': 1,
       'summer': 2,
@@ -531,10 +557,19 @@ function DeckEditor({ deckId, deck, onToggleActive, onSyncMeanings, syncing, syn
     };
 
     return [...cards].sort((a, b) => {
+      // Major Arcana comes first
       if (a.arcana !== b.arcana) {
         return a.arcana === 'major' ? -1 : 1;
       }
 
+      // Sort Major Arcana by traditional order
+      if (a.arcana === 'major') {
+        const orderA = majorArcanaOrder[a.name.toLowerCase()] ?? 999;
+        const orderB = majorArcanaOrder[b.name.toLowerCase()] ?? 999;
+        return orderA - orderB;
+      }
+
+      // Sort Minor Arcana by suit, then by rank
       if (a.arcana === 'minor') {
         const suitA = (a.suit || '').toLowerCase();
         const suitB = (b.suit || '').toLowerCase();
