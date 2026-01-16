@@ -5,7 +5,7 @@ Sidhe is a Celtic-themed tarot reading web application that combines traditional
 
 ---
 
-## 🚀 Current Status (Updated: Nov 22, 2024)
+## 🚀 Current Status (Updated: Jan 16, 2025)
 
 ### Production Environment
 - **Live URL**: https://sidhe.netlify.app
@@ -13,7 +13,30 @@ Sidhe is a Celtic-themed tarot reading web application that combines traditional
 - **Stripe Mode**: TEST MODE (ready for test transactions)
 - **Status**: ✅ Fully deployed and operational
 
-### Recent Updates (Nov 22, 2024)
+### Recent Updates (Jan 16, 2025)
+
+#### 1. Major Arcana GIF Restoration
+- Re-uploaded all 22 Major Arcana animated GIFs to Supabase storage
+- Converted 3 missing cards (Death, Justice, The Hierophant) from MP4 → GIF at 400x400
+- **Supabase CLI upload command** (for future reference):
+  ```bash
+  # Delete existing then upload (CLI doesn't have --overwrite)
+  echo "y" | npx supabase storage rm ss:///tarot-cards/<deck-id>/<uuid>.gif --experimental
+  npx supabase storage cp ~/path/to/file.gif ss:///tarot-cards/<deck-id>/<uuid>.gif --experimental
+  ```
+- **ffmpeg GIF conversion** (400x400, 15fps, optimized palette):
+  ```bash
+  ffmpeg -i input.mp4 \
+    -vf "fps=15,scale=400:400:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" \
+    -loop 0 output.gif -y
+  ```
+
+#### 2. Major Arcana Card Ordering Fix
+- Fixed card navigation in AdminPanel to use traditional tarot order (0-21) instead of alphabetical
+- File: `src/components/AdminPanel.tsx:515-540` - added `majorArcanaOrder` mapping
+- The Sun (19) → Judgement (20) → The World (21) now displays correctly
+
+### Previous Updates (Nov 22, 2024)
 
 #### 1. Celtic Cross Layout Improvements
 - **Challenge Card Positioning**: Now properly positioned to form a cross
