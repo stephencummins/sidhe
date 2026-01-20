@@ -75,7 +75,7 @@ export default function TarotCardVisual({ card, revealed = false, size = 'medium
             <img
               src={cardBackUrl}
               alt="Card back"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
             />
           </div>
         </div>
@@ -110,7 +110,7 @@ export default function TarotCardVisual({ card, revealed = false, size = 'medium
           <img
             src={card.image_url}
             alt={card.name}
-            className={`w-full h-full object-cover ${isReversed ? 'grayscale' : ''}`}
+            className={`w-full h-full object-contain ${isReversed ? 'grayscale' : ''}`}
           />
         </div>
       </div>
